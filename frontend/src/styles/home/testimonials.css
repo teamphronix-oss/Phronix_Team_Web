@@ -1,0 +1,215 @@
+/* ── Testimonials — staggered zig-zag layout (4 columns) ───────── */
+/* =========================================================
+   TESTIMONIALS - 4 COLUMN VERTICAL MARQUEE
+   Column 1 : Bottom → Top
+   Column 2 : Top → Bottom
+   Column 3 : Bottom → Top
+   Column 4 : Top → Bottom
+   ========================================================= */
+
+.testimonials-section {
+  overflow: hidden;
+}
+
+.testimonials-marquee {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+
+  margin-top: 50px;
+  padding: 0 24px;
+
+  height: 760px;
+  overflow: hidden;
+}
+
+.testimonials-marquee__column {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Track */
+.testimonials-marquee__track {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  will-change: transform;
+}
+
+/* Each duplicated group */
+.testimonials-marquee__group {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.testimonials-marquee__item {
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   1st + 3rd COLUMN
+   BOTTOM → TOP
+   ========================================================= */
+
+.testimonials-marquee__column:nth-child(1)
+.testimonials-marquee__track,
+
+.testimonials-marquee__column:nth-child(3)
+.testimonials-marquee__track {
+
+  animation: testimonial-bottom-to-top 18s linear infinite;
+
+}
+
+
+/* =========================================================
+   2nd + 4th COLUMN
+   TOP → BOTTOM
+   ========================================================= */
+
+.testimonials-marquee__column:nth-child(2)
+.testimonials-marquee__track,
+
+.testimonials-marquee__column:nth-child(4)
+.testimonials-marquee__track {
+
+  animation: testimonial-top-to-bottom 18s linear infinite;
+
+}
+
+
+/* =========================================================
+   BOTTOM → TOP
+   ========================================================= */
+
+@keyframes testimonial-bottom-to-top {
+
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+
+}
+
+
+/* =========================================================
+   TOP → BOTTOM
+   ========================================================= */
+
+@keyframes testimonial-top-to-bottom {
+
+  from {
+    transform: translateY(-50%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   DIFFERENT SPEED
+   ========================================================= */
+
+.testimonials-marquee__column:nth-child(1)
+.testimonials-marquee__track {
+  animation-duration: 18s;
+}
+
+.testimonials-marquee__column:nth-child(2)
+.testimonials-marquee__track {
+  animation-duration: 21s;
+}
+
+.testimonials-marquee__column:nth-child(3)
+.testimonials-marquee__track {
+  animation-duration: 19s;
+}
+
+.testimonials-marquee__column:nth-child(4)
+.testimonials-marquee__track {
+  animation-duration: 22s;
+}
+
+
+/* =========================================================
+   PAUSE ON HOVER
+   ========================================================= */
+
+.testimonials-marquee:hover
+.testimonials-marquee__track {
+  animation-play-state: paused;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .testimonials-marquee {
+    grid-template-columns: repeat(2, 1fr);
+    height: 700px;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .testimonials-marquee {
+    grid-template-columns: 1fr;
+    height: 600px;
+    padding: 0 16px;
+  }
+
+  .testimonials-marquee__column:not(:first-child) {
+    display: none;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-stagger__item {
+    transition: none;
+    opacity: 1;
+    transform: translateY(var(--final-offset, 0px));
+  }
+}
+
+@media (max-width: 900px) {
+  .testimonial-stagger__item {
+    transform: translateY(40px); /* mobile pe kam distance */
+  }
+  .testimonial-stagger__item--visible {
+    transform: translateY(0); /* mobile pe flat rahega, zig-zag nahi */
+  }
+}
+
+@media (max-width: 1100px) {
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .grid--4 { grid-template-columns: 1fr; }
+}
+
+
+/* =========================================================
+   PHRONIX CARE SECTION
+   Phronix Dark + Mint Theme
+   ========================================================= */
+

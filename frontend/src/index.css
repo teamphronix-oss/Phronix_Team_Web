@@ -1,0 +1,466 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+/* ── Design tokens ───────────────────────────────────────────── */
+:root {
+  /* Background */
+  --bg: #fdfbf7;
+  --bg-soft: #f6f1e7;
+  --panel-dark: #1a1512;
+  --panel-dark-soft: #2a221c;
+
+ /* Text */
+--ink: #1c1712;
+--ink-soft: #5c5348;
+--ink-faint: #948a7c;
+
+/* Text on dark backgrounds */
+--ink-on-dark: #f2f0ea;
+
+  /* Border */
+  --line: rgba(28,23,18,.10);
+  --line-dark: rgba(255,255,255,.15);
+
+  /* Accent — Gold/Amber */
+  --gold: #c9972f;
+  --gold-bright: #e6b34f;
+  --gold-pale: #f5e6c8;
+  --gold-ink: #7a5610;
+
+  /* Typography */
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Layout */
+  --container: 1180px;
+  --radius: 14px;
+  --radius-sm: 8px;
+
+  /* Shadows */
+  --shadow-soft: 0 20px 50px rgba(28,23,18,.12);
+  --shadow-gold: 0 20px 50px rgba(201,151,47,.28);
+
+  --ease: cubic-bezier(0.22,1,0.36,1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 1.5px;
+  background: var(--gold);
+  display: inline-block;
+}
+
+.section { padding: 96px 0; }
+.section--soft { background: var(--bg-soft); }
+.section--dark {
+  background: var(--panel-dark);
+  color: var(--ink);
+}
+
+.section--dark h1,
+.section--dark h2,
+.section--dark h3 {
+  color: var(--ink);
+}
+
+.section--dark .eyebrow {
+  color: var(--gold-bright);
+}
+
+.section-head {
+  max-width: 640px;
+  margin: 0 0 48px;
+}
+.section-head h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  margin-top: 12px;
+}
+.section-head p {
+  margin-top: 14px;
+  color: var(--ink-soft);
+  font-size: 16.5px;
+}
+.section--dark .section-head p { color: #c8c5bb; }
+
+/* ── Gold seam — the signature divider element ─────────────── */
+.seam {
+  position: relative;
+  height: 1px;
+  background: var(--line);
+  overflow: visible;
+}
+.seam::after {
+  content: "";
+  position: absolute;
+  top: -3.5px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--line);
+}
+.section--dark .seam { background: var(--line-dark); }
+.section--dark .seam::after { box-shadow: 0 0 0 5px var(--panel-dark), 0 0 0 6px var(--line-dark); }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn--gold {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: var(--ink);
+  box-shadow: var(--shadow-gold);
+}
+.btn--gold:hover { box-shadow: 0 14px 34px -10px rgba(127, 179, 170, 0.55); transform: translateY(-1px); }
+.btn--outline {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+
+
+.btn--outline:hover { border-color: var(--gold); color: var(--gold-ink); }
+
+.section--dark .btn--outline { border-color: var(--line-dark); color: #f2f0ea; }
+.section--dark .btn--outline:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  padding: 13px 6px;
+}
+.btn--ghost:hover { color: var(--gold-ink); }
+
+.btn--sm { padding: 9px 16px; font-size: 13.5px; }
+.btn--block { width: 100%; }
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+  border-color: #ddd6bd;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold-ink);
+  background: var(--gold-pale);
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+.badge--planning { color: #6b6b6b; border-color: #d8d8d8; background: #f4f4f4; }
+.badge--development { color: #8a5d0c; border-color: #eacd8a; background: #fbf1dc; }
+.badge--testing { color: #9c6b13; border-color: var(--gold); background: var(--gold-pale); }
+.badge--completion { color: #6e4b12; border-color: var(--gold); background: linear-gradient(135deg, var(--gold-bright), var(--gold-pale)); }
+
+/* ── Forms ───────────────────────────────────────────────────── */
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  font-family: inherit;
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--ink);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-pale);
+  outline: none;
+}
+.field textarea { resize: vertical; min-height: 120px; }
+.field-error { color: #b3261e; font-size: 12.5px; margin-top: 6px; }
+.field input.has-error, .field textarea.has-error { border-color: #b3261e; }
+
+.form-status {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.form-status--success { background: #eaf6ec; color: #216534; }
+.form-status--error { background: #fbeaea; color: #9c2a2a; }
+
+/* ── Utility ─────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  gap: 28px;
+}
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .section { padding: 64px 0; }
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+}
+
+/* ── Interactive dot-field background (lamalama-style) ─────────── */
+/* Fills whatever `position: relative` section it's placed in.
+   Sits behind real content (z-index 0) and never blocks clicks. */
+.cursor-dot-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cursor-dot-field canvas {
+  display: block;
+}
+
+/* ── Halftone dot-shape (image rendered as scattering dots) ────── */
+.cursor-dot-shape {
+  position: relative;
+  pointer-events: auto; /* needs mouse events to know where the cursor is */
+}
+.cursor-dot-shape canvas {
+  display: block;
+}
+
+/* ── Cursor trail blobs (lamalama-style shrinking dot-chain) ───── */
+/* Fixed full-viewport overlay, sits above content, never blocks
+   clicks. Mounted once near the app root so the trail works on
+   every page, not just one section. */
+.cursor-trail-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+/* ── Custom cursor ───────────────────────────────────────────── */
+/* Two pieces: a small solid dot that sticks exactly to the real mouse
+   position, and a larger soft ring that trails behind it. Both are
+   fixed-position, pointer-events:none so they never block clicks.
+
+   White + mix-blend-mode: difference gives the lamalama.com-style
+   effect — the cursor auto-inverts to stay visible on both dark and
+   light/white backgrounds without needing per-section overrides. */
+
+.custom-cursor__dot,
+.custom-cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor__dot {
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  transition: width 0.2s var(--ease, ease), height 0.2s var(--ease, ease),
+    background 0.2s var(--ease, ease), opacity 0.2s ease;
+}
+.custom-cursor__dot--hover {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+}
+
+.custom-cursor__ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.1);
+  transition: width 0.25s var(--ease, ease), height 0.25s var(--ease, ease),
+    background 0.25s var(--ease, ease), border-color 0.25s var(--ease, ease),
+    opacity 0.2s ease;
+}
+.custom-cursor__ring--hover {
+  width: 58px;
+  height: 58px;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.custom-cursor--hidden {
+  opacity: 0;
+}
+
+/* Floating text label/tag that follows the cursor — the "# Chocolate
+   Amsterdam" style pill seen on lamalama.com when hovering a logo or
+   card. Sits above the ring (translate -140% on Y) and fades/scales
+   in only when the hovered element carries data-cursor-label. */
+.custom-cursor__label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  background: rgba(11, 11, 17, 0.92);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform-origin: center bottom;
+  transition: opacity 0.2s var(--ease, ease), scale 0.2s var(--ease, ease);
+  scale: 0.85;
+}
+.custom-cursor__label--visible {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Hide the real browser cursor site-wide once our custom one is active.
+   Only applied on fine-pointer (mouse/trackpad) devices — touch devices
+   never load the component at all, but this is a safety net too. */
+@media (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+/* =========================================================
+   GLOBAL THEME OVERRIDE
+   All space-themed sections follow index.css theme
+   ========================================================= */
+
+.section--space,
+.projects-showcase.section--space {
+  background: var(--bg-soft) !important;
+  color: var(--ink) !important;
+}
+
+/* Remove old dark/star overlay */
+.section--space::before {
+  opacity: 0 !important;
+}
+
+.section--space h2,
+.section--space h3 {
+  color: var(--ink) !important;
+}
+
+.section--space p {
+  color: var(--ink-soft) !important;
+}

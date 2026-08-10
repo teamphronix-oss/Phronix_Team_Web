@@ -1,0 +1,8 @@
+  /* ── About ───────────────────────────────────────────────────── */
+  .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .about__points { display: grid; gap: 28px; }
+  .about__points h4 { font-size: 17px; margin-top: 10px; }
+  .about__points p { color: var(--ink-soft); margin-top: 8px; font-size: 14.5px; }
+  @media (max-width: 900px) { .about__grid { grid-template-columns: 1fr; } }
+
+

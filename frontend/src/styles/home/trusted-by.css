@@ -1,0 +1,54 @@
+/* ── Trusted By — simple text-wordmark logo row ──────────────── */
+  .trusted-by {
+    padding: 40px 0 8px;
+  }
+  .trusted-by__label {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-faint);
+    margin-bottom: 28px;
+  }
+  .trusted-by__row {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .trusted-by__track {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    width: max-content;
+    animation: trusted-by-scroll 24s linear infinite;
+  }
+  .trusted-by__row:hover .trusted-by__track {
+    animation-play-state: paused;
+  }
+  @keyframes trusted-by-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .trusted-by__logo {
+    flex: 0 0 auto;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--ink-soft);
+    opacity: 0.55;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: opacity 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .trusted-by__logo:hover {
+    opacity: 1;
+    color: var(--ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trusted-by__track { animation: none; }
+  }
+  @media (max-width: 900px) {
+    .trusted-by__track { gap: 36px; }
+    .trusted-by__logo { font-size: 18px; }
+  }
+  @media (max-width: 560px) {
+    .trusted-by__track { gap: 28px; }
+  }

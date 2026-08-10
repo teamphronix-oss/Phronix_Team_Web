@@ -1,0 +1,183 @@
+  /* ── Page Ecosystem showcase ─────────────────────────── */
+  .page-ecosystem { padding-bottom: 24px; }
+
+  .page-ecosystem__intro {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 48px;
+  }
+
+  .page-ecosystem__title {
+    margin-top: 18px;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.15;
+  }
+
+  .page-ecosystem__grad {
+    background: linear-gradient(120deg, var(--gold-bright), var(--gold) 60%, #d4a24c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .page-ecosystem__intro p {
+    margin-top: 18px;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+  }
+
+  .page-ecosystem-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .page-ecosystem-marquee__track {
+    display: flex;
+    gap: 22px;
+    width: max-content;
+    animation: page-ecosystem-scroll 36s linear infinite;
+  }
+  .page-ecosystem-marquee:hover .page-ecosystem-marquee__track {
+    animation-play-state: paused;
+  }
+  @keyframes page-ecosystem-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .page-ecosystem-marquee__track { animation: none; }
+  }
+
+  .page-ecosystem-card {
+    flex: 0 0 auto;
+    width: min(320px, 78vw);
+    border-radius: 16px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 22px 22px 24px;
+    box-shadow: 0 30px 60px -34px rgba(23, 22, 28, 0.25);
+  }
+
+  .page-ecosystem-card__tag {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--gold-pale);
+    color: var(--gold-ink);
+    font-size: 11.5px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .page-ecosystem-card h4 {
+    margin-top: 16px;
+    font-size: 15.5px;
+    line-height: 1.35;
+  }
+
+  /* culture card */
+  .pe-culture__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .pe-culture__grid span {
+    height: 46px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--gold-pale), var(--bg-soft));
+  }
+  .pe-culture__stat {
+    margin-top: 14px;
+  }
+  .pe-culture__stat strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .pe-culture__stat em {
+    font-style: normal;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* team card */
+  .pe-team__avatars {
+    display: flex;
+    gap: 8px;
+  }
+  .pe-team__avatars span {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    flex-shrink: 0;
+  }
+
+  /* faq card */
+  .pe-faq__row {
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .pe-faq__row:first-child { border-top: none; }
+  .pe-faq__row--open {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* contact card */
+  .pe-contact {
+    display: grid;
+    gap: 10px;
+  }
+  .pe-contact__field {
+    height: 34px;
+    border-radius: 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+  }
+  .pe-contact__field--tall { height: 60px; }
+  .pe-contact__btn {
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    margin-top: 4px;
+  }
+
+  .page-ecosystem-marquee {
+    overflow: hidden;
+    margin-top: 40px;
+  }
+
+  .page-ecosystem-marquee__track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: ecosystemScroll 45s linear infinite;
+  }
+
+  .page-ecosystem-marquee__track--reverse {
+    animation: ecosystemScrollReverse 45s linear infinite;
+  }
+
+  @keyframes ecosystemScroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes ecosystemScrollReverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+

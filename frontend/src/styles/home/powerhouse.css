@@ -1,0 +1,192 @@
+/* ── Powerhouse Features (dark two-card feature band) ────────── */
+
+.features-powerhouse .container {
+  max-width: 1360px;
+}
+
+.features-powerhouse__grid {
+  margin-top: 44px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.features-powerhouse__card {
+  border-radius: 20px;
+  padding: 36px 34px;
+
+  background: color-mix(
+    in srgb,
+    var(--panel-dark) 96%,
+    transparent
+  );
+
+  border: 1px solid var(--line-dark);
+
+  backdrop-filter: blur(6px);
+}
+
+.features-powerhouse__card h3 {
+  font-size: 22px;
+  color: var(--ink-on-dark);
+}
+
+.features-powerhouse__card p {
+  margin-top: 12px;
+  color: rgba(242, 240, 234, 0.72);
+  font-size: 14.5px;
+  max-width: 42ch;
+}
+
+
+/* ── Left card — browser mock with hover download pill ─────── */
+
+.fp-mock {
+  position: relative;
+  margin-top: 28px;
+  border-radius: 12px;
+  overflow: visible;
+
+  background: var(--panel-dark);
+
+  border: 1px solid var(--line-dark);
+}
+
+.fp-mock__bar {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+
+  background: var(--panel-dark-soft);
+
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.fp-mock__bar span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.fp-mock__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 16px;
+}
+
+.fp-mock__thumb {
+  border-radius: 8px;
+  padding: 34px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-on-dark);
+}
+
+/* Project-specific visual accent — intentionally purple */
+.fp-mock__thumb--a {
+  background: linear-gradient(
+    135deg,
+    #7c3aed,
+    #c026d3
+  );
+}
+
+/* Global gold theme */
+.fp-mock__thumb--b {
+  background: linear-gradient(
+    135deg,
+    var(--gold),
+    var(--gold-bright)
+  );
+
+  color: var(--ink);
+}
+
+.fp-mock__download {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+
+  background: color-mix(
+    in srgb,
+    var(--panel-dark) 92%,
+    transparent
+  );
+
+  border: 1px solid var(--line-dark);
+
+  color: var(--gold-bright);
+}
+
+
+/* ── Right card — tech stack icon grid ─────────────────────── */
+
+.fp-stack-grid {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.fp-stack-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  padding: 22px 10px;
+  border-radius: 12px;
+
+  background: color-mix(
+    in srgb,
+    var(--panel-dark-soft) 94%,
+    transparent
+  );
+
+  border: 1px solid var(--line-dark);
+
+  color: var(--ink-on-dark);
+
+  transition:
+    border-color 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    background 0.2s var(--ease);
+}
+
+.fp-stack-item:hover {
+  border-color: var(--gold);
+
+  background: color-mix(
+    in srgb,
+    var(--panel-dark-soft) 100%,
+    transparent
+  );
+
+  transform: translateY(-3px);
+}
+
+.fp-stack-item span {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(242, 240, 234, 0.68);
+}
+
+@media (max-width: 900px) {
+  .features-powerhouse__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fp-stack-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

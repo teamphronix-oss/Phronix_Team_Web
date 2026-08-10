@@ -1,0 +1,673 @@
+.pay-update-section {
+  position: relative;
+  overflow: hidden;
+  min-height: 720px;
+
+  background: var(--bg-soft);
+
+  color: var(--ink);
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.pay-update__grid {
+  min-height: 720px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+  gap: 60px;
+
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================================
+   PHRONIX BRAND
+   ========================================================= */
+
+.pay-update__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 55px;
+
+  font-size: 20px;
+  font-weight: 600;
+
+ color: var(--ink);
+}
+
+
+.pay-update__brand-mark {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+ color: var(--gold);
+
+  color: var(--ink);
+
+  font-size: 20px;
+  font-weight: 700;
+
+  border: 1px solid rgba(201, 151, 47, 0.25);
+
+  box-shadow:
+    0 8px 25px rgba(201, 151, 47, 0.12);
+}
+
+
+/* =========================================================
+   LEFT CONTENT
+   ========================================================= */
+
+.pay-update__content {
+  position: relative;
+  z-index: 5;
+  max-width: 650px;
+}
+
+
+.pay-update__title {
+  margin: 0;
+
+  font-size: clamp(48px, 5.4vw, 78px);
+
+  line-height: 0.98;
+
+  letter-spacing: -0.055em;
+
+  font-weight: 700;
+
+  color: var(--ink);
+}
+
+
+/* Gold heading */
+
+.pay-update__title > span {
+  background:
+    linear-gradient(
+      100deg,
+      var(--gold-bright) 0%,
+      var(--gold) 50%,
+      var(--gold-ink) 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+
+.pay-update__title small {
+  display: block;
+
+  margin-top: 8px;
+
+  font-size: 0.58em;
+
+  line-height: 1.05;
+
+  color: var(--ink);
+
+  letter-spacing: -0.035em;
+}
+
+
+.pay-update__description {
+  max-width: 580px;
+
+  margin-top: 30px;
+
+ color: var(--ink-soft);
+
+  font-size: 16px;
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.pay-update__actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 36px;
+
+  flex-wrap: wrap;
+}
+
+
+.pay-update__btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  min-height: 52px;
+
+  padding: 0 24px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+
+.pay-update__btn:hover {
+  transform: translateY(-3px);
+}
+
+
+/* Gold primary button */
+
+.pay-update__btn--primary {
+ color: var(--ink);
+
+  background:
+  linear-gradient(
+    110deg,
+    var(--gold),
+    var(--gold-bright),
+    var(--gold)
+  );
+
+  box-shadow:
+    0 15px 40px -12px rgba(201, 151, 47, 0.35);
+}
+
+
+.pay-update__btn--primary:hover {
+  box-shadow:
+    0 20px 50px -10px rgba(201, 151, 47, 0.45);
+}
+
+/* Dark secondary button */
+
+.pay-update__btn--dark {
+ color: var(--ink);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--panel-dark-soft),
+      var(--panel-dark)
+    );
+
+  border: 1px solid var(--line-dark);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35);
+}
+
+
+.pay-update__btn--dark:hover {
+  background: var(--panel-dark-soft);
+
+  border-color: var(--gold);
+}
+
+
+/* =========================================================
+   SUPPORT NOTE
+   ========================================================= */
+
+.pay-update__note {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 25px;
+
+  color: var(--ink-faint);
+
+  font-size: 13px;
+}
+
+
+.pay-update__note svg {
+  color: var(--gold-bright);
+}
+
+/* =========================================================
+   RIGHT VISUAL
+   ========================================================= */
+
+.pay-update__visual {
+  position: relative;
+
+  height: 600px;
+
+  perspective: 1200px;
+}
+
+
+/* =========================================================
+   MINT GLOW
+   ========================================================= */
+
+.pay-update__glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(90px);
+
+  pointer-events: none;
+}
+
+
+.pay-update__glow--one {
+  width: 330px;
+  height: 330px;
+
+  top: 120px;
+  right: 80px;
+
+ background: rgba(201, 151, 47, 0.15);
+}
+
+
+.pay-update__glow--two {
+  width: 230px;
+  height: 230px;
+
+  bottom: 60px;
+  left: 80px;
+
+ background: rgba(201, 151, 47, 0.10);
+}
+
+
+/* =========================================================
+   3D PLATFORM
+   ========================================================= */
+
+.pay-update__platform {
+  position: absolute;
+
+  width: 340px;
+  height: 100px;
+
+  right: 60px;
+  bottom: 105px;
+
+  transform:
+    perspective(700px)
+    rotateX(62deg)
+    rotateZ(-2deg);
+
+  background:
+    linear-gradient(
+      135deg,
+     var(--gold-ink)
+var(--panel-dark)
+    );
+
+  border: 1px solid rgba(201, 151, 47, 0.25);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.8),
+    0 0 70px rgba(168,196,191,0.13);
+
+  border-radius: 5px;
+}
+
+
+.pay-update__platform span {
+  position: absolute;
+
+  inset: 12px;
+
+  background:
+  linear-gradient(
+    135deg,
+    var(--gold-bright),
+    var(--gold)
+  );
+  box-shadow:
+    0 0 50px rgba(201,151,47,0.35);
+
+  border-radius: 3px;
+}
+
+
+/* =========================================================
+   3D BLOCKS
+   ========================================================= */
+
+.pay-update__cube {
+  position: absolute;
+
+  width: 150px;
+  height: 150px;
+
+  transform-style: preserve-3d;
+
+  animation: payCubeFloat 6s ease-in-out infinite;
+}
+
+
+.pay-update__cube--one {
+  top: 40px;
+  right: 100px;
+
+  transform:
+    rotateX(-15deg)
+    rotateY(25deg)
+    rotateZ(-4deg);
+
+  animation-delay: -1s;
+}
+
+
+.pay-update__cube--two {
+  top: 270px;
+  right: -10px;
+
+  width: 120px;
+  height: 120px;
+
+  transform:
+    rotateX(-15deg)
+    rotateY(25deg)
+    rotateZ(-4deg);
+
+  animation-delay: -3s;
+}
+
+
+.pay-update__cube--three {
+  bottom: 65px;
+  right: 280px;
+
+  width: 110px;
+  height: 110px;
+
+  transform:
+    rotateX(-15deg)
+    rotateY(25deg)
+    rotateZ(-4deg);
+
+  animation-delay: -5s;
+}
+
+
+/* Cube faces */
+
+.cube-face {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  border: 1px solid rgba(201, 151, 47, 0.38);
+
+  background:
+  linear-gradient(
+    145deg,
+    rgba(201,151,47,0.35),
+    rgba(42,34,28,0.8)
+  );
+
+  box-shadow:
+    inset 0 0 35px rgba(201,151,47,0.12);
+}
+
+
+.cube-face--front {
+  transform: translateZ(75px);
+}
+
+
+.cube-face--top {
+  transform:
+    rotateX(90deg)
+    translateZ(75px);
+
+ background:
+  linear-gradient(
+    135deg,
+    var(--gold-ink),
+    var(--panel-dark)
+  );
+}
+
+
+.cube-face--side {
+  transform:
+    rotateY(90deg)
+    translateZ(75px);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--gold-ink),
+      var(--panel-dark)
+    );
+}
+
+
+@keyframes payCubeFloat {
+
+  0%, 100% {
+    margin-top: 0;
+  }
+
+  50% {
+    margin-top: -18px;
+  }
+
+}
+
+
+/* =========================================================
+   PHRONIX CARE CARD
+   ========================================================= */
+
+.pay-update__price-card {
+  position: absolute;
+  right: 0;
+  bottom: 150px;
+  width: 340px;
+  padding: 28px 30px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(201, 151, 47, 0.18),
+      rgba(255, 255, 255, 0.10)
+    );
+
+  border: 1px solid rgba(201, 151, 47, 0.35);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 35px 80px rgba(0, 0, 0, 0.25),
+    0 0 50px rgba(201, 151, 47, 0.12);
+
+  transform: rotate(-4deg);
+  z-index: 4;
+}
+
+.pay-update__price-label {
+  display: block;
+
+   color: var(--gold-ink);
+
+  font-size: 12px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.14em;
+}
+
+
+.pay-update__price-card strong {
+  display: block;
+
+  margin-top: 8px;
+
+  font-size: 70px;
+
+  line-height: 0.9;
+
+  letter-spacing: -0.06em;
+
+  color: var(--ink);
+}
+
+
+.pay-update__price-card strong small {
+  font-size: 18px;
+
+  letter-spacing: 0.04em;
+
+  color: var(--gold);
+}
+
+
+.pay-update__price-sub {
+  display: block;
+
+  margin-top: 12px;
+
+ color: var(--ink-soft);
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .pay-update__grid {
+    grid-template-columns: 1fr;
+
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .pay-update__content {
+    max-width: 700px;
+  }
+
+  .pay-update__visual {
+    height: 500px;
+
+    max-width: 650px;
+
+    width: 100%;
+
+    margin: 0 auto;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .pay-update-section {
+    min-height: auto;
+  }
+
+  .pay-update__grid {
+    min-height: auto;
+
+    gap: 30px;
+
+    padding-top: 65px;
+    padding-bottom: 65px;
+  }
+
+  .pay-update__brand {
+    margin-bottom: 35px;
+  }
+
+  .pay-update__title {
+    font-size: clamp(42px, 12vw, 60px);
+  }
+
+  .pay-update__description {
+    font-size: 14px;
+  }
+
+  .pay-update__visual {
+    height: 390px;
+
+    transform: scale(0.82);
+
+    transform-origin: center;
+  }
+
+  .pay-update__price-card {
+    width: 270px;
+
+    right: 0;
+    bottom: 90px;
+  }
+
+  .pay-update__platform {
+    width: 280px;
+
+    right: 30px;
+  }
+
+  .pay-update__cube--one {
+    right: 70px;
+  }
+
+  .pay-update__cube--three {
+    right: 220px;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .pay-update__cube {
+    animation: none;
+  }
+
+}

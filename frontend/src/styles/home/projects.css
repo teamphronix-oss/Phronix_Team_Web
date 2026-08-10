@@ -1,0 +1,282 @@
+  .home__more-link { margin-top: 40px; }
+
+  /* ── "More Demos Coming Soon" badge under project marquee ────── */
+  .demos-soon {
+    text-align: center;
+    margin-top: 36px;
+  }
+
+  .demos-soon__pill {
+  display: inline-block;
+  padding: 14px 30px;
+  border-radius: 999px;
+
+  background: color-mix(in srgb, var(--panel-dark) 92%, transparent);
+  border: 1px solid var(--line-dark);
+  color: var(--ink-on-dark);
+
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 40px 6px rgba(168, 85, 247, 0.35),
+    0 0 70px 14px rgba(236, 72, 153, 0.18);
+
+  animation: demos-soon-glow 3s ease-in-out infinite;
+}
+
+  @keyframes demos-soon-glow {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 0 40px 6px rgba(168, 85, 247, 0.35),
+        0 0 70px 14px rgba(236, 72, 153, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 0 55px 10px rgba(168, 85, 247, 0.5),
+        0 0 90px 20px rgba(236, 72, 153, 0.28);
+    }
+  }
+
+  .demos-soon__sub {
+    margin-top: 16px;
+    font-size: 14px;
+   color: var(--ink-soft);
+  }
+
+  .demos-soon__pill-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
+  .demos-soon__arrow {
+    position: absolute;
+    top: -72px;
+    right: -70px;
+    width: 130px;
+    height: 98px;
+   color: var(--ink-soft);
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .demos-soon__arrow { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demos-soon__pill { animation: none; }
+  }
+
+  .projects-showcase { padding-bottom: 64px; }
+
+  /* This section's own overflow:hidden (inherited from .section--space, used
+     to contain the star background) was clipping the demos-soon arrow's
+     negative top/right offset. Allow overflow here so the arrow shows fully,
+     without touching overflow behavior on other .section--space sections. */
+  .projects-showcase.section--space { overflow: visible; }
+
+  .projects-showcase__intro {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 56px;
+  }
+
+  .projects-showcase__stat {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .projects-showcase__stat-number {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(64px, 9vw, 120px);
+    line-height: 1;
+background: linear-gradient(
+  120deg,
+  var(--gold-bright) 0%,
+  var(--gold) 50%,
+  var(--gold-ink) 100%
+);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* the soft diagonal light streak behind the number */
+  .projects-showcase__stat::before {
+    content: "";
+    position: absolute;
+    top: -20%;
+    left: 8%;
+    width: 6px;
+    height: 150%;
+    background: linear-gradient(
+    180deg,
+    transparent,
+    var(--gold-bright),
+    transparent
+  );
+    filter: blur(6px);
+    transform: rotate(28deg);
+    pointer-events: none;
+  }
+
+  .projects-showcase__title {
+    margin-top: 18px;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.15;
+  }
+
+ .projects-showcase__intro p {
+  margin-top: 16px;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+}
+
+  /* ── Horizontal auto-scrolling row of browser-window cards ──── */
+  .projects-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    margin-bottom: 8px;
+  }
+  .projects-marquee__track {
+    display: flex;
+    gap: 22px;
+    width: max-content;
+    animation: projects-marquee-scroll 40s linear infinite;
+  }
+  .projects-marquee:hover .projects-marquee__track {
+    animation-play-state: paused;
+  }
+  @keyframes projects-marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .projects-marquee__track { animation: none; }
+  }
+
+  .browser-card {
+  flex: 0 0 auto;
+  width: min(400px, 78vw);
+  border-radius: 14px;
+  overflow: hidden;
+
+  background: var(--panel-dark);
+  border: 1px solid var(--line-dark);
+
+  box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 0.6);
+}
+
+  .browser-card__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 14px;
+  background: var(--panel-dark-soft);
+border-bottom: 1px solid var(--line-dark);
+  }
+  .browser-card__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+  .browser-card__dot--red { background: #ff5f57; }
+  .browser-card__dot--yellow { background: #febc2e; }
+  .browser-card__dot--green { background: #28c840; }
+
+  .browser-card__badges {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+  }
+  .browser-card__badge {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .browser-card__badge--a { background: #38bdf8; color: #06202b; }
+  .browser-card__badge--b { background: #d946ef; color: #2b0625; }
+  .browser-card__badge--c { background: #d9f99d; color: #1a2604; }
+
+  .browser-card__image {
+  aspect-ratio: 16/14;
+  background: var(--bg-soft);
+}
+  .browser-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .browser-card__image {
+    position: relative; /* needed so the hover overlay can be absolutely positioned */
+  }
+
+  .browser-card__hover {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 16px 20px;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+    pointer-events: none;
+  }
+
+  .browser-card:hover .browser-card__hover {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .browser-card__page-btn {
+    padding: 9px 20px;
+    border-radius: 999px;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-on-dark);
+background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+
+  .browser-card__page-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .browser-card__page-btn--active {
+  background: linear-gradient(
+    120deg,
+    var(--gold-bright) 0%,
+    var(--gold) 50%,
+    var(--gold-ink) 100%
+  );
+
+  color: var(--ink);
+
+  box-shadow:
+    0 12px 24px -10px rgba(201, 151, 47, 0.6);
+}
+
+  @media (prefers-reduced-motion: reduce) {
+    .browser-card__hover,
+    .browser-card__page-btn { transition: none; }
+  }
+
+  @media (max-width: 640px) {
+    .browser-card { width: 86vw; }
+  }
+

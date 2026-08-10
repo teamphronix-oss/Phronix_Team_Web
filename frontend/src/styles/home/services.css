@@ -1,0 +1,44 @@
+  /* ── Trust bar — rounded pill row of checkmark highlights ───────
+    Sits below the hero as a standalone strip: dark rounded
+    background, a checkmark + short label per item, evenly spaced. */
+  .trust-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px 40px;
+  margin: 40px auto 0;
+  padding: 20px 32px;
+  max-width: fit-content;
+
+  background: var(--panel-dark);
+  border: 1px solid var(--line-dark);
+  border-radius: 999px;
+  box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.55);
+}
+
+.trust-bar__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-on-dark);
+  white-space: nowrap;
+}
+
+.trust-bar__item svg {
+  color: var(--gold-bright);
+  flex-shrink: 0;
+}
+  @media (max-width: 640px) {
+    .trust-bar {
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      gap: 12px 24px;
+    }
+    .trust-bar__item { font-size: 13px; }
+  }
+
