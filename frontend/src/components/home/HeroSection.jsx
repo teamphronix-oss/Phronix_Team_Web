@@ -7,8 +7,6 @@ export default function HeroSection() {
   return (
     <>
       <section className="hero">
-        <span className="hero__orb hero__orb--gold" aria-hidden="true" />
-        <span className="hero__orb hero__orb--ink" aria-hidden="true" />
         <div className="container hero__grid">
           <div className="hero__reveal hero__reveal--1">
             <span className="eyebrow">Software Development Company • Nashik, India</span>
@@ -35,9 +33,11 @@ export default function HeroSection() {
   <div className="hero__shell">
     <div className="hero__shell-logo-wrap">
       <div className="hero__shell-logo" />
+      <span className="hero__shell-orb hero__shell-orb--purple" />
+      <span className="hero__shell-orb hero__shell-orb--orange" />
+      <span className="hero__shell-orb hero__shell-orb--gold" />
+      <span className="hero__shell-orb hero__shell-orb--ink" />
     </div>
-    <span className="hero__shell-orb hero__shell-orb--purple" />
-    <span className="hero__shell-orb hero__shell-orb--orange" />
   </div>
 </div>
         </div>

@@ -1,14 +1,39 @@
-import mongoose from "mongoose";
+import { supabase } from "../config/supabase.js";
 
-const userSchema = new mongoose.Schema(
-  {
-    googleId: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    avatar: { type: String },
-    role: { type: String, enum: ["user", "admin"], default: "user" },
-  },
-  { timestamps: true }
-);
+const TABLE = "users";
 
-export default mongoose.model("User", userSchema);
+export async function findUserByGoogleId(googleId) {
+  const { data, error } = await supabase.from(TABLE).select("*").eq("google_id", googleId).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function findUserById(id) {
+  const { data, error } = await supabase.from(TABLE).select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function createUser({ googleId, name, email, avatar }) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .insert({ google_id: googleId, name, email, avatar })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+// Maps snake_case DB row -> the camelCase shape the rest of the app expects.
+export function toClientUser(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    avatar: row.avatar,
+    role: row.role,
+  };
+}
+
+export default { findUserByGoogleId, findUserById, createUser, toClientUser };

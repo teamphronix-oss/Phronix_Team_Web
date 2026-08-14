@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const BANDS = ["#A9CAC3", "#EAD0C4", "#DCC5BA", "#D6CBEA", "#7FB3AA"];
+const BANDS = ["#E0F2FE", "#BAE6FD", "#7DD3FC", "#38BDF8", "#0EA5E9"];
 const BAND_DURATION = 750; // ms, must match the CSS animation-duration
 const STAGGER = 160; // ms between each band starting its slide — tight overlap
 

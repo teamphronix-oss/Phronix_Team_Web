@@ -34,7 +34,9 @@ export default function Home() {
       <TopFeaturesSection />
       <TestimonialsSection testimonials={testimonials} />
       <PayUpdateSection />
-      <CTASection />
+      <div className="home-cta-spacing">
+  <CTASection />
+</div>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Github, Instagram, Youtube, Mail, MapPin, Linkedin } from "lucide-react";
 import siteConfig from "../data/siteConfig";
+import phronixLogo from "../assets/phronix-logo.png";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -10,7 +11,7 @@ export default function Footer() {
       <div className="container footer__grid">
         <div className="footer__brand">
           <div className="navbar__logo" style={{ color: "#f7f5ee" }}>
-            <span className="navbar__mark">P</span>
+            <img src={phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
             <span>{siteConfig.companyName}</span>
           </div>
           <p>{siteConfig.shortDescription}</p>

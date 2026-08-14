@@ -1,0 +1,138 @@
+.admin-auth-page__inner { max-width: 440px; margin: 0 auto; }
+
+.admin-auth-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 32px;
+  align-items: stretch;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.admin-auth-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ice-pale);
+  color: var(--ice-ink);
+  margin: 0 auto 4px;
+}
+.admin-auth-card__description {
+  text-align: center;
+  color: var(--ink-soft, #64748b);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: -6px 0 4px;
+}
+.admin-auth-card__eyebrow {
+  text-align: center;
+  color: var(--gold, #d4a017);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.admin-auth-card__title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink, #0f172a);
+  margin: 0;
+}
+
+.admin-auth-card__description {
+  text-align: center;
+  color: var(--ink-soft, #64748b);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: -6px 0 4px;
+}
+
+.admin-auth-card__error {
+  background: #FEE2E2;
+  color: #B91C1C;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.admin-auth-card__success {
+  background: var(--ice-pale);
+  color: var(--ice-ink);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.admin-auth-card__link {
+  text-align: right;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.admin-field span { font-weight: 600; }
+
+.admin-field input,
+.admin-field textarea {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--ink);
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus {
+  outline: none;
+  border-color: var(--ice);
+  box-shadow: 0 0 0 3px var(--ice-pale);
+}
+
+.admin-field--row {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.admin-field--row input { width: auto; }
+
+.admin-field__password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.admin-field__password-wrap input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.admin-field__toggle-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.admin-field__toggle-eye:hover {
+  color: var(--ink);
+}

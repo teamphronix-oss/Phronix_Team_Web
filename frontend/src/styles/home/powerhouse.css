@@ -15,25 +15,31 @@
   border-radius: 20px;
   padding: 36px 34px;
 
-  background: color-mix(
-    in srgb,
-    var(--panel-dark) 96%,
-    transparent
+  /* Glass / transparent-blue look (matches PHRONIX CARE price card) */
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--gold) 22%, transparent),
+    color-mix(in srgb, white 14%, transparent)
   );
 
-  border: 1px solid var(--line-dark);
+  border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
 
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 30px 60px -20px rgba(14, 165, 233, 0.35),
+    0 0 40px color-mix(in srgb, var(--gold) 15%, transparent);
 }
 
 .features-powerhouse__card h3 {
   font-size: 22px;
-  color: var(--ink-on-dark);
+  color: var(--ink);
 }
 
 .features-powerhouse__card p {
   margin-top: 12px;
-  color: rgba(242, 240, 234, 0.72);
+  color: var(--ink-soft);
   font-size: 14.5px;
   max-width: 42ch;
 }

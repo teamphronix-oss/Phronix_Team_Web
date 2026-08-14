@@ -1,16 +1,21 @@
 import "dotenv/config";
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieSession from "cookie-session";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 import passport from "./config/passport.js";
+import { supabase } from "./config/supabase.js";
 
 import authRoutes from "./routes/auth.js";
 import contactRoutes from "./routes/contact.js";
 import downloadRoutes from "./routes/downloads.js";
+import adminRoutes from "./routes/admin.js";
+import projectRoutes from "./routes/projects.js";
+import teamRoutes from "./routes/team.js";
+import settingsRoutes from "./routes/settings.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,6 +24,8 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use(express.json({ limit: "1mb" }));
+app.use(cookieParser());
+app.use("/uploads", express.static("uploads"));
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
@@ -55,6 +62,10 @@ app.get("/api/health", (req, res) => res.json({ ok: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/downloads", downloadRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/team", teamRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // ── Error handling ─────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ message: "Not found" }));
@@ -66,8 +77,10 @@ app.use((err, req, res, next) => {
 
 async function start() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to MongoDB");
+    // Quick sanity check that Supabase creds work before accepting traffic.
+    const { error } = await supabase.from("site_settings").select("key").limit(1);
+    if (error) throw error;
+    console.log("Connected to Supabase");
     app.listen(PORT, () => console.log(`Phronix API running on port ${PORT}`));
   } catch (err) {
     console.error("Failed to start server:", err.message);

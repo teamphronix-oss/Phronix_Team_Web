@@ -1,10 +1,9 @@
 // Utility: node scripts/seedDownloads.js
-// Populates DownloadableProject documents matching frontend/src/data/downloads.js.
+// Populates downloadable_projects rows matching frontend/src/data/downloads.js.
 // Run `node scripts/hashPassword.js <password>` first if a project needs one,
 // and paste the resulting hash below instead of a plain password.
 import "dotenv/config";
-import mongoose from "mongoose";
-import DownloadableProject from "../models/DownloadableProject.js";
+import { upsertDownloadable } from "../models/DownloadableProject.js";
 
 const seedData = [
   { slug: "formfoundry", name: "FormFoundry", version: "v1.4.0", filename: "formfoundry-v1.4.0.zip", passwordHash: null },
@@ -13,12 +12,13 @@ const seedData = [
 ];
 
 async function run() {
-  await mongoose.connect(process.env.MONGODB_URI);
   for (const item of seedData) {
-    await DownloadableProject.findOneAndUpdate({ slug: item.slug }, item, { upsert: true });
+    await upsertDownloadable(item);
   }
   console.log("Seeded downloadable projects.");
-  await mongoose.disconnect();
 }
 
-run();
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

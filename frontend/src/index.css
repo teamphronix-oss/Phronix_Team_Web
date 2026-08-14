@@ -1,30 +1,44 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
-/* ── Design tokens ───────────────────────────────────────────── */
+/* ── Design tokens — "Arctic Code" palette ──────────────────────
+   Semantic names below are the source of truth. The aliases in the
+   second block (--gold, --panel-dark, etc.) exist so every existing
+   component keeps working unchanged — they just point at the new
+   colors. New/updated CSS should prefer the semantic names. ────── */
 :root {
   /* Background */
-  --bg: #fdfbf7;
-  --bg-soft: #f6f1e7;
-  --panel-dark: #1a1512;
-  --panel-dark-soft: #2a221c;
+  --white: #FFFFFF;         /* Pure White */
+  --bg: #FAFBFC;             /* Polar White */
+  --bg-soft: #FFFFFF;        /* Pure White */
+  --navy: #f5f8f9;         /* Midnight Navy */
+  --navy-soft: #1E293B;
 
- /* Text */
---ink: #1c1712;
---ink-soft: #5c5348;
---ink-faint: #948a7c;
+  /* Text */
+  --ink: #0F172A;            /* Midnight Navy */
+  
+  --ink-soft: #475569;
+  --ink-faint: #94A3B8;      /* Silver Mist */
 
-/* Text on dark backgrounds */
---ink-on-dark: #f2f0ea;
+  /* Text on dark backgrounds */
+  --ink-on-dark: #FAFBFC;
 
   /* Border */
-  --line: rgba(28,23,18,.10);
+  --line: #E2E8F0;           /* Frost Border */
   --line-dark: rgba(255,255,255,.15);
 
-  /* Accent — Gold/Amber */
-  --gold: #c9972f;
-  --gold-bright: #e6b34f;
-  --gold-pale: #f5e6c8;
-  --gold-ink: #7a5610;
+  /* Accent — Ice Blue */
+  --ice: #0EA5E9;            /* Ice Blue */
+  --ice-bright: #38BDF8;
+  --ice-pale: #E0F2FE;
+  --ice-ink: #0369A1;
+
+  /* ── Back-compat aliases (old token names, new colors) ────────── */
+  --panel-dark: var(--navy);
+  --panel-dark-soft: var(--navy-soft);
+  --gold: var(--ice);
+  --gold-bright: var(--ice-bright);
+  --gold-pale: var(--ice-pale);
+  --gold-ink: var(--ice-ink);
 
   /* Typography */
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
@@ -37,8 +51,8 @@
   --radius-sm: 8px;
 
   /* Shadows */
-  --shadow-soft: 0 20px 50px rgba(28,23,18,.12);
-  --shadow-gold: 0 20px 50px rgba(201,151,47,.28);
+  --shadow-soft: 0 20px 50px rgba(15,23,42,.12);
+  --shadow-gold: 0 20px 50px rgba(14,165,233,.28);
 
   --ease: cubic-bezier(0.22,1,0.36,1);
 }
@@ -178,7 +192,7 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--ink);
   box-shadow: var(--shadow-gold);
 }
-.btn--gold:hover { box-shadow: 0 14px 34px -10px rgba(127, 179, 170, 0.55); transform: translateY(-1px); }
+.btn--gold:hover { box-shadow: 0 14px 34px -10px rgba(14, 165, 233, 0.55); transform: translateY(-1px); }
 .btn--outline {
   background: transparent;
   border-color: var(--line);
@@ -360,13 +374,12 @@ button { font-family: inherit; cursor: pointer; }
   pointer-events: none;
   border-radius: 50%;
   will-change: transform;
-  mix-blend-mode: difference;
 }
 
 .custom-cursor__dot {
   width: 8px;
   height: 8px;
-  background: #ffffff;
+  background: #0EA5E9;
   transition: width 0.2s var(--ease, ease), height 0.2s var(--ease, ease),
     background 0.2s var(--ease, ease), opacity 0.2s ease;
 }
@@ -379,8 +392,8 @@ button { font-family: inherit; cursor: pointer; }
 .custom-cursor__ring {
   width: 34px;
   height: 34px;
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(14, 165, 233, 0.65);
+  background: rgba(14, 165, 233, 0.1);
   transition: width 0.25s var(--ease, ease), height 0.25s var(--ease, ease),
     background 0.25s var(--ease, ease), border-color 0.25s var(--ease, ease),
     opacity 0.2s ease;
@@ -388,8 +401,8 @@ button { font-family: inherit; cursor: pointer; }
 .custom-cursor__ring--hover {
   width: 58px;
   height: 58px;
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.95);
+  background: rgba(14, 165, 233, 0.2);
+  border-color: rgba(14, 165, 233, 0.95);
 }
 
 .custom-cursor--hidden {

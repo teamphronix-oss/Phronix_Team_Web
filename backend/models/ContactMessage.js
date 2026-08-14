@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
+import { supabase } from "../config/supabase.js";
 
-const contactMessageSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true },
-    phone: { type: String, trim: true },
-    subject: { type: String, required: true, trim: true },
-    message: { type: String, required: true, trim: true },
-  },
-  { timestamps: true }
-);
+const TABLE = "contact_messages";
 
-export default mongoose.model("ContactMessage", contactMessageSchema);
+export async function createContactMessage({ name, email, phone, subject, message }) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .insert({ name, email, phone, subject, message })
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export default { createContactMessage };

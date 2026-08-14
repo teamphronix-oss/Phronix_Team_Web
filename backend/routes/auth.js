@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "../config/passport.js";
+import { toClientUser } from "../models/User.js";
 
 const router = Router();
 
@@ -26,8 +27,7 @@ router.get("/me", (req, res) => {
   if (!req.isAuthenticated || !req.isAuthenticated()) {
     return res.status(401).json({ user: null });
   }
-  const { id, name, email, avatar, role } = req.user;
-  res.json({ user: { id, name, email, avatar, role } });
+  res.json({ user: toClientUser(req.user) });
 });
 
 router.post("/logout", (req, res) => {

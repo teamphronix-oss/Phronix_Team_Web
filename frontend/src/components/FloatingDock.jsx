@@ -16,12 +16,18 @@ const DEFAULT_ITEMS = [
    visible/open-able and isn't tied to a section). */
 const DEFAULT_SECTION_SELECTORS = [".about__grid", ".section--space", ".projects-showcase"];
 
+/* How long (ms) to wait after scrolling out of a section's active
+   zone before auto-closing its video — avoids the panel/video
+   snapping shut the instant the user scrolls a little too far. */
+const CLOSE_DELAY = 3000;
+
 export default function FloatingDock({
   items = DEFAULT_ITEMS,
   sectionSelectors = DEFAULT_SECTION_SELECTORS,
 }) {
   const [openId, setOpenId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(0);
+  const closeTimerRef = useRef(null);
 
   useEffect(() => {
     const targets = sectionSelectors
@@ -42,6 +48,13 @@ export default function FloatingDock({
           if (idx === -1) return;
 
           if (entry.isIntersecting) {
+            // Re-entered (or a new section became active) — cancel
+            // any pending close from before, it's no longer needed.
+            if (closeTimerRef.current) {
+              clearTimeout(closeTimerRef.current);
+              closeTimerRef.current = null;
+            }
+
             // Reveal stays sticky (never un-reveals).
             setVisibleCount((prev) => Math.max(prev, idx + 1));
 
@@ -49,10 +62,16 @@ export default function FloatingDock({
             activeIdx = idx;
             setOpenId(items[idx + 1]?.id ?? null);
           } else if (activeIdx === idx) {
-            // Left this section — close it (pauses its video via
-            // DockItem's effect below).
-            activeIdx = -1;
-            setOpenId(null);
+            // Left this section — don't close immediately. Wait a
+            // bit in case the user scrolls back in or it was just a
+            // brief overshoot; pauses its video via DockItem's
+            // effect below once it actually closes.
+            if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = setTimeout(() => {
+              activeIdx = -1;
+              setOpenId(null);
+              closeTimerRef.current = null;
+            }, CLOSE_DELAY);
           }
         });
       },
@@ -64,7 +83,10 @@ export default function FloatingDock({
     );
 
     targets.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionSelectors, items]);
 

@@ -1,18 +1,31 @@
-import mongoose from "mongoose";
+import { supabase } from "../config/supabase.js";
 
-// Stores only a bcrypt HASH if a project needs its own password, plus the
-// server-local file path. Neither the hash nor the path is ever sent to
-// the client — see routes/downloads.js.
-const downloadableProjectSchema = new mongoose.Schema(
-  {
-    slug: { type: String, required: true, unique: true }, // matches frontend data/downloads.js id
-    name: { type: String, required: true },
-    version: { type: String },
-    filename: { type: String, required: true }, // filename inside PROTECTED_FILES_DIR
-    passwordHash: { type: String }, // optional, bcrypt hash only
-    requiresAuth: { type: Boolean, default: true },
-  },
-  { timestamps: true }
-);
+const TABLE = "downloadable_projects";
 
-export default mongoose.model("DownloadableProject", downloadableProjectSchema);
+export async function findDownloadableBySlug(slug) {
+  const { data, error } = await supabase.from(TABLE).select("*").eq("slug", slug).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function upsertDownloadable(item) {
+  const { data, error } = await supabase
+    .from(TABLE)
+    .upsert(
+      {
+        slug: item.slug,
+        name: item.name,
+        version: item.version,
+        filename: item.filename,
+        password_hash: item.passwordHash || null,
+        requires_auth: item.requiresAuth ?? true,
+      },
+      { onConflict: "slug" }
+    )
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+export default { findDownloadableBySlug, upsertDownloadable };

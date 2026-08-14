@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
-import ContactMessage from "../models/ContactMessage.js";
+import { createContactMessage } from "../models/ContactMessage.js";
 
 const router = Router();
 
@@ -42,10 +42,8 @@ router.post("/", contactLimiter, validators, async (req, res, next) => {
     }
 
     const { name, email, phone, subject, message } = req.body;
-    const saved = await ContactMessage.create({ name, email, phone, subject, message });
+    const saved = await createContactMessage({ name, email, phone, subject, message });
 
-    // Email delivery is best-effort — a saved message is still success even
-    // if SMTP isn't configured yet in this environment.
     if (process.env.SMTP_HOST) {
       try {
         await getTransporter().sendMail({

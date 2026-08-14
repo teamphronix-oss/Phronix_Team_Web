@@ -15,7 +15,7 @@ export default function CursorTrailBlobs({
   startRadius = 34,          // radius (px) of a freshly spawned blob
   dotCount = 55,               // dots per blob
   lifespan = 650,                // ms a blob lives before fully gone
-  color = "255,255,255",           // r,g,b used for dot fill (opacity added per-dot)
+  color = "14,165,233",           // r,g,b used for dot fill (opacity added per-dot)
 }) {
   const canvasRef = useRef(null);
 

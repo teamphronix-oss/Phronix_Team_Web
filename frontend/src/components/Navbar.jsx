@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Instagram, Github, Youtube, Linkedin } from "lucide-react";
 import siteConfig from "../data/siteConfig";
-import { useAuth } from "../context/AuthContext";
+import { useAdminAuth } from "../context/AdminAuthContext";
+import phronixLogo from "../assets/phronix-logo.jpeg";
 
 const links = [
   { to: "/", label: "Home" },
@@ -19,7 +20,7 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { user } = useAuth();
+  const { admin } = useAdminAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -35,8 +36,13 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="container navbar__inner">
-        <NavLink to="/" className="navbar__logo" aria-label="Phronix home">
-          <span className="navbar__mark">P</span>
+        <NavLink
+          to="/"
+          className="navbar__logo"
+          aria-label="Phronix home"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <img src={phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
           <span>{siteConfig.companyName}</span>
         </NavLink>
 
@@ -56,8 +62,46 @@ export default function Navbar() {
         </nav>
 
         <div className="navbar__actions">
-          <NavLink to="/login" className="btn btn--gold btn--sm">
-            {user ? user.name.split(" ")[0] : "Login"}
+          <div className="navbar__socials">
+            <a
+              href={siteConfig.socialLinks.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--instagram"
+              aria-label="Instagram"
+            >
+              <Instagram size={19} />
+            </a>
+            <a
+              href={siteConfig.socialLinks.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--github"
+              aria-label="GitHub"
+            >
+              <Github size={19} />
+            </a>
+            <a
+              href={siteConfig.socialLinks.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--youtube"
+              aria-label="YouTube"
+            >
+              <Youtube size={19} />
+            </a>
+            <a
+              href={siteConfig.socialLinks.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--linkedin"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={19} />
+            </a>
+          </div>
+          <NavLink to={admin ? "/admin" : "/admin/login"} className="btn btn--gold btn--sm">
+            {admin ? admin.username : "Login"}
           </NavLink>
           <button
             className="navbar__toggle"
@@ -84,9 +128,47 @@ export default function Navbar() {
               {l.label}
             </NavLink>
           ))}
-          <NavLink to="/login" className="btn btn--gold btn--block">
-            {user ? user.name.split(" ")[0] : "Login"}
+          <NavLink to={admin ? "/admin" : "/admin/login"} className="btn btn--gold btn--block">
+            {admin ? admin.username : "Login"}
           </NavLink>
+          <div className="navbar__socials navbar__socials--mobile">
+            <a
+              href={siteConfig.socialLinks.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--instagram"
+              aria-label="Instagram"
+            >
+              <Instagram size={20} />
+            </a>
+            <a
+              href={siteConfig.socialLinks.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--github"
+              aria-label="GitHub"
+            >
+              <Github size={20} />
+            </a>
+            <a
+              href={siteConfig.socialLinks.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--youtube"
+              aria-label="YouTube"
+            >
+              <Youtube size={20} />
+            </a>
+            <a
+              href={siteConfig.socialLinks.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="navbar__social-icon navbar__social-icon--linkedin"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={20} />
+            </a>
+          </div>
         </nav>
       )}
     </header>
