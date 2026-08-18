@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <div className="navbar__logo" style={{ color: "#f7f5ee" }}>
+          <div className="navbar__logo">
             <img src={phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
             <span>{siteConfig.companyName}</span>
           </div>

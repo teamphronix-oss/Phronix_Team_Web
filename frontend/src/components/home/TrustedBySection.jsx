@@ -1,28 +1,34 @@
 import "../../styles/home/trusted-by.css";
 
+const capabilities = [
+  "AI SYSTEMS",
+  "SOFTWARE PRODUCTS",
+  "DIGITAL EXPERIENCES",
+  "AUTOMATION",
+  "3D & CREATIVE",
+  "AI AGENTS",
+  "WEB & MOBILE",
+  "DIGITAL PRODUCTS",
+];
+
 export default function TrustedBySection() {
   return (
-    <>
-      <section className="trusted-by">
-        <div className="container">
-          <p className="trusted-by__label">Trusted by B2B marketing and growth teams</p>
-        </div>
-        <div className="trusted-by__row">
-          <div className="trusted-by__track">
-            {[
-              "ElevenLabs", "Figma", "Framer", "auth0",
-              "replit", "GAMMA", "HubSpot", "Graphite",
-              "ElevenLabs", "Figma", "Framer", "auth0",
-              "replit", "GAMMA", "HubSpot", "Graphite",
-            ].map((name, i) => (
-              <span className="trusted-by__logo" key={`${name}-${i}`}>
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+    <section className="trusted-by">
+      <div className="container">
+        <p className="trusted-by__label">
+          Building the future with technology, creativity & AI
+        </p>
+      </div>
 
-    </>
+      <div className="trusted-by__row">
+        <div className="trusted-by__track">
+          {[...capabilities, ...capabilities].map((item, i) => (
+            <span className="trusted-by__logo" key={`${item}-${i}`}>
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

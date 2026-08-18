@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Menu, X, Instagram, Github, Youtube, Linkedin } from "lucide-react";
 import siteConfig from "../data/siteConfig";
 import { useAdminAuth } from "../context/AdminAuthContext";
-import phronixLogo from "../assets/phronix-logo.jpeg";
+import phronixLogo from "../assets/Gemini_Generated_Image_mflsmnmflsmnmfls.png";
 
 const links = [
   { to: "/", label: "Home" },
@@ -36,15 +36,20 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="container navbar__inner">
-        <NavLink
-          to="/"
-          className="navbar__logo"
-          aria-label="Phronix home"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <img src={phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
-          <span>{siteConfig.companyName}</span>
-        </NavLink>
+ <NavLink
+  to="/"
+  className="navbar__logo"
+  aria-label="Phronix home"
+  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+>
+  <img
+    src={phronixLogo}
+    alt="Phronix"
+    className="navbar__mark navbar__mark--img"
+  />
+
+  <span>{siteConfig.companyName}</span>
+</NavLink>
 
         <nav className="navbar__links" aria-label="Primary">
           {links.map((l) => (

@@ -25,7 +25,7 @@
   gap: 10px;
   font-size: 14px;
   font-weight: 500;
-  color: #000000;
+  color: var(--ink-on-dark);
   white-space: nowrap;
 }
 

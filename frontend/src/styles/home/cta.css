@@ -1,6 +1,6 @@
   /* ── CTA section ────────────────────────────────────────────── */
   .cta__inner { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
   .cta__inner h2 { font-size: clamp(26px, 3vw, 34px); margin-top: 10px; }
-  .cta__inner p { color: #c8c5bb; margin-top: 10px; }
+  .cta__inner p { color: var(--ink-soft); margin-top: 10px; }
   .cta__actions { display: flex; gap: 14px; flex-wrap: wrap; }
 

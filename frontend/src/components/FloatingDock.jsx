@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Plus, Minus } from "lucide-react";
 import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
 
-/* Default (Home page) content — kept as default props so
-   `<FloatingDock />` with no props behaves exactly as before. */
+/* Home page dock items. The rows are revealed in this order while the
+   user moves through the matching sections. */
 const DEFAULT_ITEMS = [
   { id: "touch", label: "GET IN TOUCH", hasVideo: true, videoSrc: logoVideo, avatar: true },
   { id: "us", label: "THIS IS US", hasVideo: true, videoSrc: logoVideo },
@@ -11,15 +11,19 @@ const DEFAULT_ITEMS = [
   { id: "awwwards", label: "OUR AWWWARDS TALK", hasVideo: true, videoSrc: logoVideo },
 ];
 
-/* Which sections on the host page trigger each row (index 0 in this
-   list -> items[1], index 1 -> items[2], etc. — item[0] is always
-   visible/open-able and isn't tied to a section). */
-const DEFAULT_SECTION_SELECTORS = [".about__grid", ".section--space", ".projects-showcase"];
+/* Keep these selectors distinct. They correspond to:
+   1. About / This Is Us
+   2. Services / Pitchdeck
+   3. Projects / Our Awwwards Talk */
+const DEFAULT_SECTION_SELECTORS = [
+  ".about__grid",
+  ".section--soft.section--space",
+  ".projects-showcase",
+];
 
-/* How long (ms) to wait after scrolling out of a section's active
-   zone before auto-closing its video — avoids the panel/video
-   snapping shut the instant the user scrolls a little too far. */
-const CLOSE_DELAY = 3000;
+/* Motion timings are intentionally kept together so the scroll feel can
+   be tuned without hunting through the component. */
+const REVEAL_STAGGER_MS = 180;
 
 export default function FloatingDock({
   items = DEFAULT_ITEMS,
@@ -27,76 +31,160 @@ export default function FloatingDock({
 }) {
   const [openId, setOpenId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(0);
-  const closeTimerRef = useRef(null);
+ 
 
-  useEffect(() => {
-    const targets = sectionSelectors
-      .map((sel) => document.querySelector(sel))
-      .filter(Boolean);
+ useEffect(() => {
+  const targets = sectionSelectors
+    .map((sel) => document.querySelector(sel))
+    .filter(Boolean);
 
-    if (targets.length === 0) return;
+  if (targets.length === 0) return;
 
-    // Tracks which section is currently "active" (near the vertical
-    // centre of the screen). -1 means none — i.e. user is back up
-    // near the always-visible first row.
-    let activeIdx = -1;
+  let startY = null;
+  let lastActiveIdx = -1;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const idx = targets.indexOf(entry.target);
-          if (idx === -1) return;
+  const updateFromScroll = () => {
+    const scrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
 
-          if (entry.isIntersecting) {
-            // Re-entered (or a new section became active) — cancel
-            // any pending close from before, it's no longer needed.
-            if (closeTimerRef.current) {
-              clearTimeout(closeTimerRef.current);
-              closeTimerRef.current = null;
-            }
+    /*
+     * The sequence starts when the first matching section
+     * reaches the same visual point as before.
+     */
+    if (startY === null) {
+      const firstRect = targets[0].getBoundingClientRect();
 
-            // Reveal stays sticky (never un-reveals).
-            setVisibleCount((prev) => Math.max(prev, idx + 1));
+      startY =
+        firstRect.top +
+        window.scrollY -
+        viewportHeight * 0.45;
+    }
 
-            // Auto-open + auto-play this row's video.
-            activeIdx = idx;
-            setOpenId(items[idx + 1]?.id ?? null);
-          } else if (activeIdx === idx) {
-            // Left this section — don't close immediately. Wait a
-            // bit in case the user scrolls back in or it was just a
-            // brief overshoot; pauses its video via DockItem's
-            // effect below once it actually closes.
-            if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-            closeTimerRef.current = setTimeout(() => {
-              activeIdx = -1;
-              setOpenId(null);
-              closeTimerRef.current = null;
-            }, CLOSE_DELAY);
-          }
-        });
-      },
-      {
-        // Thin trigger band around the vertical centre of the screen.
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: 0,
+    /*
+     * The complete scroll range available for the dock.
+     */
+    const pageEndY =
+      document.documentElement.scrollHeight - viewportHeight;
+
+    /*
+     * If we haven't reached the starting point yet,
+     * close all video panels.
+     */
+    if (scrollY < startY) {
+      if (lastActiveIdx !== -1) {
+        lastActiveIdx = -1;
+        setOpenId(null);
       }
+
+      return;
+    }
+
+    /*
+     * Once we reach the actual bottom of the page,
+     * close the currently open panel.
+     */
+    if (scrollY >= pageEndY - 20) {
+      if (lastActiveIdx !== -1) {
+        lastActiveIdx = -1;
+        setOpenId(null);
+      }
+
+      return;
+    }
+
+    /*
+     * Divide the ENTIRE available scroll distance
+     * into exactly 3 equal zones.
+     *
+     * Zone 0 → THIS IS US
+     * Zone 1 → PITCHDECK
+     * Zone 2 → OUR AWWWARDS TALK
+     */
+    const totalScrollDistance = pageEndY - startY;
+
+    const zoneSize =
+      totalScrollDistance / targets.length;
+
+    const distanceFromStart =
+      scrollY - startY;
+
+    let activeIdx = Math.floor(
+      distanceFromStart / zoneSize
     );
 
-    targets.forEach((t) => observer.observe(t));
-    return () => {
-      observer.disconnect();
-      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sectionSelectors, items]);
+    /*
+     * Keep the index safely inside 0–2.
+     */
+    activeIdx = Math.max(
+      0,
+      Math.min(activeIdx, targets.length - 1)
+    );
 
+    /*
+     * Don't update React unnecessarily.
+     */
+    if (activeIdx === lastActiveIdx) return;
+
+    lastActiveIdx = activeIdx;
+
+    /*
+     * Reveal the cards progressively.
+     */
+    setVisibleCount((prev) =>
+      Math.max(prev, activeIdx + 1)
+    );
+
+    /*
+     * Map:
+     *
+     * activeIdx 0 → items[1] → THIS IS US
+     * activeIdx 1 → items[2] → PITCHDECK
+     * activeIdx 2 → items[3] → OUR AWWWARDS TALK
+     */
+    setOpenId(
+      items[activeIdx + 1]?.id ?? null
+    );
+  };
+
+  const initialise = () => {
+    startY = null;
+    lastActiveIdx = -1;
+    updateFromScroll();
+  };
+
+  initialise();
+
+  window.addEventListener(
+    "scroll",
+    updateFromScroll,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    initialise
+  );
+
+  return () => {
+    window.removeEventListener(
+      "scroll",
+      updateFromScroll
+    );
+
+    window.removeEventListener(
+      "resize",
+      initialise
+    );
+  };
+}, [sectionSelectors, items]);
   const isPinned = visibleCount > 0;
 
   return (
-    <div className={`floating-dock${isPinned ? " floating-dock--pinned" : ""}`}>
+    <aside className={`floating-dock${isPinned ? " floating-dock--pinned" : ""}`}>
       {items.map((item, index) => {
         const isOpen = openId === item.id;
-        const isVisible = index === 0 ? true : index - 1 < visibleCount;
+        const isVisible = index === 0 || index - 1 < visibleCount;
+
         return (
           <DockItem
             key={item.id}
@@ -108,17 +196,13 @@ export default function FloatingDock({
           />
         );
       })}
-    </div>
+    </aside>
   );
 }
 
 function DockItem({ item, index, isOpen, isVisible, onToggle }) {
   const videoRef = useRef(null);
 
-  // Plays/pauses whenever `isOpen` changes — whether from a manual
-  // click OR the scroll-driven auto-open above. Video is `muted`, so
-  // browsers (incl. mobile Safari) allow programmatic play() here
-  // without a direct click gesture on this element.
   useEffect(() => {
     if (!item.hasVideo || !videoRef.current) return;
 
@@ -136,9 +220,9 @@ function DockItem({ item, index, isOpen, isVisible, onToggle }) {
     <div
       className={`floating-dock__item${
         isVisible ? " floating-dock__item--visible" : ""
-      }`}
+      }${isOpen ? " floating-dock__item--open" : ""}`}
       style={{
-        transitionDelay: isVisible ? `${Math.max(0, index - 1) * 90}ms` : "0ms",
+        "--dock-delay": `${Math.max(0, index - 1) * REVEAL_STAGGER_MS}ms`,
       }}
     >
       <button
@@ -148,9 +232,7 @@ function DockItem({ item, index, isOpen, isVisible, onToggle }) {
         tabIndex={isVisible ? 0 : -1}
       >
         <span className="floating-dock__row-label">
-          {item.avatar && (
-            <span className="floating-dock__avatar" aria-hidden="true" />
-          )}
+          {item.avatar && <span className="floating-dock__avatar" aria-hidden="true" />}
           <span>{item.label}</span>
         </span>
         {isOpen ? <Minus size={14} /> : <Plus size={14} />}
@@ -159,13 +241,16 @@ function DockItem({ item, index, isOpen, isVisible, onToggle }) {
       {item.hasVideo && (
         <div
           className={`floating-dock__panel${
-            isOpen ? "" : " floating-dock__panel--hidden"
+            isOpen ? " floating-dock__panel--open" : ""
           }`}
+          aria-hidden={!isOpen}
         >
-          <div className="floating-dock__video">
-            <video ref={videoRef} muted loop playsInline controls>
-              <source src={item.videoSrc} type="video/mp4" />
-            </video>
+          <div className="floating-dock__panel-inner">
+            <div className="floating-dock__video">
+              <video ref={videoRef} muted loop playsInline>
+                <source src={item.videoSrc} type="video/mp4" />
+              </video>
+            </div>
           </div>
         </div>
       )}

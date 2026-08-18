@@ -1,48 +1,82 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { useCallback, useState } from "react";
 import siteConfig from "../../data/siteConfig";
+import ParticlePhoenix from "./ParticlePhoenix";
 import "../../styles/home/hero.css";
 
 export default function HeroSection() {
+  const [hasInteracted, setHasInteracted] = useState(false);
+
+  const handlePhoenixInteraction = useCallback(() => {
+    setHasInteracted(true);
+  }, []);
+
   return (
-    <>
-      <section className="hero">
-        <div className="container hero__grid">
-          <div className="hero__reveal hero__reveal--1">
-            <span className="eyebrow">Software Development Company • Nashik, India</span>
-            <h1 className="hero__title">
-  Building <span className="hero__title-gold">Digital Products</span> That Drive Business Growth.
-</h1>
-            <p className="hero__lede">{siteConfig.shortDescription}</p>
-            <div className="hero__actions">
-              <Link to="/contact" className="btn btn--gold">
-                Get Started <ArrowRight size={16} />
-              </Link>
-              <Link to="/projects" className="btn btn--outline">
-                View our work
-              </Link>
-            </div>
-            <div className="hero__stats">
-              <div><strong>40+</strong><span>Projects Completed</span></div>
-              <div><strong>18</strong><span>Happy Clients</span></div>
-              <div><strong>6</strong><span>Technology Services</span></div>
-            </div>
-          </div>
+    <section className="hero hero--particle">
+      <div className="hero__ambient" />
+      <ParticlePhoenix onInteraction={handlePhoenixInteraction} />
 
-         <div className="hero__panel hero__reveal hero__reveal--2" aria-hidden="true">
-  <div className="hero__shell">
-    <div className="hero__shell-logo-wrap">
-      <div className="hero__shell-logo" />
-      <span className="hero__shell-orb hero__shell-orb--purple" />
-      <span className="hero__shell-orb hero__shell-orb--orange" />
-      <span className="hero__shell-orb hero__shell-orb--gold" />
-      <span className="hero__shell-orb hero__shell-orb--ink" />
-    </div>
-  </div>
-</div>
+      <div className="hero__content">
+        <div className="hero__eyebrow">
+          <span className="hero__eyebrow-dot" />
+          PHRONIX · AI · SOFTWARE · DIGITAL
         </div>
-      </section>
 
-    </>
+        <h1 className="hero__title">
+          Build what <span>comes next.</span>
+        </h1>
+
+        <p className="hero__lede">
+          {siteConfig.shortDescription}
+        </p>
+
+        <div className="hero__actions">
+          <Link to="/contact" className="hero__button hero__button--primary">
+            Start a project <ArrowRight size={16} />
+          </Link>
+
+          <Link to="/projects" className="hero__button hero__button--ghost">
+            Explore our work
+          </Link>
+        </div>
+
+        <div className="hero__meta">
+          <span><Sparkles size={13} /> AI-first thinking</span>
+          <span>40+ projects</span>
+          <span>18+ clients</span>
+        </div>
+      </div>
+
+      {/* Interactive explanation for the phoenix. */}
+      <div
+        className={`hero__interaction-hint ${
+          hasInteracted ? "hero__interaction-hint--active" : ""
+        }`}
+        aria-hidden="true"
+      >
+        <div className="hero__interaction-orbit">
+          <span className="hero__interaction-orbit-line" />
+         <span className="hero__interaction-cursor" />
+          
+        </div>
+
+        <div className="hero__interaction-copy">
+   <strong>
+  {hasInteracted ? "AGAIN?" : "AWAKEN"}
+</strong>
+
+<span>
+  Tap the phoenix
+</span>
+        </div>
+      </div>
+
+      <div className="hero__bottom">
+        <span>SCROLL TO BUILD</span>
+        <span className="hero__bottom-line" />
+        <span>PHRONIX / 01</span>
+      </div>
+    </section>
   );
 }

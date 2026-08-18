@@ -283,7 +283,7 @@
   /* ── Footer ─────────────────────────────────────────────────── */
 .footer {
   /* background: var(--panel-dark); */
-  background:#2a95cf;
+  background: var(--panel-dark);
   color: var(--ink-on-dark);
   padding-top: 60px;
 }
@@ -595,132 +595,193 @@
   }
 
   /* ── Floating dock (right side, Home page only) ─────────────── */
-  /* Each row is now its OWN independent rounded card (its own
-    background, border, blur, shadow) with a gap between them —
-    not one big connected box. .floating-dock itself is just an
-    invisible flex column that positions/spaces the individual cards. */
+  /*
+   * The dock is a real fixed layer above the page. Each card owns its
+   * background, so page content cannot visually bleed through it.
+   * New cards enter from below, one at a time, while the active card's
+   * media panel expands/collapses in place.
+   */
   .floating-dock {
-  position: fixed;
-  top: 88px;   /* navbar height (76px) + thoda gap — navbar la chipkun rahil */
-  right: 0px;
-  width: 240px;
-  z-index: 55;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  transition: top 0.6s var(--ease), transform 0.6s var(--ease);
-}
-.floating-dock--pinned {
-  top: 88px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .floating-dock { transition: none; }
-}
-  .floating-dock__top {
+    position: fixed;
+    top: 88px;
+    right: 18px;
+    width: min(240px, calc(100vw - 28px));
+    z-index: 500;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 10px;
-    padding: 14px 16px;
-    background: rgba(15, 32, 74, 0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
-    color: #f2f0ea;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.04em;
+    isolation: isolate;
+    pointer-events: none;
   }
-  .floating-dock__avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: var(--gold-pale);
-    flex-shrink: 0;
+
+  .floating-dock--pinned {
+    top: 88px;
   }
-  .floating-dock__row {
+
+  .floating-dock__item {
+    position: relative;
     width: 100%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translate3d(0, 72px, 0);
+    pointer-events: none;
+
+    /* Deep navy/blue theme — deliberately opaque to hide content behind it. */
+    background: #050b16;
+    border: 1px solid rgba(56, 189, 248, 0.16);
+    border-radius: 12px;
+    box-shadow:
+      0 22px 45px -24px rgba(0, 0, 0, 0.95),
+      0 0 0 1px rgba(14, 165, 233, 0.03);
+
+    transition:
+      max-height 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.48s ease,
+      transform 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.25s ease,
+      box-shadow 0.35s ease;
+
+    transition-delay: 0ms;
+    will-change: transform, opacity, max-height;
+  }
+
+  .floating-dock__item--visible {
+    max-height: 420px;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    pointer-events: auto;
+    transition-delay: var(--dock-delay);
+  }
+
+  .floating-dock__item--open {
+    border-color: rgba(56, 189, 248, 0.30);
+    box-shadow:
+      0 26px 55px -26px rgba(0, 0, 0, 0.98),
+      0 0 24px -16px rgba(14, 165, 233, 0.55);
+  }
+
+  .floating-dock__row {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
-    background: none;
-    border: none;
-    color: #f2f0ea;
+    gap: 12px;
+    padding: 13px 14px;
+
+    /* Opaque face — scrolling content stays underneath the dock. */
+    background: #07111f;
+    border: 0;
+    color: #f4f8ff;
     font-family: var(--font-mono);
-    font-size: 11.5px;
-    letter-spacing: 0.04em;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.035em;
+    text-align: left;
     cursor: pointer;
-    transition: color 0.2s var(--ease);
-  }
-  .floating-dock__row:hover { color: var(--gold-bright); }
 
-  /* Rows start hidden (collapsed + faded) and reveal one-by-one as the
-    user scrolls, driven by the .floating-dock__item--visible class
-    toggled in FloatingDock.jsx. transition-delay is set inline per
-    item so each row lags slightly behind the previous one. Each item
-    is its own standalone card (background/border/blur/shadow), matching
-    .floating-dock__top, so it reads as a separate connected pill
-    sliding into the stack rather than a row inside one shared box. */
-  .floating-dock__item {
-    max-height: 0;
-    opacity: 0;
-    /* Starts a full row-height below its resting spot and rises fully
-      into place — so it visibly travels up from below and "docks" onto
-      the item above it (GET IN TOUCH for the first row, the previous
-      row for the rest) instead of just fading in where it sits. */
-    transform: translateY(58px);
-    overflow: hidden;
-    background: rgba(10, 9, 14, 0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
-    transition: max-height 0.55s var(--ease),
-      opacity 0.45s var(--ease),
-      transform 0.5s cubic-bezier(0.34, 1.35, 0.64, 1);
-  }
-  .floating-dock__item--visible {
-    max-height: 260px; /* comfortably fits row + open video panel */
-    opacity: 1;
-    transform: translateY(0);
+    transition:
+      background 0.28s ease,
+      color 0.22s ease;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .floating-dock__item {
-      transition: none;
-      max-height: 260px;
-      opacity: 1;
-      transform: none;
-    }
+  .floating-dock__item:first-child .floating-dock__row {
+    background:
+      linear-gradient(135deg, rgba(56, 189, 248, 0.20), rgba(7, 17, 31, 0.99) 62%);
   }
-  .floating-dock__panel {
-    padding: 0 16px 16px;
+
+  .floating-dock__row:hover {
+    color: #7ddcff;
+    background:
+      linear-gradient(135deg, rgba(14, 165, 233, 0.18), #07111f 72%);
   }
-  .floating-dock__panel--hidden {
-    display: none;
+
+  .floating-dock__item--open .floating-dock__row {
+    background:
+      linear-gradient(135deg, rgba(14, 165, 233, 0.18), #07111f 72%);
   }
+
   .floating-dock__row-label {
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 10px;
   }
+
+  .floating-dock__row-label > span:last-child {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .floating-dock__avatar {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    border-radius: 6px;
+    background:
+      linear-gradient(135deg, rgba(56, 189, 248, 0.85), rgba(14, 165, 233, 0.22));
+    border: 1px solid rgba(125, 220, 255, 0.28);
+    box-shadow: 0 0 18px -10px rgba(56, 189, 248, 0.9);
+  }
+
+  /* Smooth media open/close. The panel stays in the same card, so opening
+     it never moves the other cards to a new x/y position. */
+  .floating-dock__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition:
+      grid-template-rows 0.58s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.30s ease;
+  }
+
+  .floating-dock__panel--open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .floating-dock__panel-inner {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 12px;
+  }
+
   .floating-dock__video {
-    aspect-ratio: 16/10;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    margin: 0 0 12px;
     border-radius: 8px;
     overflow: hidden;
-    background: #000;
-    margin-top: 14px;
+    background: #030712;
+    border: 1px solid rgba(56, 189, 248, 0.12);
   }
-  .floating-dock__video video { width: 100%; height: 100%; object-fit: cover; }
+
+  .floating-dock__video video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
   @media (max-width: 900px) {
-    .floating-dock { display: none; }
+    .floating-dock {
+      display: none;
+    }
   }
 
-
+  @media (prefers-reduced-motion: reduce) {
+    .floating-dock__item,
+    .floating-dock__panel {
+      transition: none;
+    }
+  }
 
   /* ── Card carousel (3D coverflow, auto-rotate) ───────────────── */
   .card-carousel { position: relative; }
@@ -881,7 +942,7 @@ border-color: var(--line);
 
   .section--space .card-carousel__item .card {
     min-height: 520px;     
-    background: linear-gradient(160deg, #ffffff 0%, #f7f3ea 140%);
+    background: linear-gradient(160deg, #0b1625 0%, #07111f 140%);
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 50px 90px -30px rgba(0, 0, 0, 0.6);
   }
