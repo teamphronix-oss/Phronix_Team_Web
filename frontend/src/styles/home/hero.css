@@ -910,3 +910,232 @@
     margin-top: 16px;
   }
 }
+
+
+/* =========================================================
+   MOBILE PHOENIX COMPOSITION V2
+   Keep the bird centered behind the headline, but lower and
+   smaller so it does not compete with the copy or CTAs.
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .hero--particle .hero__content {
+    /*
+     * Keep the complete copy as one centered composition.
+     * The phoenix sits behind it rather than changing the
+     * document flow.
+     */
+    padding-top: 92px;
+    padding-bottom: 88px;
+  }
+
+  .hero--particle .hero__title {
+    position: relative;
+    z-index: 5;
+    max-width: 600px;
+  }
+
+  .hero--particle .hero__lede {
+    position: relative;
+    z-index: 5;
+    max-width: 36ch;
+    text-shadow:
+      0 2px 18px rgba(0, 0, 0, .98),
+      0 0 28px rgba(0, 0, 0, .9);
+  }
+
+  .hero--particle .hero__actions {
+    position: relative;
+    z-index: 5;
+  }
+
+  .hero--particle .hero__meta {
+    position: relative;
+    z-index: 5;
+  }
+
+  .hero--particle .particle-phoenix {
+    /*
+     * The WebGL object is centered by ParticlePhoenix itself.
+     * Keep the canvas full-screen and behind the copy.
+     */
+    inset: 0;
+    opacity: .92;
+  }
+
+  .hero--particle .hero__interaction-hint {
+    top: 78%;
+    right: 50%;
+    width: 112px;
+    transform: translateX(50%) scale(.58);
+    transform-origin: center top;
+  }
+
+  .hero--particle .hero__interaction-copy {
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero--particle .hero__content {
+    padding-top: 86px;
+    padding-bottom: 82px;
+  }
+
+  .hero--particle .hero__title {
+    font-size: clamp(39px, 13.2vw, 54px);
+    line-height: .93;
+  }
+
+  .hero--particle .hero__lede {
+    max-width: 33ch;
+    margin-top: 18px;
+  }
+
+  .hero--particle .hero__interaction-hint {
+    top: 71%;
+    transform: translateX(50%) scale(.52);
+  }
+}
+
+
+/* =========================================================
+   MOBILE HERO V3 — SEPARATE PHOENIX BLOCK
+   Order on phones:
+   NAV → eyebrow → headline → PHOENIX → paragraph → CTAs → meta → awaken
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .hero--particle {
+    min-height: 860px;
+    height: auto;
+    max-height: none;
+    overflow: hidden;
+  }
+
+  .hero--particle .hero__content {
+    width: calc(100% - 28px);
+    min-height: 0;
+    height: auto;
+    padding: 104px 14px 100px;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+  }
+
+  .hero--particle .hero__eyebrow {
+    margin-top: 0;
+  }
+
+  .hero--particle .hero__title {
+    margin-top: 12px;
+    max-width: 620px;
+    font-size: clamp(42px, 13.6vw, 66px);
+    line-height: .92;
+    z-index: 5;
+  }
+
+  /*
+   * Reserve real vertical space for the phoenix.
+   * The canvas itself is still absolute, but the copy is no longer
+   * allowed to sit on top of it.
+   */
+  .hero--particle .hero__lede {
+    margin-top: 254px;
+    max-width: 36ch;
+    font-size: clamp(13px, 3.5vw, 14.5px);
+    line-height: 1.55;
+    z-index: 5;
+    text-shadow: none;
+  }
+
+  .hero--particle .hero__actions {
+    margin-top: 24px;
+    z-index: 5;
+  }
+
+  .hero--particle .hero__meta {
+    margin-top: 22px;
+    z-index: 5;
+  }
+
+  .hero--particle .particle-phoenix {
+    inset: 0;
+    z-index: 2;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  /*
+   * The bird occupies the gap between the headline and paragraph.
+   * It is deliberately not behind the text.
+   */
+  .hero--particle .hero__interaction-hint {
+    top: 78%;
+    right: 50%;
+    width: 112px;
+    transform: translateX(50%) scale(.54);
+    transform-origin: center top;
+    z-index: 5;
+  }
+
+  .hero--particle .hero__bottom {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    z-index: 6;
+  }
+}
+
+/* Smaller phones: reduce the reserved bird space slightly. */
+@media (max-width: 390px) {
+  .hero--particle {
+    min-height: 880px;
+  }
+
+  .hero--particle .hero__content {
+    padding-top: 94px;
+    padding-bottom: 88px;
+  }
+
+  .hero--particle .hero__title {
+    font-size: clamp(39px, 13.2vw, 54px);
+  }
+
+  .hero--particle .hero__lede {
+    margin-top: 224px;
+    max-width: 33ch;
+    font-size: 13px;
+    line-height: 1.52;
+  }
+
+  .hero--particle .hero__actions {
+    margin-top: 20px;
+  }
+
+  .hero--particle .hero__meta {
+    margin-top: 18px;
+    gap: 8px 11px;
+  }
+
+  .hero--particle .hero__interaction-hint {
+    top: 79%;
+    transform: translateX(50%) scale(.50);
+  }
+}
+
+/* Short phones: preserve the sequence without creating a huge blank page. */
+@media (max-height: 720px) and (max-width: 760px) {
+  .hero--particle {
+    min-height: 860px;
+  }
+
+  .hero--particle .hero__content {
+    padding-top: 82px;
+    padding-bottom: 76px;
+  }
+
+  .hero--particle .hero__lede {
+    margin-top: 205px;
+  }
+}

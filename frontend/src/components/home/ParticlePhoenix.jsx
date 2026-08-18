@@ -39,6 +39,13 @@ export default function ParticlePhoenix({ onInteraction }) {
     ).matches;
     const lowEnd = (navigator.hardwareConcurrency || 8) <= 4;
 
+    // Use viewport width for layout, not pointer type.
+    // Some laptops have touch screens and report a coarse pointer;
+    // they must still keep the desktop phoenix composition.
+    const isMobileViewport = window.matchMedia(
+      "(max-width: 760px)"
+    ).matches;
+
     // More tiles = more faithful image. 52–64 is a good desktop range.
     const GRID = reducedMotion
       ? 28
@@ -52,9 +59,18 @@ export default function ParticlePhoenix({ onInteraction }) {
      * - Touch/mobile devices center the phoenix behind the headline.
      * The mobile frame is smaller so the full bird stays inside the viewport.
      */
-    const FRAME = coarsePointer ? 4.15 : 6.75;
-    const OFFSET_X = coarsePointer ? 0 : 2.45;
-    const OFFSET_Y = coarsePointer ? 0.10 : 0.02;
+    const FRAME = isMobileViewport ? 2.70 : 6.75;
+    const OFFSET_X = isMobileViewport ? 0 : 2.45;
+
+    /*
+     * Mobile composition:
+     * keep the phoenix as its own visual block between the headline
+     * and the supporting copy instead of placing it behind the copy.
+     *
+     * IMPORTANT: this is based on viewport width, not pointer type,
+     * so touch-enabled laptops keep the original desktop layout.
+     */
+    const OFFSET_Y = isMobileViewport ? 0.65 : 0.02;
 
     const scene = new THREE.Scene();
 
