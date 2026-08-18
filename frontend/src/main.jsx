@@ -7,7 +7,7 @@ import "./styles/layout.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/Phronix_Team_Web">
       <App />
     </BrowserRouter>
   </React.StrictMode>
