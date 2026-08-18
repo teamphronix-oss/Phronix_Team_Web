@@ -46,10 +46,15 @@ export default function ParticlePhoenix({ onInteraction }) {
         ? 42
         : 60;
 
-    // Right-side visual size and position.
-    const FRAME = coarsePointer ? 5.15 : 6.75;
-    const OFFSET_X = coarsePointer ? 1.55 : 2.45;
-    const OFFSET_Y = 0.02;
+    /*
+     * Responsive visual placement:
+     * - Desktop keeps the phoenix on the right side.
+     * - Touch/mobile devices center the phoenix behind the headline.
+     * The mobile frame is smaller so the full bird stays inside the viewport.
+     */
+    const FRAME = coarsePointer ? 4.15 : 6.75;
+    const OFFSET_X = coarsePointer ? 0 : 2.45;
+    const OFFSET_Y = coarsePointer ? 0.10 : 0.02;
 
     const scene = new THREE.Scene();
 

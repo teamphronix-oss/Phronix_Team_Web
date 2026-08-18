@@ -694,3 +694,219 @@
     animation: none !important;
   }
 }
+
+/* =========================================================
+   FINAL MOBILE / TABLET RESPONSIVE HERO
+   The phoenix moves behind the headline on narrow screens.
+   ========================================================= */
+
+.hero--particle {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-x: clip;
+}
+
+.hero--particle .particle-phoenix {
+  width: 100%;
+  max-width: 100%;
+  inset: 0;
+}
+
+/* Tablet: keep the bird visible without pushing the copy off-screen. */
+@media (max-width: 1050px) {
+  .hero--particle .hero__content {
+    width: min(100% - 40px, 760px);
+    padding: 84px 20px 100px;
+  }
+
+  .hero--particle .hero__title {
+    max-width: 760px;
+    font-size: clamp(48px, 8.5vw, 82px);
+  }
+
+  .hero--particle .hero__lede {
+    max-width: 48ch;
+  }
+
+  .hero--particle .particle-phoenix {
+    inset: 0;
+  }
+
+  .hero__interaction-hint {
+    right: 4%;
+    top: 58%;
+    transform: scale(.78);
+    transform-origin: right center;
+  }
+}
+
+/* Phones: centered composition — bird behind the middle of the copy. */
+@media (max-width: 760px) {
+  .hero--particle {
+    min-height: 720px;
+    height: 100svh;
+    max-height: 920px;
+  }
+
+  .hero--particle .particle-phoenix {
+    inset: 0;
+    z-index: 1;
+  }
+
+  .hero--particle .hero__content {
+    width: calc(100% - 28px);
+    min-height: 100%;
+    padding: 104px 14px 92px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 4;
+  }
+
+  .hero--particle .hero__eyebrow,
+  .hero--particle .hero__lede,
+  .hero--particle .hero__actions,
+  .hero--particle .hero__meta {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero--particle .hero__eyebrow {
+    max-width: 100%;
+    font-size: clamp(7.5px, 2.1vw, 9px);
+    letter-spacing: .11em;
+    white-space: nowrap;
+  }
+
+  .hero--particle .hero__title {
+    width: 100%;
+    max-width: 620px;
+    margin-top: 14px;
+    font-size: clamp(43px, 13.8vw, 68px);
+    line-height: .91;
+    letter-spacing: -.06em;
+  }
+
+  .hero--particle .hero__lede {
+    width: min(100%, 38ch);
+    margin-top: 20px;
+    font-size: clamp(13px, 3.5vw, 14.5px);
+    line-height: 1.58;
+  }
+
+  .hero--particle .hero__actions {
+    width: 100%;
+    margin-top: 24px;
+    gap: 10px;
+  }
+
+  .hero--particle .hero__button {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+
+  .hero--particle .hero__meta {
+    width: 100%;
+    margin-top: 22px;
+    gap: 10px 14px;
+    flex-wrap: wrap;
+    font-size: 8px;
+    line-height: 1.2;
+  }
+
+  .hero--particle .hero__interaction-hint {
+    right: 50%;
+    top: 67%;
+    width: 120px;
+    transform: translateX(50%) scale(.62);
+    transform-origin: center top;
+    text-align: center;
+  }
+
+  .hero--particle .hero__interaction-orbit {
+    margin: 0 auto;
+  }
+
+  .hero--particle .hero__interaction-copy {
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .hero--particle .hero__bottom {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+    gap: 8px;
+  }
+
+  .hero--particle .hero__bottom span:last-child {
+    margin-left: auto;
+  }
+}
+
+/* Very small phones: protect the CTA and bottom label from overlap. */
+@media (max-width: 390px) {
+  .hero--particle {
+    min-height: 680px;
+  }
+
+  .hero--particle .hero__content {
+    padding-top: 94px;
+    padding-bottom: 82px;
+  }
+
+  .hero--particle .hero__title {
+    font-size: clamp(40px, 13.5vw, 56px);
+  }
+
+  .hero--particle .hero__lede {
+    width: min(100%, 34ch);
+    font-size: 13px;
+    line-height: 1.52;
+  }
+
+  .hero--particle .hero__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero--particle .hero__button {
+    width: min(210px, 100%);
+  }
+
+  .hero--particle .hero__meta {
+    gap: 8px 11px;
+    justify-content: center;
+  }
+
+  .hero--particle .hero__interaction-hint {
+    top: 70%;
+    transform: translateX(50%) scale(.54);
+  }
+}
+
+/* Short mobile screens: keep the headline and CTAs above the bottom UI. */
+@media (max-height: 720px) and (max-width: 760px) {
+  .hero--particle .hero__content {
+    padding-top: 82px;
+    padding-bottom: 76px;
+  }
+
+  .hero--particle .hero__title {
+    font-size: clamp(38px, 12.5vw, 54px);
+  }
+
+  .hero--particle .hero__lede {
+    margin-top: 15px;
+  }
+
+  .hero--particle .hero__actions {
+    margin-top: 18px;
+  }
+
+  .hero--particle .hero__meta {
+    margin-top: 16px;
+  }
+}
