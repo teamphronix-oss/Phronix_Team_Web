@@ -1,0 +1,629 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+
+/* ── Design tokens — "Arctic Code" palette ──────────────────────
+   Semantic names below are the source of truth. The aliases in the
+   second block (--gold, --panel-dark, etc.) exist so every existing
+   component keeps working unchanged — they just point at the new
+   colors. New/updated CSS should prefer the semantic names. ────── */
+:root {
+  /* Background */
+  --white: #0b1220;         /* Pure White */
+  --bg: #030712;             /* Polar White */
+  --bg-soft: #07111f;        /* Pure White */
+  --navy: #050b16;         /* Midnight Navy */
+  --navy-soft: #0d1a2b;
+
+  /* Text */
+  --ink: #f4f8ff;            /* Midnight Navy */
+  
+  --ink-soft: #a8b6c8;
+  --ink-faint: #66778d;      /* Silver Mist */
+
+  /* Text on dark backgrounds */
+  --ink-on-dark: #FAFBFC;
+
+  /* Border */
+  --line: rgba(148,163,184,.18);           /* Frost Border */
+  --line-dark: rgba(255,255,255,.15);
+
+  /* Accent — Ice Blue */
+  --ice: #0EA5E9;            /* Ice Blue */
+  --ice-bright: #38BDF8;
+  --ice-pale: #08283a;
+  --ice-ink: #7ddcff;
+
+  /* ── Back-compat aliases (old token names, new colors) ────────── */
+  --panel-dark: var(--navy);
+  --panel-dark-soft: var(--navy-soft);
+  --gold: var(--ice);
+  --gold-bright: var(--ice-bright);
+  --gold-pale: var(--ice-pale);
+  --gold-ink: var(--ice-ink);
+
+  /* Typography */
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Layout */
+  --container: 1180px;
+  --radius: 14px;
+  --radius-sm: 8px;
+
+  /* Shadows */
+  --shadow-soft: 0 20px 50px rgba(15,23,42,.12);
+  --shadow-gold: 0 20px 50px rgba(14,165,233,.28);
+
+  --ease: cubic-bezier(0.22,1,0.36,1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 1.5px;
+  background: var(--gold);
+  display: inline-block;
+}
+
+.section { padding: 96px 0; }
+.section--soft { background: var(--bg-soft); }
+.section--dark {
+  background: var(--panel-dark);
+  color: var(--ink);
+}
+
+.section--dark h1,
+.section--dark h2,
+.section--dark h3 {
+  color: var(--ink);
+}
+
+.section--dark .eyebrow {
+  color: var(--gold-bright);
+}
+
+.section-head {
+  max-width: 640px;
+  margin: 0 0 48px;
+}
+.section-head h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  margin-top: 12px;
+}
+.section-head p {
+  margin-top: 14px;
+  color: var(--ink-soft);
+  font-size: 16.5px;
+}
+.section--dark .section-head p { color: #c8c5bb; }
+
+/* ── Gold seam — the signature divider element ─────────────── */
+.seam {
+  position: relative;
+  height: 1px;
+  background: var(--line);
+  overflow: visible;
+}
+.seam::after {
+  content: "";
+  position: absolute;
+  top: -3.5px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px var(--line);
+}
+.section--dark .seam { background: var(--line-dark); }
+.section--dark .seam::after { box-shadow: 0 0 0 5px var(--panel-dark), 0 0 0 6px var(--line-dark); }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn--gold {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: var(--ink);
+  box-shadow: var(--shadow-gold);
+}
+.btn--gold:hover { box-shadow: 0 14px 34px -10px rgba(14, 165, 233, 0.55); transform: translateY(-1px); }
+.btn--outline {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+
+
+.btn--outline:hover { border-color: var(--gold); color: var(--gold-ink); }
+
+.section--dark .btn--outline { border-color: var(--line-dark); color: #f2f0ea; }
+.section--dark .btn--outline:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  padding: 13px 6px;
+}
+.btn--ghost:hover { color: var(--gold-ink); }
+
+.btn--sm { padding: 9px 16px; font-size: 13.5px; }
+.btn--block { width: 100%; }
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(56,189,248,.45);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold-ink);
+  background: var(--gold-pale);
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+.badge--planning { color: #6b6b6b; border-color: #d8d8d8; background: #f4f4f4; }
+.badge--development { color: #8a5d0c; border-color: #eacd8a; background: #fbf1dc; }
+.badge--testing { color: #9c6b13; border-color: var(--gold); background: var(--gold-pale); }
+.badge--completion { color: #6e4b12; border-color: var(--gold); background: linear-gradient(135deg, var(--gold-bright), var(--gold-pale)); }
+
+/* ── Forms ───────────────────────────────────────────────────── */
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 13px 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  font-family: inherit;
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--ink);
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-pale);
+  outline: none;
+}
+.field textarea { resize: vertical; min-height: 120px; }
+.field-error { color: #b3261e; font-size: 12.5px; margin-top: 6px; }
+.field input.has-error, .field textarea.has-error { border-color: #b3261e; }
+
+.form-status {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.form-status--success { background: #eaf6ec; color: #216534; }
+.form-status--error { background: #fbeaea; color: #9c2a2a; }
+
+/* ── Utility ─────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  gap: 28px;
+}
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .section { padding: 64px 0; }
+  .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+}
+
+/* ── Interactive dot-field background (lamalama-style) ─────────── */
+/* Fills whatever `position: relative` section it's placed in.
+   Sits behind real content (z-index 0) and never blocks clicks. */
+.cursor-dot-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cursor-dot-field canvas {
+  display: block;
+}
+
+/* ── Halftone dot-shape (image rendered as scattering dots) ────── */
+.cursor-dot-shape {
+  position: relative;
+  pointer-events: auto; /* needs mouse events to know where the cursor is */
+}
+.cursor-dot-shape canvas {
+  display: block;
+}
+
+/* ── Cursor trail blobs (lamalama-style shrinking dot-chain) ───── */
+/* Fixed full-viewport overlay, sits above content, never blocks
+   clicks. Mounted once near the app root so the trail works on
+   every page, not just one section. */
+.cursor-trail-blobs {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+/* ── Custom cursor ───────────────────────────────────────────── */
+/* Two pieces: a small solid dot that sticks exactly to the real mouse
+   position, and a larger soft ring that trails behind it. Both are
+   fixed-position, pointer-events:none so they never block clicks.
+
+   White + mix-blend-mode: difference gives the lamalama.com-style
+   effect — the cursor auto-inverts to stay visible on both dark and
+   light/white backgrounds without needing per-section overrides. */
+
+.custom-cursor__dot,
+.custom-cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.custom-cursor__dot {
+  width: 8px;
+  height: 8px;
+  background: #0EA5E9;
+  transition: width 0.2s var(--ease, ease), height 0.2s var(--ease, ease),
+    background 0.2s var(--ease, ease), opacity 0.2s ease;
+}
+.custom-cursor__dot--hover {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+}
+
+.custom-cursor__ring {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid rgba(14, 165, 233, 0.65);
+  background: rgba(14, 165, 233, 0.1);
+  transition: width 0.25s var(--ease, ease), height 0.25s var(--ease, ease),
+    background 0.25s var(--ease, ease), border-color 0.25s var(--ease, ease),
+    opacity 0.2s ease;
+}
+.custom-cursor__ring--hover {
+  width: 58px;
+  height: 58px;
+  background: rgba(14, 165, 233, 0.2);
+  border-color: rgba(14, 165, 233, 0.95);
+}
+
+.custom-cursor--hidden {
+  opacity: 0;
+}
+
+/* Floating text label/tag that follows the cursor — the "# Chocolate
+   Amsterdam" style pill seen on lamalama.com when hovering a logo or
+   card. Sits above the ring (translate -140% on Y) and fades/scales
+   in only when the hovered element carries data-cursor-label. */
+.custom-cursor__label {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  background: rgba(11, 11, 17, 0.92);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform-origin: center bottom;
+  transition: opacity 0.2s var(--ease, ease), scale 0.2s var(--ease, ease);
+  scale: 0.85;
+}
+.custom-cursor__label--visible {
+  opacity: 1;
+  scale: 1;
+}
+
+/* Hide the real browser cursor site-wide once our custom one is active.
+   Only applied on fine-pointer (mouse/trackpad) devices — touch devices
+   never load the component at all, but this is a safety net too. */
+/* ── Admin: restore normal browser cursor ── */
+#root,
+#root * {
+  cursor: auto !important;
+}
+
+#root button,
+#root a,
+#root [role="button"] {
+  cursor: pointer !important;
+}
+
+#root input,
+#root textarea,
+#root select {
+  cursor: text !important;
+}
+
+/* =========================================================
+   GLOBAL THEME OVERRIDE
+   All space-themed sections follow index.css theme
+   ========================================================= */
+
+.section--space,
+.projects-showcase.section--space {
+  background: var(--bg-soft) !important;
+  color: var(--ink) !important;
+}
+
+/* Remove old dark/star overlay */
+.section--space::before {
+  opacity: 0 !important;
+}
+
+.section--space h2,
+.section--space h3 {
+  color: var(--ink) !important;
+}
+
+.section--space p {
+  color: var(--ink-soft) !important;
+}
+/* =========================================================
+   PHRONIX / PHOENIX VISUAL SYSTEM
+   Dark, cinematic, particle-led theme shared across the site.
+   ========================================================= */
+:root {
+  --white: #0b1220;
+  --bg: #030712;
+  --bg-soft: #07111f;
+  --navy: #050b16;
+  --navy-soft: #0d1a2b;
+  --ink: #f4f8ff;
+  --ink-soft: #a8b5c9;
+  --ink-faint: #63728a;
+  --ink-on-dark: #f5f8ff;
+  --line: rgba(139, 172, 220, .14);
+  --line-dark: rgba(255,255,255,.10);
+  --ice: #20c7ff;
+  --ice-bright: #31e6d0;
+  --ice-pale: rgba(32, 199, 255, .10);
+  --ice-ink: #7ddfff;
+  --gold: #20c7ff;
+  --gold-bright: #31e6d0;
+  --gold-pale: rgba(32, 199, 255, .10);
+  --gold-ink: #7ddfff;
+  --shadow-soft: 0 30px 80px rgba(0,0,0,.35);
+  --shadow-gold: 0 24px 60px rgba(18, 193, 211, .18);
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(25, 94, 255, .06), transparent 30%),
+    var(--bg);
+}
+
+.section,
+.section--soft,
+.section--dark,
+.section--space,
+.projects-showcase.section--space {
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+}
+
+.section--dark { background: #02040a !important; }
+.section--dark h1,
+.section--dark h2,
+.section--dark h3,
+.section h1,
+.section h2,
+.section h3 { color: var(--ink); }
+.section p { color: var(--ink-soft); }
+
+.card {
+  background: linear-gradient(145deg, rgba(10,17,31,.96), rgba(5,9,18,.96));
+  border-color: rgba(111, 159, 225, .14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+.card:hover { border-color: rgba(45, 226, 207, .32); box-shadow: 0 25px 70px rgba(0,0,0,.32); }
+
+.btn--gold {
+  color: #02050b;
+  background: linear-gradient(120deg, #ffffff 0%, #9fd7ff 42%, #31e6d0 100%);
+  box-shadow: 0 18px 45px -18px rgba(35, 219, 210, .65);
+}
+.btn--outline { border-color: rgba(255,255,255,.14); color: var(--ink); }
+.btn--outline:hover { border-color: rgba(49,230,208,.6); color: #8df6e6; }
+
+.tag,
+.notice--gold,
+.badge--testing,
+.badge--completion {
+  color: #78e9da;
+  background: rgba(32,199,255,.08);
+  border-color: rgba(32,199,255,.22);
+}
+
+.seam { background: rgba(255,255,255,.08); }
+.seam::after { box-shadow: 0 0 0 5px var(--bg), 0 0 0 6px rgba(49,230,208,.22); }
+
+/* Home hero owns the viewport like the reference prototype. */
+.navbar:has(+ main .hero--particle) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, rgba(1,2,8,.72), rgba(1,2,8,0));
+  border-bottom-color: transparent;
+}
+.navbar:has(+ main .hero--particle) .navbar__logo,
+.navbar:has(+ main .hero--particle) .navbar__link,
+.navbar:has(+ main .hero--particle) .navbar__social-icon,
+.navbar:has(+ main .hero--particle) .navbar__toggle { color: rgba(255,255,255,.82); }
+.navbar:has(+ main .hero--particle) .navbar__link:hover { color: #fff; background: rgba(255,255,255,.06); }
+.navbar:has(+ main .hero--particle) .navbar__link--active { color: #73eadb; background: rgba(31,224,197,.08); }
+.navbar:has(+ main .hero--particle) .navbar__socials { border-color: rgba(255,255,255,.10); }
+
+@media (max-width: 900px) {
+  .navbar:has(+ main .hero--particle) { background: rgba(1,2,8,.68); backdrop-filter: blur(12px); }
+}
+
+/* Global media treatment. */
+img { border-color: rgba(255,255,255,.08); }
+input, textarea, select {
+  background: #080e1b !important;
+  color: var(--ink) !important;
+  border-color: rgba(120, 160, 220, .16) !important;
+}
+
+.footer { background: #02040a !important; border-top: 1px solid rgba(255,255,255,.06); }
+.footer__col a, .footer__contact li, .footer__bottom { color: rgba(235,242,255,.52); }
+
+.navbar__mark--img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+
+  /* Deep-blue theme ring */
+  border: 2px solid #123b68;
+
+  /* subtle blue/cyan glow */
+  box-shadow:
+    0 0 0 2px rgba(0, 174, 255, 0.08),
+    0 0 18px rgba(0, 174, 255, 0.12);
+
+  background: #06101f;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.navbar__logo:hover .navbar__mark--img {
+  transform: scale(1.06);
+
+  border-color: #36aeea;
+
+  box-shadow:
+    0 0 0 2px rgba(121, 206, 245, 0.15),
+    0 0 22px rgba(48, 173, 231, 0.28);
+}

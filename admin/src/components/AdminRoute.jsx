@@ -7,6 +7,6 @@ export default function AdminRoute({ children }) {
   const { admin, loading } = useAdminAuth();
 
   if (loading) return <div className="container section">Checking admin session…</div>;
-  if (!admin) return <Navigate to="/admin/login" replace />;
+  if (!admin) return <Navigate to="/login" replace />;
   return children;
 }

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
-import { useAdminAuth } from "../../context/AdminAuthContext";
-import "../../styles/admin/admin-auth.css";
+
+import { useAdminAuth } from "../context/AdminAuthContext";
+
+import "../styles/admin-auth.css";
 
 export default function AdminForgotPassword() {
   const { forgotPassword } = useAdminAuth();
@@ -59,7 +61,7 @@ export default function AdminForgotPassword() {
             {submitting ? "Sending…" : "Send reset link"}
           </button>
 
-          <Link to="/admin/login" className="admin-auth-card__link">
+          <Link to="/login" className="admin-auth-card__link">
             Back to sign in
           </Link>
         </form>

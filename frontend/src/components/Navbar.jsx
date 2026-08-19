@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Menu, X, Instagram, Github, Youtube, Linkedin } from "lucide-react";
+import {
+  Menu,
+  X,
+  Instagram,
+  Github,
+  Youtube,
+  Linkedin,
+} from "lucide-react";
 import siteConfig from "../data/siteConfig";
-import { useAdminAuth } from "../context/AdminAuthContext";
 import phronixLogo from "../assets/Gemini_Generated_Image_mflsmnmflsmnmfls.png";
 
 const links = [
@@ -20,13 +26,16 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { admin } = useAdminAuth();
   const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
+
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -36,21 +45,29 @@ export default function Navbar() {
   return (
     <header className={`navbar ${scrolled ? "navbar--scrolled" : ""}`}>
       <div className="container navbar__inner">
- <NavLink
-  to="/"
-  className="navbar__logo"
-  aria-label="Phronix home"
-  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
->
-  <img
-    src={phronixLogo}
-    alt="Phronix"
-    className="navbar__mark navbar__mark--img"
-  />
 
-  <span>{siteConfig.companyName}</span>
-</NavLink>
+        {/* Logo */}
+        <NavLink
+          to="/"
+          className="navbar__logo"
+          aria-label="Phronix home"
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            })
+          }
+        >
+          <img
+            src={phronixLogo}
+            alt="Phronix"
+            className="navbar__mark navbar__mark--img"
+          />
 
+          <span>{siteConfig.companyName}</span>
+        </NavLink>
+
+        {/* Desktop Navigation */}
         <nav className="navbar__links" aria-label="Primary">
           {links.map((l) => (
             <NavLink
@@ -58,7 +75,9 @@ export default function Navbar() {
               to={l.to}
               end={l.to === "/"}
               className={({ isActive }) =>
-                `navbar__link ${isActive ? "navbar__link--active" : ""}`
+                `navbar__link ${
+                  isActive ? "navbar__link--active" : ""
+                }`
               }
             >
               {l.label}
@@ -66,8 +85,12 @@ export default function Navbar() {
           ))}
         </nav>
 
+        {/* Actions */}
         <div className="navbar__actions">
+
+          {/* Social Links */}
           <div className="navbar__socials">
+
             <a
               href={siteConfig.socialLinks.instagram}
               target="_blank"
@@ -77,6 +100,7 @@ export default function Navbar() {
             >
               <Instagram size={19} />
             </a>
+
             <a
               href={siteConfig.socialLinks.github}
               target="_blank"
@@ -86,6 +110,7 @@ export default function Navbar() {
             >
               <Github size={19} />
             </a>
+
             <a
               href={siteConfig.socialLinks.youtube}
               target="_blank"
@@ -95,6 +120,7 @@ export default function Navbar() {
             >
               <Youtube size={19} />
             </a>
+
             <a
               href={siteConfig.socialLinks.linkedin}
               target="_blank"
@@ -104,10 +130,10 @@ export default function Navbar() {
             >
               <Linkedin size={19} />
             </a>
+
           </div>
-          <NavLink to={admin ? "/admin" : "/admin/login"} className="btn btn--gold btn--sm">
-            {admin ? admin.username : "Login"}
-          </NavLink>
+
+          {/* Mobile Menu Button */}
           <button
             className="navbar__toggle"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -116,27 +142,32 @@ export default function Navbar() {
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
+
         </div>
       </div>
 
+      {/* Mobile Navigation */}
       {open && (
         <nav className="navbar__mobile" aria-label="Mobile">
+
           {links.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
               end={l.to === "/"}
               className={({ isActive }) =>
-                `navbar__mobile-link ${isActive ? "navbar__link--active" : ""}`
+                `navbar__mobile-link ${
+                  isActive ? "navbar__link--active" : ""
+                }`
               }
             >
               {l.label}
             </NavLink>
           ))}
-          <NavLink to={admin ? "/admin" : "/admin/login"} className="btn btn--gold btn--block">
-            {admin ? admin.username : "Login"}
-          </NavLink>
+
+          {/* Mobile Social Links */}
           <div className="navbar__socials navbar__socials--mobile">
+
             <a
               href={siteConfig.socialLinks.instagram}
               target="_blank"
@@ -146,6 +177,7 @@ export default function Navbar() {
             >
               <Instagram size={20} />
             </a>
+
             <a
               href={siteConfig.socialLinks.github}
               target="_blank"
@@ -155,6 +187,7 @@ export default function Navbar() {
             >
               <Github size={20} />
             </a>
+
             <a
               href={siteConfig.socialLinks.youtube}
               target="_blank"
@@ -164,6 +197,7 @@ export default function Navbar() {
             >
               <Youtube size={20} />
             </a>
+
             <a
               href={siteConfig.socialLinks.linkedin}
               target="_blank"
@@ -173,6 +207,7 @@ export default function Navbar() {
             >
               <Linkedin size={20} />
             </a>
+
           </div>
         </nav>
       )}

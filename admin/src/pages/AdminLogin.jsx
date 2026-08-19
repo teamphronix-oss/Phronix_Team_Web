@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
-import { useAdminAuth } from "../../context/AdminAuthContext";
-import "../../styles/admin/admin-auth.css";
+
+import { useAdminAuth } from "../context/AdminAuthContext";
+
+import "../styles/admin-auth.css";
 
 export default function AdminLogin() {
   const { admin, loading, login } = useAdminAuth();
@@ -13,7 +15,7 @@ export default function AdminLogin() {
   const [submitting, setSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
-  if (!loading && admin) return <Navigate to="/admin" replace />;
+  if (!loading && admin) return <Navigate to="/" replace />;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -21,7 +23,7 @@ export default function AdminLogin() {
     setSubmitting(true);
     try {
       await login(username, password);
-      navigate("/admin");
+      navigate("/");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -79,7 +81,7 @@ export default function AdminLogin() {
             </div>
           </label>
 
-          <Link to="/admin/forgot-password" className="admin-auth-card__link">
+          <Link to="/forgot-password" className="admin-auth-card__link">
             Forgot password?
           </Link>
 
