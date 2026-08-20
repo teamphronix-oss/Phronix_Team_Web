@@ -11,6 +11,9 @@ export default function ServiceCard({ service }) {
       </div>
       <h3>{service.name}</h3>
       <p>{service.shortDescription}</p>
+      {service.priceRange && (
+        <div className="service-card__price">{service.priceRange}</div>
+      )}
       {service.technologies?.length > 0 && (
         <div className="service-card__tags">
           {service.technologies.map((t) => (

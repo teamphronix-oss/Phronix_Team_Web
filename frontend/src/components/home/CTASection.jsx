@@ -15,7 +15,7 @@ export default function CTASection() {
           </div>
           <div className="cta__actions">
             <Link to="/contact" className="btn btn--gold">
-              Get in touch <ArrowRight size={16} />
+              Start a Project <ArrowRight size={16} />
             </Link>
             <a
               href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.whatsappDefaultMessage)}`}

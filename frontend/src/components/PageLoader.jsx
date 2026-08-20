@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 const BANDS = [
-  "#091329", // near-black blue
-  "#0B1F42", // deep navy
-  "#0a2445", // dark blue
-  "#18518e", // mid blue
-  "#21547e", // bright blue
+  "#BFE0FA", // soft blue
+  "#A7D4F5", // light blue
+  "#8FC6EE", // mid light blue
+  "#6FB3E6", // brighter blue
+  "#2E7BC7", // darker blue
 ];
 const BAND_DURATION = 750; // ms, must match the CSS animation-duration
 const STAGGER = 160; // ms between each band starting its slide — tight overlap

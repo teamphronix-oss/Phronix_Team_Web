@@ -7,6 +7,7 @@ export const services = [
     shortDescription:
       "Fast, accessible, production-ready web applications built on modern frameworks.",
     technologies: ["React", "Next.js", "Node.js", "TypeScript"],
+    priceRange: "₹5,999 – ₹9,999",
   },
   {
     id: "mobile-apps",
@@ -15,6 +16,7 @@ export const services = [
     shortDescription:
       "Native-feel iOS and Android apps from a single React Native codebase.",
     technologies: ["React Native", "Expo", "Firebase"],
+    priceRange: "₹5,999 – ₹9,999",
   },
   {
     id: "cloud-devops",
@@ -23,6 +25,7 @@ export const services = [
     shortDescription:
       "CI/CD pipelines, containerized deployments, and infrastructure that scales with you.",
     technologies: ["AWS", "Docker", "Kubernetes", "GitHub Actions"],
+    priceRange: "₹5,999 – ₹9,999",
   },
   {
     id: "ui-ux-design",
@@ -31,6 +34,7 @@ export const services = [
     shortDescription:
       "Interface design grounded in research, tested with real users, refined until it's obvious.",
     technologies: ["Figma", "Design Systems"],
+    priceRange: "₹5,999 – ₹9,999",
   },
   {
     id: "backend-apis",
@@ -39,6 +43,7 @@ export const services = [
     shortDescription:
       "Secure, well-documented APIs and data layers built to handle real production load.",
     technologies: ["Node.js", "Express", "MongoDB", "PostgreSQL"],
+    priceRange: "₹5,999 – ₹9,999",
   },
   {
     id: "ai-integration",
@@ -47,6 +52,7 @@ export const services = [
     shortDescription:
       "Practical AI features — from support copilots to internal workflow automation.",
     technologies: ["OpenAI API", "Claude API", "Python"],
+    priceRange: "₹5,999 – ₹9,999",
   },
 ];
 

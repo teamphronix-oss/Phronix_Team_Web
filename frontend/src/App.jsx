@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 import PageLoader from "./components/PageLoader";
@@ -27,6 +28,7 @@ export default function App() {
       <CursorTrailBlobs />
       <CustomCursor />
       <PageLoader />
+      <ScrollToTop />
 
       <Navbar />
 
