@@ -12,11 +12,11 @@ export default function ProjectsSection() {
             <span className="projects-showcase__stat-number">40+</span>
           </div>
           <h2 className="projects-showcase__title">
-            Purpose-Built Products for Every Business Vision
+            Real-World Projects Built by Aspiring Developers
           </h2>
           <p>
-            From ambitious startups to established brands — launch-ready
-            products, shipped in weeks, not months.
+            From final-year submissions to portfolio-ready builds — practical,
+            industry-style projects crafted to help students learn by doing.
           </p>
         </div>
 

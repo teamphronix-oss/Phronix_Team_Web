@@ -1,4 +1,4 @@
-import { Headphones, RefreshCw, Globe, Search, Zap, Palette } from "lucide-react";
+import { Headphones, Bot, Star, Search, ShieldCheck, Palette } from "lucide-react";
 import "../../styles/home/top-features.css";
 
 export default function TopFeaturesSection() {
@@ -19,47 +19,47 @@ export default function TopFeaturesSection() {
               <div className="tf-card__icon">
                 <Headphones size={24} strokeWidth={1.8} />
               </div>
-              <h4>Friendly Support</h4>
-              <p>We're here when you need us — fast, helpful, and human.</p>
+              <h4>24x7 Support</h4>
+              <p>Reach us anytime via bot or a real call — help is always one message away.</p>
             </div>
 
             <div className="tf-card">
               <div className="tf-card__icon">
-                <RefreshCw size={24} strokeWidth={1.8} />
+                <Bot size={24} strokeWidth={1.8} />
               </div>
-              <h4>Free Post-Launch Updates</h4>
-              <p>Enjoy ongoing improvements, bug fixes, and small tweaks — on us.</p>
+              <h4>AI-First Thinking</h4>
+              <p>Smart automation baked into the build — so your product works smarter from day one.</p>
             </div>
 
             <div className="tf-card">
               <div className="tf-card__icon">
-                <Globe size={24} strokeWidth={1.8} />
+                <Star size={24} strokeWidth={1.8} />
               </div>
-              <h4>Cross-Browser Compatible</h4>
-              <p>Looks and works perfectly on Chrome, Safari, Firefox, and Edge.</p>
+              <h4>Social Review Optimization</h4>
+              <p>Built to earn trust — optimized to collect and showcase great reviews.</p>
             </div>
 
             <div className="tf-card">
               <div className="tf-card__icon">
                 <Search size={24} strokeWidth={1.8} />
               </div>
-              <h4>SEO Optimized</h4>
-              <p>Built to rank better and load faster on all major search engines.</p>
+              <h4>SEO Optimized & Scalable</h4>
+              <p>Built to rank better, load faster, and grow with your business.</p>
             </div>
 
             <div className="tf-card">
               <div className="tf-card__icon">
-                <Zap size={24} strokeWidth={1.8} />
+                <ShieldCheck size={24} strokeWidth={1.8} />
               </div>
-              <h4>Blazing Fast Performance</h4>
-              <p>Optimized code and structure for speed and smooth performance.</p>
+              <h4>Security & High-Speed Performance</h4>
+              <p>Locked-down, optimized code that stays fast without cutting corners.</p>
             </div>
 
             <div className="tf-card">
               <div className="tf-card__icon">
                 <Palette size={24} strokeWidth={1.8} />
               </div>
-              <h4>Fully Customizable Design</h4>
+              <h4>Fully Customized Design</h4>
               <p>Colors, fonts, and layout — shaped to match your brand exactly.</p>
             </div>
           </div>
