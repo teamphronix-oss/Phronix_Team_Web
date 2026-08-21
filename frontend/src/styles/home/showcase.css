@@ -1,453 +1,389 @@
-/* ── Showcase strip — 3-column mockup band ──────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   ShowcaseSection — Bento Layout Spec Implementation
+   Asymmetric 3-Column × 2-Row Bento Grid (Expanded Layout)
+   ───────────────────────────────────────────────────────────── */
 
-.showcase-wrap {
-  padding-top: 0;
-}
-
-.showcase-wrap .container {
-  max-width: 1360px;
-}
-
-.showcase {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
-}
-
-.showcase__col {
+.showcase-section {
   position: relative;
   overflow: hidden;
-  border-radius: 24px;
-  padding: 44px 40px;
-  min-height: 600px;
+  padding: 80px 0 100px;
+}
+
+/* ── Desktop Grid: 3-column × 2-row with named areas ─────────── */
+.spec-bento {
+  display: grid;
+  grid-template-columns: 1.35fr 1.35fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "hero hero web"
+    "mkt  mkt  total";
+  gap: 18px;
+  max-width: 1120px;
+  margin: 48px auto 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Base Bento Tile ─────────────────────────────────────────── */
+.spec-bento__tile {
+  border-radius: 22px;
+  padding: 26px 24px;
+  overflow: hidden;
+  position: relative;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 18px 45px -15px rgba(0, 0, 0, 0.65);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
 }
 
-.showcase__col h3 {
-  font-size: 24px;
-  line-height: 1.2;
-  max-width: 19ch;
+.spec-bento__tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.8);
 }
 
-.showcase__col p {
-  margin-top: 14px;
-  font-size: 15px;
-  color: var(--ink-soft);
-  max-width: 36ch;
+/* ── Tile Grid Areas ─────────────────────────────────────────── */
+.spec-bento__tile--hero {
+  grid-area: hero;
+  background: linear-gradient(165deg, rgba(8, 22, 40, 0.94) 0%, rgba(4, 12, 24, 0.98) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+.spec-bento__tile--hero:hover {
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
-
-/* ── Column A ─────────────────────────────────────────────── */
-
-.showcase__col--a {
-  background: linear-gradient(
-    160deg,
-    var(--gold-pale) 0%,
-    var(--bg) 60%
-  );
-
-  border: 1px solid var(--line);
+.spec-bento__tile--web {
+  grid-area: web;
+  background: linear-gradient(165deg, rgba(6, 26, 32, 0.94) 0%, rgba(3, 14, 18, 0.98) 100%);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+}
+.spec-bento__tile--web:hover {
+  border-color: rgba(45, 212, 191, 0.4);
 }
 
+.spec-bento__tile--mkt {
+  grid-area: mkt;
+  background: linear-gradient(165deg, rgba(16, 18, 44, 0.94) 0%, rgba(8, 10, 26, 0.98) 100%);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+}
+.spec-bento__tile--mkt:hover {
+  border-color: rgba(129, 140, 248, 0.4);
+}
 
-/* ── Column B ─────────────────────────────────────────────── */
-
-.showcase__col--b {
-  background: linear-gradient(
-    160deg,
-    var(--bg) 0%,
-    var(--bg-soft) 100%
-  );
-
-  border: 1px solid var(--line);
-
-  text-align: center;
+.spec-bento__tile--total {
+  grid-area: total;
+  background: linear-gradient(165deg, rgba(14, 20, 32, 0.92) 0%, rgba(8, 12, 20, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  justify-content: center;
   align-items: center;
+  text-align: center;
+}
+.spec-bento__tile--total:hover {
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
-
-/* ── Column C — dark themed card ─────────────────────────── */
-
-.showcase__col--c {
-  background: linear-gradient(
-    160deg,
-    var(--panel-dark-soft) 0%,
-    var(--panel-dark) 100%
-  );
-
-  color: var(--ink-on-dark);
-}
-
-.showcase__col--c p {
-  color: rgba(242, 240, 234, 0.72);
-}
-
-
-/* ── Gold gradient text ──────────────────────────────────── */
-
-.showcase__grad {
-  background: linear-gradient(
-    135deg,
-    var(--gold-bright),
-    var(--gold)
-  );
-
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-
-/* ── Col A — fake browser window ──────────────────────────── */
-
-.browser-mock {
-  margin-top: 32px;
-  border-radius: 12px;
-
-  background: var(--bg);
-
-  border: 1px solid var(--line);
-
-  box-shadow:
-    0 30px 60px -30px rgba(23, 22, 28, 0.35);
-
-  overflow: hidden;
-}
-
-.browser-mock__bar {
+/* ── Tile Header Row ─────────────────────────────────────────── */
+.spec-bento__header {
   display: flex;
-  gap: 6px;
-  padding: 12px 14px;
-
-  background: var(--bg-soft);
-
-  border-bottom: 1px solid var(--line);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
 }
 
-.browser-mock__bar span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--line);
+.spec-bento__badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.browser-mock__body {
-  display: grid;
-  gap: 12px;
-  padding: 16px;
+.spec-bento__icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.browser-mock__thumb {
-  border-radius: 8px;
-  padding: 28px 16px;
+.spec-bento__icon-badge--ai {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
 
-  color: var(--ink-on-dark);
+.spec-bento__icon-badge--web {
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  color: #2dd4bf;
+}
 
-  font-size: 13.5px;
+.spec-bento__icon-badge--mkt {
+  background: rgba(129, 140, 248, 0.12);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  color: #818cf8;
+}
+
+.spec-bento__title {
+  font-size: 16px;
   font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-
-/* Project-specific purple visual */
-.browser-mock__thumb--1 {
-  background: linear-gradient(
-    135deg,
-    #7c3aed,
-    #c026d3
-  );
+.spec-bento__count {
+  font-family: var(--font-mono, monospace);
+  font-size: 12.5px;
+  color: rgba(148, 163, 184, 0.7);
 }
 
-
-/* Global gold theme */
-.browser-mock__thumb--2 {
-  background: linear-gradient(
-    135deg,
-    var(--gold),
-    var(--gold-bright)
-  );
-
-  color: var(--ink);
-}
-
-
-/* Project-specific blue/green visual */
-.browser-mock__thumb--3 {
-  background: linear-gradient(
-    135deg,
-    #0ea5e9,
-    #22c55e
-  );
-}
-
-
-/* ── Col B — auto-scrolling widget marquee ────────────────── */
-/* Row 1 → right-to-left
-   Row 2 → left-to-right */
-
-.widget-marquee {
-  width: 100%;
+/* ── 1. Hero Tile (AI Tools Static 4×3 Grid) ─────────────────── */
+.spec-bento__ai-grid {
   display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
-.widget-marquee__row {
-  overflow: hidden;
-
-  -webkit-mask-image:
-    linear-gradient(
-      90deg,
-      transparent,
-      #000 12%,
-      #000 88%,
-      transparent
-    );
-
-  mask-image:
-    linear-gradient(
-      90deg,
-      transparent,
-      #000 12%,
-      #000 88%,
-      transparent
-    );
-}
-
-.widget-marquee__track {
+.spec-bento__ai-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 13px 8px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 7px;
+  transition: all 0.18s ease;
+}
+
+.spec-bento__ai-card:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.25);
+  transform: translateY(-1px);
+}
+
+.spec-bento__ai-icon {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.spec-bento__ai-label {
+  font-size: 11.5px;
+  line-height: 1.18;
+  color: #cbd5e1;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── 2. Web Tile (Website Tools Vertical Marquee) ────────────── */
+.spec-bento__ticker-vertical {
+  height: 250px;
+  min-height: 250px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(180deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+
+.spec-bento__ticker-v-track {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: tickerVerticalScroll 22s linear infinite;
+}
+
+.spec-bento__v-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spec-bento__v-row {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  transition: all 0.18s ease;
+}
+
+.spec-bento__v-row:hover {
+  background: rgba(45, 212, 191, 0.08);
+  border-color: rgba(45, 212, 191, 0.25);
+  color: #ffffff;
+}
+
+.spec-bento__web-icon {
+  color: #2dd4bf;
+  flex-shrink: 0;
+}
+
+@keyframes tickerVerticalScroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+/* ── 3. Mkt Tile (Marketing Tools Stat + Horizontal Marquee) ─── */
+.spec-bento__mkt-body {
+  margin-bottom: 16px;
+}
+
+.spec-bento__stat-num {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  color: #818cf8;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+
+.spec-bento__stat-subhead {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.spec-bento__ticker-horizontal {
+  overflow: hidden;
+  position: relative;
+  padding: 4px 0;
+  mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+
+.spec-bento__ticker-h-track {
+  display: flex;
+  gap: 8px;
   width: max-content;
+  animation: tickerHorizontalScroll 20s linear infinite;
 }
 
-.widget-marquee__row--rtl .widget-marquee__track {
-  animation: widget-marquee-rtl 16s linear infinite;
+.spec-bento__h-list {
+  display: flex;
+  gap: 8px;
 }
 
-.widget-marquee__row--ltr .widget-marquee__track {
-  animation: widget-marquee-ltr 16s linear infinite;
+.spec-bento__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  white-space: nowrap;
+  transition: all 0.18s ease;
 }
 
-.widget-marquee:hover .widget-marquee__track {
-  animation-play-state: paused;
+.spec-bento__chip:hover {
+  background: rgba(129, 140, 248, 0.08);
+  border-color: rgba(129, 140, 248, 0.25);
+  color: #ffffff;
 }
 
-@keyframes widget-marquee-rtl {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
+.spec-bento__mkt-icon {
+  color: #818cf8;
+  flex-shrink: 0;
 }
 
-@keyframes widget-marquee-ltr {
-  from {
-    transform: translateX(-50%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
+@keyframes tickerHorizontalScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
+/* ── 4. Total Tile (Aggregate Stat) ──────────────────────────── */
+.spec-bento__total-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.spec-bento__total-num {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1;
+  color: #f1f5f9;
+  letter-spacing: -0.03em;
+}
+
+.spec-bento__total-label {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* CTA Wrap */
+.showcase-cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+}
+
+/* ── Motion Accessibility ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .widget-marquee__track {
+  .spec-bento__ticker-v-track,
+  .spec-bento__ticker-h-track {
     animation: none;
   }
 }
 
-
-/* ── Widget cards ─────────────────────────────────────────── */
-
-.widget-grid__item {
-  flex: 0 0 auto;
-  width: 92px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 8px;
-  padding: 14px 6px;
-
-  border-radius: 10px;
-
-  background: var(--bg);
-  border: 1px solid var(--line);
-
-  color: var(--ink-soft);
-
-  transition:
-    border-color 0.2s var(--ease),
-    color 0.2s var(--ease),
-    background 0.2s var(--ease);
-}
-
-.widget-grid__item:hover {
-  border-color: var(--gold);
-  color: var(--gold-ink);
-}
-
-.widget-grid__item span {
-  font-size: 10.5px;
-  font-weight: 500;
-}
-
-.showcase__col--b h3 {
-  margin-top: 32px;
-}
-
-
-/* ── Col C — fake phone frame ────────────────────────────── */
-
-.phone-mock {
-  position: relative;
-  margin-top: auto;
-  padding-top: 32px;
-
-  display: flex;
-  justify-content: center;
-}
-
-.phone-mock__frame {
-  width: 210px;
-
-  border-radius: 28px;
-
-  background: var(--panel-dark);
-
-  border: 4px solid var(--panel-dark-soft);
-
-  padding: 16px 14px;
-
-  box-shadow:
-    0 40px 70px -25px rgba(0, 0, 0, 0.7);
-}
-
-.phone-mock__notch {
-  width: 56px;
-  height: 6px;
-
-  border-radius: 999px;
-
-  background: var(--panel-dark-soft);
-
-  margin: 0 auto 14px;
-}
-
-.phone-mock__screen {
-  background: var(--panel-dark-soft);
-
-  border-radius: 12px;
-  padding: 16px 12px;
-
-  display: grid;
-  gap: 10px;
-}
-
-.phone-mock__row {
-  height: 8px;
-  border-radius: 999px;
-
-  background: rgba(242, 240, 234, 0.20);
-
-  width: 70%;
-}
-
-.phone-mock__row--wide {
-  width: 100%;
-  height: 10px;
-  background: var(--gold);
-}
-
-.phone-mock__btn {
-  margin-top: 6px;
-  height: 26px;
-
-  border-radius: 8px;
-
-  background: linear-gradient(
-    135deg,
-    var(--gold-bright),
-    var(--gold)
-  );
-}
-
-.phone-mock__badge {
-  position: absolute;
-
-  width: 40px;
-  height: 40px;
-
-  border-radius: 12px;
-
-  display: grid;
-  place-items: center;
-
-  box-shadow:
-    0 16px 30px -10px rgba(0, 0, 0, 0.5);
-}
-
-
-/* Gold lightning badge */
-.phone-mock__badge--zap {
-  top: 12px;
-  right: 18%;
-
-  background: var(--gold-bright);
-  color: var(--ink);
-
-  transform: rotate(-8deg);
-}
-
-
-/* Performance/security status badge — intentionally green */
-.phone-mock__badge--shield {
-  bottom: 30px;
-  left: 12%;
-
-  background: #22c55e;
-  color: #06210f;
-
-  transform: rotate(8deg);
-}
-
-
-/* ── Responsive ───────────────────────────────────────────── */
-
-/* Col A / Col C — widget grid replacing the old browser/phone mock */
-.showcase__marquee--top {
-  margin-top: 0;
-}
-
-.showcase__label {
-  margin-bottom: 20px;
-}
-
-.showcase__col--a,
-.showcase__col--c {
-  justify-content: flex-start;
-}
-
-/* Col C is a dark card — restyle widget chips to sit on dark bg */
-.showcase__col--c .widget-grid__item {
-  background: var(--panel-dark-soft);
-  border-color: var(--line-dark);
-  color: rgba(242, 240, 234, 0.72);
-}
-
-.showcase__col--c .widget-grid__item:hover {
-  border-color: var(--gold-bright);
-  color: var(--gold-bright);
-}
-
-@media (max-width: 900px) {
-  .showcase {
-    grid-template-columns: 1fr;
+/* ── Responsive Viewports ─────────────────────────────────────── */
+@media (max-width: 860px) {
+  .showcase-section {
+    padding: 60px 0 80px;
   }
 
-  .showcase__col {
-    min-height: auto;
+  .spec-bento {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hero"
+      "web"
+      "mkt"
+      "total";
+    gap: 14px;
+    max-width: 100%;
+  }
+
+  .spec-bento__ticker-vertical {
+    height: 180px;
+    min-height: 180px;
+    mask-image: linear-gradient(180deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+  }
+
+  .spec-bento__ticker-horizontal {
+    mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+  }
+
+  .spec-bento__ai-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .spec-bento__ai-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .spec-bento__ai-card {
+    padding: 10px 4px;
   }
 }

@@ -1,182 +1,230 @@
-import { Video, UserCircle, FileText, Image, Type, Grid3x3, MessageSquare, Layers, Zap, ShieldCheck, Bot, Sparkles, Cpu, Wand2, Brain, Mic, Megaphone, TrendingUp, Mail, Share2, Eye, Workflow, Database, Target, Bell, CreditCard, Search, Settings, BarChart3, Users, Palette } from "lucide-react";
+import {
+  Bot,
+  Sparkles,
+  Cpu,
+  Wand2,
+  Brain,
+  Mic,
+  MessageSquare,
+  Zap,
+  Eye,
+  Workflow,
+  Database,
+  Target,
+  Video,
+  UserCircle,
+  FileText,
+  Image,
+  Type,
+  Grid3x3,
+  Layers,
+  Bell,
+  CreditCard,
+  Search,
+  Settings,
+  Megaphone,
+  TrendingUp,
+  Mail,
+  Share2,
+  Users,
+  ShieldCheck,
+  BarChart3,
+  Palette,
+  ArrowUpRight
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import SectionHeading from "../SectionHeading";
 import "../../styles/home/showcase.css";
+
+const aiTools = [
+  { icon: Bot, label: "Chatbot" },
+  { icon: Sparkles, label: "AI Assistant" },
+  { icon: Cpu, label: "Automation" },
+  { icon: Wand2, label: "Image AI" },
+  { icon: Brain, label: "Smart Insights" },
+  { icon: Mic, label: "Voice AI" },
+  { icon: MessageSquare, label: "NLP" },
+  { icon: Zap, label: "Predictive" },
+  { icon: Eye, label: "Vision AI" },
+  { icon: Workflow, label: "Workflow AI" },
+  { icon: Database, label: "Data Analysis" },
+  { icon: Target, label: "Recommendations" }
+];
+
+const websiteTools = [
+  { icon: Video, label: "Video" },
+  { icon: UserCircle, label: "Auth" },
+  { icon: FileText, label: "Editor" },
+  { icon: Image, label: "Media" },
+  { icon: Type, label: "Heading" },
+  { icon: Grid3x3, label: "Carousel" },
+  { icon: MessageSquare, label: "Chat" },
+  { icon: Layers, label: "Layout" },
+  { icon: Bell, label: "Notifications" },
+  { icon: CreditCard, label: "Payments" },
+  { icon: Search, label: "Search" },
+  { icon: Settings, label: "Settings" }
+];
+
+const marketingTools = [
+  { icon: Megaphone, label: "Campaigns" },
+  { icon: TrendingUp, label: "Growth" },
+  { icon: Mail, label: "Email" },
+  { icon: Share2, label: "Social" },
+  { icon: Users, label: "Audience" },
+  { icon: Zap, label: "Ad Targeting" },
+  { icon: ShieldCheck, label: "SEO" },
+  { icon: FileText, label: "Content" },
+  { icon: BarChart3, label: "Analytics" },
+  { icon: UserCircle, label: "Influencer" },
+  { icon: Target, label: "Retargeting" },
+  { icon: Palette, label: "Branding" }
+];
 
 export default function ShowcaseSection() {
   return (
-    <>
-      <section className="section showcase-wrap">
-        <div className="container">
-          <div className="showcase">
+    <section className="section showcase-section">
+      <div className="container">
+        <SectionHeading
+          eyebrow="Toolkit & Stack"
+          title="Everything we build into your product"
+          description="A complete ecosystem spanning intelligent AI capabilities, modern web infrastructure, and conversion-focused marketing tools."
+        />
 
-            {/* Col 1 — AI tools widget grid */}
-            <div className="showcase__col showcase__col--a">
-              <span className="eyebrow showcase__label">AI Tools</span>
-              <div className="widget-marquee showcase__marquee--top">
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Bot size={18} /><span>Chatbot</span></div>
-                    <div className="widget-grid__item"><Sparkles size={18} /><span>AI Assistant</span></div>
-                    <div className="widget-grid__item"><Bot size={18} /><span>Chatbot</span></div>
-                    <div className="widget-grid__item"><Sparkles size={18} /><span>AI Assistant</span></div>
-                  </div>
+        {/* ── BENTO SPEC GRID ───────────────────────────────────── */}
+        <div className="spec-bento">
+
+          {/* 1. HERO TILE — AI TOOLS (Static 4×3 Grid) ─────────── */}
+          <div className="spec-bento__tile spec-bento__tile--hero">
+            <div className="spec-bento__header">
+              <div className="spec-bento__badge-wrap">
+                <div className="spec-bento__icon-badge spec-bento__icon-badge--ai">
+                  <Bot size={16} />
                 </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Cpu size={18} /><span>Automation</span></div>
-                    <div className="widget-grid__item"><Wand2 size={18} /><span>Image AI</span></div>
-                    <div className="widget-grid__item"><Cpu size={18} /><span>Automation</span></div>
-                    <div className="widget-grid__item"><Wand2 size={18} /><span>Image AI</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Brain size={18} /><span>Smart Insights</span></div>
-                    <div className="widget-grid__item"><Mic size={18} /><span>Voice AI</span></div>
-                    <div className="widget-grid__item"><Brain size={18} /><span>Smart Insights</span></div>
-                    <div className="widget-grid__item"><Mic size={18} /><span>Voice AI</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><MessageSquare size={18} /><span>NLP</span></div>
-                    <div className="widget-grid__item"><Zap size={18} /><span>Predictive</span></div>
-                    <div className="widget-grid__item"><MessageSquare size={18} /><span>NLP</span></div>
-                    <div className="widget-grid__item"><Zap size={18} /><span>Predictive</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Eye size={18} /><span>Vision AI</span></div>
-                    <div className="widget-grid__item"><Workflow size={18} /><span>Workflow AI</span></div>
-                    <div className="widget-grid__item"><Eye size={18} /><span>Vision AI</span></div>
-                    <div className="widget-grid__item"><Workflow size={18} /><span>Workflow AI</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Database size={18} /><span>Data Analysis</span></div>
-                    <div className="widget-grid__item"><Target size={18} /><span>Recommendations</span></div>
-                    <div className="widget-grid__item"><Database size={18} /><span>Data Analysis</span></div>
-                    <div className="widget-grid__item"><Target size={18} /><span>Recommendations</span></div>
-                  </div>
-                </div>
+                <h3 className="spec-bento__title">AI tools</h3>
               </div>
+              <span className="spec-bento__count">×12</span>
             </div>
 
-            {/* Col 2 — website tools widget grid */}
-            <div className="showcase__col showcase__col--b">
-              <span className="eyebrow showcase__label">Website Tools</span>
-              <div className="widget-marquee">
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Video size={18} /><span>Video</span></div>
-                    <div className="widget-grid__item"><UserCircle size={18} /><span>Auth</span></div>
-                    <div className="widget-grid__item"><Video size={18} /><span>Video</span></div>
-                    <div className="widget-grid__item"><UserCircle size={18} /><span>Auth</span></div>
+            <div className="spec-bento__ai-grid">
+              {aiTools.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div key={idx} className="spec-bento__ai-card">
+                    <Icon size={16} className="spec-bento__ai-icon" />
+                    <span className="spec-bento__ai-label">{item.label}</span>
                   </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><FileText size={18} /><span>Editor</span></div>
-                    <div className="widget-grid__item"><Image size={18} /><span>Media</span></div>
-                    <div className="widget-grid__item"><FileText size={18} /><span>Editor</span></div>
-                    <div className="widget-grid__item"><Image size={18} /><span>Media</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Type size={18} /><span>Heading</span></div>
-                    <div className="widget-grid__item"><Grid3x3 size={18} /><span>Carousel</span></div>
-                    <div className="widget-grid__item"><Type size={18} /><span>Heading</span></div>
-                    <div className="widget-grid__item"><Grid3x3 size={18} /><span>Carousel</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><MessageSquare size={18} /><span>Chat</span></div>
-                    <div className="widget-grid__item"><Layers size={18} /><span>Layout</span></div>
-                    <div className="widget-grid__item"><MessageSquare size={18} /><span>Chat</span></div>
-                    <div className="widget-grid__item"><Layers size={18} /><span>Layout</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Bell size={18} /><span>Notifications</span></div>
-                    <div className="widget-grid__item"><CreditCard size={18} /><span>Payments</span></div>
-                    <div className="widget-grid__item"><Bell size={18} /><span>Notifications</span></div>
-                    <div className="widget-grid__item"><CreditCard size={18} /><span>Payments</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Search size={18} /><span>Search</span></div>
-                    <div className="widget-grid__item"><Settings size={18} /><span>Settings</span></div>
-                    <div className="widget-grid__item"><Search size={18} /><span>Search</span></div>
-                    <div className="widget-grid__item"><Settings size={18} /><span>Settings</span></div>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
-
-            {/* Col 3 — marketing tools widget grid */}
-            <div className="showcase__col showcase__col--c">
-              <span className="eyebrow showcase__label">Marketing Tools</span>
-              <div className="widget-marquee showcase__marquee--top">
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Megaphone size={18} /><span>Campaigns</span></div>
-                    <div className="widget-grid__item"><TrendingUp size={18} /><span>Growth</span></div>
-                    <div className="widget-grid__item"><Megaphone size={18} /><span>Campaigns</span></div>
-                    <div className="widget-grid__item"><TrendingUp size={18} /><span>Growth</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Mail size={18} /><span>Email</span></div>
-                    <div className="widget-grid__item"><Share2 size={18} /><span>Social</span></div>
-                    <div className="widget-grid__item"><Mail size={18} /><span>Email</span></div>
-                    <div className="widget-grid__item"><Share2 size={18} /><span>Social</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><UserCircle size={18} /><span>Audience</span></div>
-                    <div className="widget-grid__item"><Zap size={18} /><span>Ad Targeting</span></div>
-                    <div className="widget-grid__item"><UserCircle size={18} /><span>Audience</span></div>
-                    <div className="widget-grid__item"><Zap size={18} /><span>Ad Targeting</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><ShieldCheck size={18} /><span>SEO</span></div>
-                    <div className="widget-grid__item"><FileText size={18} /><span>Content</span></div>
-                    <div className="widget-grid__item"><ShieldCheck size={18} /><span>SEO</span></div>
-                    <div className="widget-grid__item"><FileText size={18} /><span>Content</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--rtl">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><BarChart3 size={18} /><span>Analytics</span></div>
-                    <div className="widget-grid__item"><Users size={18} /><span>Influencer</span></div>
-                    <div className="widget-grid__item"><BarChart3 size={18} /><span>Analytics</span></div>
-                    <div className="widget-grid__item"><Users size={18} /><span>Influencer</span></div>
-                  </div>
-                </div>
-                <div className="widget-marquee__row widget-marquee__row--ltr">
-                  <div className="widget-marquee__track">
-                    <div className="widget-grid__item"><Target size={18} /><span>Retargeting</span></div>
-                    <div className="widget-grid__item"><Palette size={18} /><span>Branding</span></div>
-                    <div className="widget-grid__item"><Target size={18} /><span>Retargeting</span></div>
-                    <div className="widget-grid__item"><Palette size={18} /><span>Branding</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
-        </div>
-      </section>
 
-    </>
+          {/* 2. WEB TILE — WEBSITE TOOLS (Vertical Marquee) ──────── */}
+          <div className="spec-bento__tile spec-bento__tile--web">
+            <div className="spec-bento__header">
+              <div className="spec-bento__badge-wrap">
+                <div className="spec-bento__icon-badge spec-bento__icon-badge--web">
+                  <Layers size={16} />
+                </div>
+                <h3 className="spec-bento__title">Website tools</h3>
+              </div>
+              <span className="spec-bento__count">×12</span>
+            </div>
+
+            <div className="spec-bento__ticker-vertical">
+              <div className="spec-bento__ticker-v-track">
+                {/* First copy for screen readers and visible flow */}
+                <div className="spec-bento__v-list">
+                  {websiteTools.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={idx} className="spec-bento__v-row">
+                        <Icon size={15} className="spec-bento__web-icon" />
+                        <span>{item.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {/* Duplicated copy for seamless loop (aria-hidden) */}
+                <div className="spec-bento__v-list" aria-hidden="true">
+                  {websiteTools.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={idx} className="spec-bento__v-row">
+                        <Icon size={15} className="spec-bento__web-icon" />
+                        <span>{item.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. MKT TILE — MARKETING TOOLS (Stat + Horizontal Marquee) */}
+          <div className="spec-bento__tile spec-bento__tile--mkt">
+            <div className="spec-bento__header">
+              <div className="spec-bento__badge-wrap">
+                <div className="spec-bento__icon-badge spec-bento__icon-badge--mkt">
+                  <Megaphone size={16} />
+                </div>
+                <h3 className="spec-bento__title">Marketing tools</h3>
+              </div>
+            </div>
+
+            <div className="spec-bento__mkt-body">
+              <div className="spec-bento__stat-num">12</div>
+              <p className="spec-bento__stat-subhead">ways to reach an audience</p>
+            </div>
+
+            <div className="spec-bento__ticker-horizontal">
+              <div className="spec-bento__ticker-h-track">
+                {/* First copy */}
+                <div className="spec-bento__h-list">
+                  {marketingTools.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={idx} className="spec-bento__chip">
+                        <Icon size={14} className="spec-bento__mkt-icon" />
+                        <span>{item.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {/* Duplicated copy for loop (aria-hidden) */}
+                <div className="spec-bento__h-list" aria-hidden="true">
+                  {marketingTools.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={idx} className="spec-bento__chip">
+                        <Icon size={14} className="spec-bento__mkt-icon" />
+                        <span>{item.label}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4. TOTAL TILE — AGGREGATE STAT (Static & Centered) ──── */}
+          <div className="spec-bento__tile spec-bento__tile--total">
+            <div className="spec-bento__total-content">
+              <div className="spec-bento__total-num">36</div>
+              <div className="spec-bento__total-label">tools, one platform</div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* CTA */}
+        <div className="showcase-cta-wrap">
+          <Link to="/contact" className="btn btn--outline home__more-link">
+            <span>Start Building With Phronix</span>
+            <ArrowUpRight size={16} />
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }
