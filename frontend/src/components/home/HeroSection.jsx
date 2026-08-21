@@ -48,30 +48,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Interactive explanation for the phoenix. */}
-      <div
-        className={`hero__interaction-hint ${
-          hasInteracted ? "hero__interaction-hint--active" : ""
-        }`}
-        aria-hidden="true"
-      >
-        <div className="hero__interaction-orbit">
-          <span className="hero__interaction-orbit-line" />
-         <span className="hero__interaction-cursor" />
-          
-        </div>
-
-        <div className="hero__interaction-copy">
-   <strong>
-  {hasInteracted ? "AGAIN?" : "AWAKEN"}
-</strong>
-
-<span>
-  Tap the phoenix
-</span>
-        </div>
-      </div>
-
       <div className="hero__bottom">
         <span>SCROLL TO BUILD</span>
         <span className="hero__bottom-line" />

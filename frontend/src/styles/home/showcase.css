@@ -416,6 +416,32 @@
 
 /* ── Responsive ───────────────────────────────────────────── */
 
+/* Col A / Col C — widget grid replacing the old browser/phone mock */
+.showcase__marquee--top {
+  margin-top: 0;
+}
+
+.showcase__label {
+  margin-bottom: 20px;
+}
+
+.showcase__col--a,
+.showcase__col--c {
+  justify-content: flex-start;
+}
+
+/* Col C is a dark card — restyle widget chips to sit on dark bg */
+.showcase__col--c .widget-grid__item {
+  background: var(--panel-dark-soft);
+  border-color: var(--line-dark);
+  color: rgba(242, 240, 234, 0.72);
+}
+
+.showcase__col--c .widget-grid__item:hover {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
+
 @media (max-width: 900px) {
   .showcase {
     grid-template-columns: 1fr;

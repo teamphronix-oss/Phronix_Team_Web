@@ -1,14 +1,14 @@
 import "../../styles/home/trusted-by.css";
 
 const capabilities = [
-  "AI SYSTEMS",
-  "SOFTWARE PRODUCTS",
-  "DIGITAL EXPERIENCES",
-  "AUTOMATION",
-  "3D & CREATIVE",
-  "AI AGENTS",
-  "WEB & MOBILE",
-  "DIGITAL PRODUCTS",
+  "AI/AUTOMATION SERVICES",
+  "WEBSITE BUILDING SERVICES",
+  "SEO SERVICES",
+  "CONTENT-BASED SERVICES",
+  "UI/UX DESIGNING",
+  "SOFTWARE DEVELOPMENT",
+  "BASIC DIGITAL & TECH SUPPORT",
+  "MOBILE APP DEVELOPMENT",
 ];
 
 export default function TrustedBySection() {

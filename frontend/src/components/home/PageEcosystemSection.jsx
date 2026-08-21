@@ -17,15 +17,15 @@ import sweeterJoy10 from "../../assets/projects/sweeter-joy10.png";
 const project1Data = [
   { image: sweeterjoy, tag: "Home" },
   { image: sweeterJoy1, tag: "About Us" },
-  { image: sweeterJoy2, tag: "Our Chocolates" },
-  { image: sweeterJoy3, tag: "Contact Us" },
-  { image: sweeterJoy4, tag: "FAQ" },
-  { image: sweeterJoy5, tag: "Gallery" },
+  { image: sweeterJoy2, tag: "Our Story" },
+  { image: sweeterJoy3, tag: "Our Chocolates" },
+  { image: sweeterJoy4, tag: "Video" },
+  { image: sweeterJoy5, tag: "Highlights" },
   { image: sweeterJoy6, tag: "Reviews" },
-  { image: sweeterJoy7, tag: "Blog" },
-  { image: sweeterJoy8, tag: "Order Now" },
-  { image: sweeterJoy9, tag: "Careers" },
-  { image: sweeterJoy10, tag: "Privacy Policy" },
+  { image: sweeterJoy7, tag: "Gallery" },
+  { image: sweeterJoy8, tag: "FAQ" },
+  { image: sweeterJoy9, tag: "Contact Us" },
+  { image: sweeterJoy10, tag: "Footer" },
 ];
 
 const project1Slots = project1Data.map((item) => ({
