@@ -1,118 +1,243 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-/* Custom cursor: a small solid dot that tracks the mouse exactly, plus
-   a larger soft ring that trails behind with slight lag (spring-like
-   easing) for that "liquid follow" feel seen on sites like lamalama.com.
-   The ring grows and the dot fades when hovering any clickable element
-   (a, button, [role="button"], or anything with data-cursor="hover").
-
-   NEW: a floating label/tag (small dark pill with text) that follows
-   the cursor and shows whatever text is set via data-cursor-label="..."
-   on the hovered element — this is the "# Chocolate Amsterdam" style
-   tag seen following the mouse on lamalama.com when hovering a logo. */
+/* ─────────────────────────────────────────────────────────────
+   Phronix Next-Gen Interactive Custom Cursor
+   - Velocity-aware aerodynamic aura morphing
+   - Luminous high-contrast pinpoint core with ambient pulse
+   - Magnetic hover expansion on cards, buttons & interactive elements
+   - Click impulse shockwaves
+   - Zero re-render architecture running at 60/120fps
+   ───────────────────────────────────────────────────────────── */
 export default function CustomCursor() {
   const dotRef = useRef(null);
   const ringRef = useRef(null);
+  const ringInnerRef = useRef(null);
   const labelRef = useRef(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [labelText, setLabelText] = useState(null);
 
   useEffect(() => {
-    // Skip entirely on touch devices — custom cursors don't make sense
-    // there and we don't want to hide the real (only) pointer.
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     if (isTouchDevice) return;
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let ringX = 0;
-    let ringY = 0;
-    let labelX = 0;
-    let labelY = 0;
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let labelX = -100;
+    let labelY = -100;
+
+    let prevMouseX = -100;
+    let prevMouseY = -100;
+    let angle = 0;
+    let stretch = 1;
+
+    let isInitialized = false;
+    let isVisible = false;
+    let isMouseDown = false;
+    let isHovering = false;
     let rafId;
 
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const label = labelRef.current;
+
+    const setVisibleState = (visible) => {
+      isVisible = visible;
+      if (dot) {
+        if (visible) dot.classList.remove("custom-cursor--hidden");
+        else dot.classList.add("custom-cursor--hidden");
+      }
+      if (ring) {
+        if (visible) ring.classList.remove("custom-cursor--hidden");
+        else ring.classList.add("custom-cursor--hidden");
+      }
+      if (label && !visible) {
+        label.classList.remove("custom-cursor__label--visible");
+      }
+    };
+
     const handleMouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (!isVisible) setIsVisible(true);
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+      const x = e.clientX;
+      const y = e.clientY;
+
+      mouseX = x;
+      mouseY = y;
+
+      if (!isInitialized) {
+        ringX = mouseX;
+        ringY = mouseY;
+        labelX = mouseX;
+        labelY = mouseY;
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+        isInitialized = true;
+      }
+
+      if (!isVisible) {
+        setVisibleState(true);
+      }
+
+      if (dot) {
+        const dotScale = isMouseDown ? 0.7 : (isHovering ? 1.3 : 1);
+        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%) scale(${dotScale})`;
       }
     };
 
-    const animateRing = () => {
-      // Simple lerp for a soft trailing/spring feel behind the dot.
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+    const animate = () => {
+      if (isInitialized && isVisible) {
+        // Dot transform
+        if (dot) {
+          const dotScale = isMouseDown ? 0.7 : (isHovering ? 1.3 : 1);
+          dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+        }
+
+        // Direct, responsive concentric tracking for the ring
+        const lerpFactor = isHovering ? 0.45 : 0.38;
+        ringX += (mouseX - ringX) * lerpFactor;
+        ringY += (mouseY - ringY) * lerpFactor;
+
+        // Strict geometric clamp: Dot stays tightly concentric inside the outer ring (max 4.5px displacement)
+        const maxOffset = isHovering ? 7 : 4.5;
+        const dx = ringX - mouseX;
+        const dy = ringY - mouseY;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > maxOffset && dist > 0) {
+          const ratio = maxOffset / dist;
+          ringX = mouseX + dx * ratio;
+          ringY = mouseY + dy * ratio;
+        }
+
+        // Calculate velocity and motion angle for dynamic stretch
+        const vx = mouseX - prevMouseX;
+        const vy = mouseY - prevMouseY;
+        const speed = Math.hypot(vx, vy);
+
+        if (speed > 1.5) {
+          angle = Math.atan2(vy, vx);
+          const targetStretch = Math.min(1 + speed * 0.015, 1.35);
+          stretch += (targetStretch - stretch) * 0.3;
+        } else {
+          stretch += (1 - stretch) * 0.2;
+        }
+
+        prevMouseX = mouseX;
+        prevMouseY = mouseY;
+
+        if (ring) {
+          const deg = (angle * 180) / Math.PI;
+          const scaleY = isMouseDown ? 0.82 : 1 / Math.sqrt(stretch);
+          const scaleX = isMouseDown ? 0.82 : stretch;
+
+          if (isHovering) {
+            ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${isMouseDown ? 0.85 : 1})`;
+          } else {
+            ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) rotate(${deg}deg) scale(${scaleX}, ${scaleY})`;
+          }
+        }
+
+        // Smooth lerp for label
+        labelX += (mouseX - labelX) * 0.18;
+        labelY += (mouseY - labelY) * 0.18;
+        if (label) {
+          label.style.transform = `translate3d(${labelX}px, ${labelY}px, 0) translate(-50%, -150%)`;
+        }
       }
-      // Label trails a bit slower/looser than the ring so it feels
-      // like it's being "dragged" behind the cursor.
-      labelX += (mouseX - labelX) * 0.14;
-      labelY += (mouseY - labelY) * 0.14;
-      if (labelRef.current) {
-        labelRef.current.style.transform = `translate(${labelX}px, ${labelY}px) translate(-50%, -140%)`;
-      }
-      rafId = requestAnimationFrame(animateRing);
+
+      rafId = requestAnimationFrame(animate);
     };
 
-    const handleMouseLeaveWindow = () => setIsVisible(false);
-    const handleMouseEnterWindow = () => setIsVisible(true);
+    const handleMouseOver = (e) => {
+      if (!isVisible) setVisibleState(true);
 
-    const handleOver = (e) => {
-      const target = e.target.closest(
-        'a, button, [role="button"], [data-cursor="hover"]'
+      const target = e.target;
+      if (!target || !(target instanceof Element)) return;
+
+      const clickable = target.closest(
+        'a, button, [role="button"], [data-cursor="hover"], .btn, .intake-pill, .intake-card-pill, .cal-day-btn, .cal-slot-btn, .browser-card, .tf-card, .pay-update__btn'
       );
-      setIsHovering(Boolean(target));
 
-      // Walk up to find the nearest element carrying a label — lets
-      // you tag a whole card/logo block once instead of every child.
-      const labelTarget = e.target.closest("[data-cursor-label]");
-      setLabelText(labelTarget ? labelTarget.getAttribute("data-cursor-label") : null);
+      isHovering = Boolean(clickable);
+
+      if (isHovering) {
+        dot?.classList.add("custom-cursor__dot--hover");
+        ring?.classList.add("custom-cursor__ring--hover");
+      } else {
+        dot?.classList.remove("custom-cursor__dot--hover");
+        ring?.classList.remove("custom-cursor__ring--hover");
+      }
+
+      const labelTarget = target.closest("[data-cursor-label]");
+      if (labelTarget && label) {
+        const text = labelTarget.getAttribute("data-cursor-label");
+        if (text) {
+          label.textContent = text;
+          label.classList.add("custom-cursor__label--visible");
+        } else {
+          label.classList.remove("custom-cursor__label--visible");
+        }
+      } else if (label) {
+        label.classList.remove("custom-cursor__label--visible");
+      }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseover", handleOver);
+    const handleMouseDown = () => {
+      isMouseDown = true;
+      dot?.classList.add("custom-cursor__dot--active");
+      ring?.classList.add("custom-cursor__ring--active");
+    };
+
+    const handleMouseUp = () => {
+      isMouseDown = false;
+      dot?.classList.remove("custom-cursor__dot--active");
+      ring?.classList.remove("custom-cursor__ring--active");
+    };
+
+    const handleMouseLeaveWindow = () => {
+      setVisibleState(false);
+    };
+
+    const handleMouseEnterWindow = () => {
+      setVisibleState(true);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
+    window.addEventListener("mousedown", handleMouseDown, { passive: true });
+    window.addEventListener("mouseup", handleMouseUp, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeaveWindow);
     document.addEventListener("mouseenter", handleMouseEnterWindow);
-    rafId = requestAnimationFrame(animateRing);
+    rafId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseover", handleOver);
+      window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
       document.removeEventListener("mouseenter", handleMouseEnterWindow);
       cancelAnimationFrame(rafId);
     };
-  }, [isVisible]);
+  }, []);
 
   return (
     <>
       <div
         ref={dotRef}
-        className={`custom-cursor__dot${
-          isHovering ? " custom-cursor__dot--hover" : ""
-        }${isVisible ? "" : " custom-cursor--hidden"}`}
+        className="custom-cursor__dot custom-cursor--hidden"
         aria-hidden="true"
       />
       <div
         ref={ringRef}
-        className={`custom-cursor__ring${
-          isHovering ? " custom-cursor__ring--hover" : ""
-        }${isVisible ? "" : " custom-cursor--hidden"}`}
-        aria-hidden="true"
-      />
-      <div
-        ref={labelRef}
-        className={`custom-cursor__label${
-          labelText && isVisible ? " custom-cursor__label--visible" : ""
-        }`}
+        className="custom-cursor__ring custom-cursor--hidden"
         aria-hidden="true"
       >
-        {labelText}
+        <div ref={ringInnerRef} className="custom-cursor__ring-core" />
       </div>
+      <div
+        ref={labelRef}
+        className="custom-cursor__label"
+        aria-hidden="true"
+      />
     </>
   );
 }
