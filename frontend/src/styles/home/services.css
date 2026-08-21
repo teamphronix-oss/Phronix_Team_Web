@@ -227,6 +227,50 @@
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
+/* ── Minimalist See All Services Button ───────────────────────── */
+.services-cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.services-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8, 18, 34, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #e2e8f0;
+  text-decoration: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.services-more-btn svg {
+  color: #38bdf8;
+  transition: transform 0.22s ease;
+}
+
+.services-more-btn:hover {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.25), 0 12px 35px -10px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+.services-more-btn:hover svg {
+  transform: translate(2px, -2px);
+}
+
 /* ── Tablet Viewports ─────────────────────────────────────────── */
 @media (max-width: 990px) {
   .card-carousel--minimal .card-carousel__stage {

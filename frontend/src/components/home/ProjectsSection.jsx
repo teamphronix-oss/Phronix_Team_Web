@@ -1,86 +1,144 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import projects from "../../data/projects";
+import { ArrowUpRight, Sparkles, CheckCircle2 } from "lucide-react";
+import SectionHeading from "../SectionHeading";
+import sweeterJoy from "../../assets/projects/sweeter-joy.png";
+import sweeterJoy1 from "../../assets/projects/sweeter-joy1.png";
+import sweeterJoy2 from "../../assets/projects/sweeter-joy2.png";
+import sweeterJoy3 from "../../assets/projects/sweeter-joy3.png";
+import sweeterJoy5 from "../../assets/projects/sweeter-joy5.png";
+import sweeterJoy7 from "../../assets/projects/sweeter-joy7.png";
 import "../../styles/home/projects.css";
+
+const featuredProjects = [
+  {
+    id: "sweeterjoy",
+    name: "Sweeter Joy",
+    category: "E-Commerce",
+    image: sweeterJoy,
+    description: "Artisan confectionery e-commerce platform with automated 1-tap checkout and delivery tracking.",
+    technologies: ["React", "Next.js", "Stripe", "Tailwind"],
+  },
+  {
+    id: "orbitpay",
+    name: "OrbitPay",
+    category: "Fintech & Billing",
+    image: sweeterJoy3,
+    description: "Multi-vendor checkout platform with split payments and real-time merchant revenue analytics.",
+    technologies: ["React", "Node.js", "MongoDB", "Stripe"],
+  },
+  {
+    id: "pulseboard",
+    name: "Pulseboard",
+    category: "SaaS Analytics",
+    image: sweeterJoy5,
+    description: "Real-time customer analytics and telemetry dashboard with customizable alert triggers.",
+    technologies: ["Next.js", "PostgreSQL", "D3.js", "Tailwind"],
+  },
+  {
+    id: "wanderly",
+    name: "Wanderly",
+    category: "Mobile & Travel",
+    image: sweeterJoy2,
+    description: "Cross-platform mobile travel planner with offline sync and collaborative itineraries.",
+    technologies: ["React Native", "Firebase", "Mapbox"],
+  },
+  {
+    id: "ledgerlite",
+    name: "LedgerLite",
+    category: "Productivity",
+    image: sweeterJoy7,
+    description: "Fast, minimal bookkeeping software built for high-growth freelance teams and agencies.",
+    technologies: ["React", "TypeScript", "Node.js"],
+  },
+  {
+    id: "artisan-studio",
+    name: "Artisan Studio",
+    category: "Brand & Creative",
+    image: sweeterJoy1,
+    description: "Immersive visual storefront with sub-second image CDN caching and dynamic filter queries.",
+    technologies: ["React", "Next.js", "Tailwind"],
+  }
+];
 
 export default function ProjectsSection() {
   return (
-    <>
-      <section className="section section--space projects-showcase">
-        <div className="container projects-showcase__intro">
-          <div className="projects-showcase__stat">
-            <span className="projects-showcase__stat-number">40+</span>
-          </div>
-          <h2 className="projects-showcase__title">
-            Real-World Projects Built by Aspiring Developers
-          </h2>
-          <p>
-            From final-year submissions to portfolio-ready builds — practical,
-            industry-style projects crafted to help students learn by doing.
-          </p>
-        </div>
+    <section className="section projects-section">
+      <div className="container">
+        <SectionHeading
+          eyebrow="Featured Work"
+          title="Digital products engineered for scale"
+          description="From high-conversion e-commerce platforms to real-time analytics and custom AI workflows — explore recent client builds."
+        />
+      </div>
 
-        <div className="projects-marquee">
-          <div className="projects-marquee__track">
-            {[...projects, ...projects].map((p, i) => (
-              <div className="browser-card" key={`${p.id}-${i}`}>
-                <div className="browser-card__bar">
-                  <span className="browser-card__dot browser-card__dot--red" />
-                  <span className="browser-card__dot browser-card__dot--yellow" />
-                  <span className="browser-card__dot browser-card__dot--green" />
-                  <span className="browser-card__badges">
-                    <span className={`browser-card__badge browser-card__badge--${i % 2 === 0 ? "a" : "b"}`}>
-                      {i % 2 === 0 ? "Popular" : "Trending"}
-                    </span>
-                    <span className="browser-card__badge browser-card__badge--c">New</span>
+      {/* Infinite Smooth Marquee */}
+      <div className="projects-marquee">
+        <div className="projects-marquee__track">
+          {[...featuredProjects, ...featuredProjects].map((p, i) => (
+            <Link
+              to="/projects"
+              className="project-card"
+              key={`${p.id}-${i}`}
+              data-cursor-label="View"
+            >
+              <div className="project-card__top">
+                <div className="project-card__dots">
+                  <span className="dot dot--red" />
+                  <span className="dot dot--yellow" />
+                  <span className="dot dot--green" />
+                </div>
+                <span className="project-card__category">{p.category}</span>
+                <span className="project-card__status">
+                  <span className="status-indicator" /> Live
+                </span>
+              </div>
+
+              <div className="project-card__preview">
+                <img src={p.image} alt={p.name} loading="lazy" />
+                <div className="project-card__overlay">
+                  <span className="project-card__view-btn">
+                    <span>View Project</span>
+                    <ArrowUpRight size={14} />
                   </span>
                 </div>
-                <div className="browser-card__image">
-  <img src={p.image} alt={p.name} loading="lazy" />
-  <div className="browser-card__hover">
-    <button
-      type="button"
-      className={`browser-card__page-btn ${
-        (p.pageType ?? (i % 2 === 0 ? "one" : "multi")) === "one"
-          ? "browser-card__page-btn--active"
-          : ""
-      }`}
-    >
-      One Page
-    </button>
-    <button
-      type="button"
-      className={`browser-card__page-btn ${
-        (p.pageType ?? (i % 2 === 0 ? "one" : "multi")) === "multi"
-          ? "browser-card__page-btn--active"
-          : ""
-      }`}
-    >
-      Multi Page
-    </button>
-  </div>
-</div>
               </div>
-            ))}
-          </div>
+
+              <div className="project-card__body">
+                <div className="project-card__header-row">
+                  <h3 className="project-card__name">{p.name}</h3>
+                </div>
+                <p className="project-card__desc">{p.description}</p>
+
+                <div className="project-card__tags">
+                  {p.technologies.map((t) => (
+                    <span key={t} className="project-card__tag">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="container">
+        {/* Centered Minimalist CTA */}
+        <div className="projects-cta-wrap">
+          <Link to="/projects" className="projects-more-btn">
+            <span>Explore All Projects</span>
+            <ArrowUpRight size={15} />
+          </Link>
         </div>
 
-       <div className="container">
-  <Link to="/projects" className="btn btn--outline home__more-link">
-    See all projects <ArrowUpRight size={16} />
-  </Link>
-
- <div className="demos-soon">
-    <span className="demos-soon__pill-wrap">
-      <span className="demos-soon__pill">More Demos Coming Soon</span>
-    </span>
-    <p className="demos-soon__sub">
-      New demos are added regularly to meet the latest SaaS trends.
-    </p>
-  </div>
-</div>
-      </section>
-
-    </>
+        {/* Minimal Trust Bar */}
+        <div className="projects-trust-note">
+          <span className="projects-trust-badge">
+            <CheckCircle2 size={14} />
+            <span>40+ Products Built & Delivered Across Web, Mobile & AI</span>
+          </span>
+        </div>
+      </div>
+    </section>
   );
 }

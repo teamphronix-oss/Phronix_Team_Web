@@ -21,9 +21,12 @@ export default function ServicesSection() {
               <ServiceCard key={s.id} service={s} index={idx} />
             ))}
           </CardCarousel>
-          <Link to="/services" className="btn btn--outline home__more-link">
-            See all services <ArrowUpRight size={16} />
-          </Link>
+          <div className="services-cta-wrap">
+            <Link to="/services" className="services-more-btn">
+              <span>See All Services</span>
+              <ArrowUpRight size={15} />
+            </Link>
+          </div>
 
           <div className="trust-bar">
             <span className="trust-bar__item">

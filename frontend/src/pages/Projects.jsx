@@ -213,11 +213,27 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Loading */}
+        {/* Loading Skeleton Placeholders */}
         {loading && (
-          <p className="empty-state">
-            Loading projects...
-          </p>
+          <div className="grid grid--3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="card project-card project-card--skeleton">
+                <div className="project-card__image skeleton-pulse" />
+                <div className="skeleton-line skeleton-line--title skeleton-pulse" />
+                <div className="skeleton-line skeleton-line--text skeleton-pulse" />
+                <div className="skeleton-line skeleton-line--text skeleton-pulse" style={{ width: "70%" }} />
+                <div className="service-card__tags" style={{ marginTop: "10px" }}>
+                  <span className="skeleton-pill skeleton-pulse" />
+                  <span className="skeleton-pill skeleton-pulse" />
+                  <span className="skeleton-pill skeleton-pulse" />
+                </div>
+                <div className="project-card__actions" style={{ marginTop: "auto", paddingTop: "14px" }}>
+                  <span className="skeleton-btn skeleton-pulse" />
+                  <span className="skeleton-btn skeleton-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
         {/* Projects Grid */}
@@ -233,11 +249,13 @@ export default function Projects() {
           </div>
         )}
 
-        {/* Empty */}
+        {/* Empty State */}
         {!loading && filtered.length === 0 && (
-          <p className="empty-state">
-            No projects in this category yet.
-          </p>
+          <div className="empty-state-wrap">
+            <p className="empty-state">
+              No projects in this category yet. New client builds are deployed weekly.
+            </p>
+          </div>
         )}
       </div>
 
