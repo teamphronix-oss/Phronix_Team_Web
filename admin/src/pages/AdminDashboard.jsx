@@ -36,8 +36,16 @@ async function apiFetch(url, options = {}) {
 
 const TABS = [
   { id: "logo", label: "Site Logo" },
-  { id: "projects", label: "Projects" },
+  { id: "homeStats", label: "Homepage Stats" },
+  { id: "projects", label: "Student Project" },
   { id: "team", label: "Team" },
+  { id: "services", label: "Services" },
+  { id: "testimonials", label: "Testimonials" },
+  { id: "careers", label: "Careers" },
+  { id: "downloads", label: "Client Project" },
+  { id: "youtube", label: "YouTube" },
+  { id: "ongoing", label: "Ongoing Projects" },
+  { id: "why", label: "Why Phronix" },
 ];
 
 export default function AdminDashboard() {
@@ -79,8 +87,16 @@ export default function AdminDashboard() {
         </div>
 
         {tab === "logo" && <LogoPanel />}
+        {tab === "homeStats" && <HomeStatsPanel />}
         {tab === "projects" && <ProjectsPanel />}
         {tab === "team" && <TeamPanel />}
+        {tab === "services" && <ServicesPanel />}
+        {tab === "testimonials" && <TestimonialsPanel />}
+        {tab === "careers" && <CareersPanel />}
+        {tab === "downloads" && <DownloadsPanel />}
+        {tab === "youtube" && <YoutubePanel />}
+        {tab === "ongoing" && <OngoingPanel />}
+        {tab === "why" && <WhyPanel />}
       </div>
     </div>
   );
@@ -173,6 +189,121 @@ function LogoPanel() {
           {status}
         </p>
       )}
+    </div>
+  );
+}
+
+// ── Homepage Stats (the "40+" projects counter + heading) ──────────
+
+function HomeStatsPanel() {
+  const [form, setForm] = useState({
+    statNumber: "40+",
+    title: "Real-World Projects Built by Aspiring Developers",
+    description:
+      "From final-year submissions to portfolio-ready builds — practical, industry-style projects crafted to help students learn by doing.",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm({
+          statNumber: d.settings?.statNumber || "40+",
+          title:
+            d.settings?.projectsTitle ||
+            "Real-World Projects Built by Aspiring Developers",
+          description:
+            d.settings?.projectsDescription ||
+            "From final-year submissions to portfolio-ready builds — practical, industry-style projects crafted to help students learn by doing.",
+        });
+      })
+      .catch(() => {
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      await apiFetch("/settings/home-stats", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) {
+    return <p className="admin-panel__status">Loading…</p>;
+  }
+
+  return (
+    <div className="card admin-panel">
+      <h3>Homepage — "40+" stat section</h3>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      <label className="admin-field">
+        <span>Stat number (e.g. 40+)</span>
+
+        <input
+          value={form.statNumber}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              statNumber: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Title</span>
+
+        <input
+          value={form.title}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              title: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Description</span>
+
+        <textarea
+          rows={3}
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <button
+        className="btn btn--gold btn--sm"
+        onClick={save}
+      >
+        <Upload size={16} />
+        Save
+      </button>
     </div>
   );
 }
@@ -832,5 +963,586 @@ function TeamPanel() {
 
       </div>
     </div>
+  );
+}
+
+// ── Generic CRUD panel ──────────────────────────────────────────────
+// Services, Testimonials, Careers, Downloads, and YouTube all follow the
+// same shape (plain JSON fields, no image upload), so they share this one
+// implementation instead of five near-identical copies.
+//
+// field.type: "text" | "textarea" | "number" | "checkbox" | "csv" (comma
+// separated list, stored as an array server-side) | "lines" (one item per
+// line, stored as an array server-side) | "password" (optional — blank
+// means "leave unchanged").
+
+function GenericPanel({
+  basePath,
+  listKey,
+  emptyItem,
+  fields,
+  addLabel,
+  emptyLabel,
+  formTitle,
+  rowLabel,
+  rowSub,
+}) {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyItem);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch(basePath)
+      .then((d) => setItems(d[listKey] || []))
+      .catch((err) => {
+        console.error(`${basePath} load error:`, err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function toFormValue(field, item) {
+    const raw = item[field.key];
+    if (field.type === "csv") return Array.isArray(raw) ? raw.join(", ") : raw || "";
+    if (field.type === "lines") return Array.isArray(raw) ? raw.join("\n") : raw || "";
+    if (field.type === "checkbox") return Boolean(raw);
+    if (field.type === "password") return "";
+    return raw ?? "";
+  }
+
+  function startNew() {
+    setForm(emptyItem);
+    setStatus("");
+    setEditing("new");
+  }
+
+  function startEdit(item) {
+    const next = { ...emptyItem };
+    fields.forEach((f) => {
+      next[f.key] = toFormValue(f, item);
+    });
+    setForm(next);
+    setStatus("");
+    setEditing(item.id);
+  }
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = {};
+      fields.forEach((f) => {
+        body[f.key] = form[f.key];
+      });
+
+      if (editing === "new") {
+        await apiFetch(basePath, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } else {
+        await apiFetch(`${basePath}/${editing}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this entry?")) return;
+
+    try {
+      await apiFetch(`${basePath}/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <div className="admin-panel">
+
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          {addLabel}
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? `New ${formTitle}` : `Edit ${formTitle}`}</h3>
+
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          {fields.map((f) => {
+            if (f.type === "checkbox") {
+              return (
+                <label className="admin-field admin-field--row" key={f.key}>
+                  <input
+                    type="checkbox"
+                    checked={Boolean(form[f.key])}
+                    onChange={(e) => setForm({ ...form, [f.key]: e.target.checked })}
+                  />
+                  <span>{f.label}</span>
+                </label>
+              );
+            }
+
+            if (f.type === "textarea" || f.type === "lines") {
+              return (
+                <label className="admin-field" key={f.key}>
+                  <span>{f.label}</span>
+                  <textarea
+                    rows={f.type === "lines" ? 4 : 3}
+                    value={form[f.key] ?? ""}
+                    onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                    required={f.required}
+                  />
+                </label>
+              );
+            }
+
+            return (
+              <label className="admin-field" key={f.key}>
+                <span>{f.label}</span>
+                <input
+                  type={f.type === "number" ? "number" : f.type === "password" ? "text" : "text"}
+                  placeholder={f.placeholder}
+                  value={form[f.key] ?? ""}
+                  onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                  required={f.required}
+                />
+              </label>
+            );
+          })}
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+
+        </div>
+      )}
+
+      <div className="admin-list">
+
+        {items.map((item) => (
+          <div className="admin-list__row" key={item.id}>
+            <div className="admin-list__info">
+              <strong>{rowLabel(item)}</strong>
+              <span>{rowSub ? rowSub(item) : ""}</span>
+            </div>
+
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(item)}>
+                <Pencil size={14} />
+              </button>
+
+              <button className="btn btn--outline btn--sm" onClick={() => remove(item.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {items.length === 0 && <p className="admin-panel__status">{emptyLabel}</p>}
+
+      </div>
+    </div>
+  );
+}
+
+// ── Services ─────────────────────────────────────────────────────
+
+const emptyService = {
+  name: "",
+  icon: "",
+  shortDescription: "",
+  technologies: "",
+  priceRange: "",
+  order: 0,
+};
+
+function ServicesPanel() {
+  return (
+    <GenericPanel
+      basePath="/services"
+      listKey="services"
+      emptyItem={emptyService}
+      addLabel="Add service"
+      emptyLabel="No services yet."
+      formTitle="service"
+      rowLabel={(s) => s.name}
+      rowSub={(s) => s.price_range || ""}
+      fields={[
+        { key: "name", label: "Name", type: "text", required: true },
+        { key: "icon", label: "Icon (lucide icon name, e.g. Globe)", type: "text" },
+        { key: "shortDescription", label: "Short description", type: "textarea" },
+        { key: "technologies", label: "Technologies (comma separated)", type: "csv" },
+        { key: "priceRange", label: "Price range", type: "text", placeholder: "₹5,999 – ₹9,999" },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+// ── Testimonials ─────────────────────────────────────────────────
+
+const emptyTestimonial = {
+  clientName: "",
+  company: "",
+  logo: "",
+  projectCompleted: "",
+  designation: "",
+  rating: 5,
+  feedback: "",
+  order: 0,
+};
+
+function TestimonialsPanel() {
+  return (
+    <GenericPanel
+      basePath="/testimonials"
+      listKey="testimonials"
+      emptyItem={emptyTestimonial}
+      addLabel="Add testimonial"
+      emptyLabel="No testimonials yet."
+      formTitle="testimonial"
+      rowLabel={(t) => t.client_name}
+      rowSub={(t) => t.company || ""}
+      fields={[
+        { key: "clientName", label: "Client name", type: "text", required: true },
+        { key: "company", label: "Company", type: "text" },
+        { key: "logo", label: "Logo URL", type: "text" },
+        { key: "projectCompleted", label: "Project completed", type: "text" },
+        { key: "designation", label: "Designation", type: "text" },
+        { key: "rating", label: "Rating (1–5)", type: "number" },
+        { key: "feedback", label: "Feedback", type: "textarea" },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+// ── Careers ──────────────────────────────────────────────────────
+
+const emptyCareer = {
+  title: "",
+  department: "",
+  location: "",
+  type: "",
+  experience: "",
+  description: "",
+  responsibilities: "",
+  requirements: "",
+  open: true,
+  order: 0,
+};
+
+function CareersPanel() {
+  return (
+    <GenericPanel
+      basePath="/careers"
+      listKey="careers"
+      emptyItem={emptyCareer}
+      addLabel="Add role"
+      emptyLabel="No open roles yet."
+      formTitle="role"
+      rowLabel={(c) => c.title}
+      rowSub={(c) => `${c.department || ""}${c.open ? "" : " · Closed"}`}
+      fields={[
+        { key: "title", label: "Title", type: "text", required: true },
+        { key: "department", label: "Department", type: "text" },
+        { key: "location", label: "Location", type: "text" },
+        { key: "type", label: "Type", type: "text", placeholder: "Full-time / Internship" },
+        { key: "experience", label: "Experience", type: "text" },
+        { key: "description", label: "Description", type: "textarea" },
+        { key: "responsibilities", label: "Responsibilities (one per line)", type: "lines" },
+        { key: "requirements", label: "Requirements (one per line)", type: "lines" },
+        { key: "open", label: "Role is open", type: "checkbox" },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+// ── Downloads ────────────────────────────────────────────────────
+
+const emptyDownload = {
+  slug: "",
+  name: "",
+  description: "",
+  version: "",
+  filename: "",
+  requiresAuth: true,
+  password: "",
+  order: 0,
+};
+
+function DownloadsPanel() {
+  return (
+    <GenericPanel
+      basePath="/downloads"
+      listKey="downloads"
+      emptyItem={emptyDownload}
+      addLabel="Add download"
+      emptyLabel="No downloadable projects yet."
+      formTitle="download"
+      rowLabel={(d) => d.name}
+      rowSub={(d) => `${d.version || ""}${d.hasPassword ? " · Password protected" : ""}`}
+      fields={[
+        { key: "slug", label: "Slug (unique, used in the URL)", type: "text", required: true },
+        { key: "name", label: "Name", type: "text", required: true },
+        { key: "description", label: "Description", type: "textarea" },
+        { key: "version", label: "Version", type: "text", placeholder: "v1.0.0" },
+        {
+          key: "filename",
+          label: "Filename on server (inside PROTECTED_FILES_DIR)",
+          type: "text",
+          placeholder: "project-v1.0.0.zip",
+        },
+        { key: "requiresAuth", label: "Require visitor sign-in to download", type: "checkbox" },
+        {
+          key: "password",
+          label: "Password (leave blank to keep the current one / no password)",
+          type: "password",
+        },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+// ── YouTube ──────────────────────────────────────────────────────
+
+const emptyVideo = {
+  title: "",
+  thumbnail: "",
+  url: "",
+  order: 0,
+};
+
+function YoutubePanel() {
+  return (
+    <GenericPanel
+      basePath="/youtube"
+      listKey="videos"
+      emptyItem={emptyVideo}
+      addLabel="Add video"
+      emptyLabel="No videos yet."
+      formTitle="video"
+      rowLabel={(v) => v.title}
+      rowSub={(v) => v.url || ""}
+      fields={[
+        { key: "title", label: "Title", type: "text", required: true },
+        { key: "thumbnail", label: "Thumbnail URL", type: "text" },
+        { key: "url", label: "YouTube URL", type: "text", required: true },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+// ── Ongoing Projects ─────────────────────────────────────────────
+
+const emptyOngoing = {
+  name: "",
+  image: "",
+  description: "",
+  status: "Planning",
+  technologies: "",
+  startDate: "",
+  expectedCompletion: "",
+  order: 0,
+};
+
+function OngoingPanel() {
+  return (
+    <GenericPanel
+      basePath="/ongoing-projects"
+      listKey="items"
+      emptyItem={emptyOngoing}
+      addLabel="Add ongoing project"
+      emptyLabel="No ongoing projects yet."
+      formTitle="ongoing project"
+      rowLabel={(o) => o.name}
+      rowSub={(o) => o.status || ""}
+      fields={[
+        { key: "name", label: "Name", type: "text", required: true },
+        {
+          key: "image",
+          label: "Image URL",
+          type: "text",
+          placeholder: "/assets/placeholder-project.svg",
+        },
+        { key: "description", label: "Description", type: "textarea", required: true },
+        {
+          key: "status",
+          label: "Status (Planning / In Development / Testing / Near Completion)",
+          type: "text",
+        },
+        { key: "technologies", label: "Technologies (comma separated)", type: "csv" },
+        { key: "startDate", label: "Start date", type: "text", placeholder: "2026-03-01" },
+        { key: "expectedCompletion", label: "Expected completion", type: "text", placeholder: "2026-09-30" },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+
+// ── Why Phronix (intro text + feature cards) ───────────────────────
+
+function WhyPanel() {
+  return (
+    <div className="admin-panel">
+      <WhyIntroPanel />
+      <WhyFeaturesPanel />
+    </div>
+  );
+}
+
+function WhyIntroPanel() {
+  const [form, setForm] = useState({
+    title: "Built Right, Built to Last.",
+    description:
+      "Every engagement gets senior engineering attention, transparent communication, and code you actually own — no black boxes, no hand-offs to juniors mid-project.",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm({
+          title: d.settings?.whyTitle || "Built Right, Built to Last.",
+          description:
+            d.settings?.whyDescription ||
+            "Every engagement gets senior engineering attention, transparent communication, and code you actually own — no black boxes, no hand-offs to juniors mid-project.",
+        });
+      })
+      .catch(() => {
+        // Backend endpoint isn'''t ready yet — keep the defaults shown above.
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      await apiFetch("/settings/why-intro", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) {
+    return <p className="admin-panel__status">Loading…</p>;
+  }
+
+  return (
+    <div className="card admin-panel">
+      <h3>"Why Phronix?" — heading &amp; intro</h3>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      <label className="admin-field">
+        <span>Title</span>
+
+        <input
+          value={form.title}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              title: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Description</span>
+
+        <textarea
+          rows={3}
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <button
+        className="btn btn--gold btn--sm"
+        onClick={save}
+      >
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+const emptyWhyFeature = {
+  title: "",
+  description: "",
+  icon: "",
+  order: 0,
+};
+
+function WhyFeaturesPanel() {
+  return (
+    <GenericPanel
+      basePath="/why-features"
+      listKey="features"
+      emptyItem={emptyWhyFeature}
+      addLabel="Add feature card"
+      emptyLabel="No feature cards yet."
+      formTitle="feature card"
+      rowLabel={(f) => f.title}
+      rowSub={(f) => f.icon || ""}
+      fields={[
+        { key: "title", label: "Title", type: "text", required: true },
+        { key: "description", label: "Description", type: "textarea", required: true },
+        {
+          key: "icon",
+          label: "Icon (lucide icon name, e.g. Layers, Gauge, ShieldCheck)",
+          type: "text",
+        },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
   );
 }

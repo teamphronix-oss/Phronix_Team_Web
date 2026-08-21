@@ -11,6 +11,14 @@
   gap: 8px;
   margin: 24px 0;
   border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* old Edge/IE */
+}
+
+.admin-tabs::-webkit-scrollbar {
+  display: none;                /* Chrome/Edge/Safari */
 }
 
 .admin-tabs__btn {
@@ -22,6 +30,8 @@
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-body);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .admin-tabs__btn--active {
   color: var(--ice-ink);

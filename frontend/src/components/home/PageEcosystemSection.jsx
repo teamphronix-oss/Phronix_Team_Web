@@ -1,12 +1,69 @@
 import "../../styles/home/page-ecosystem.css";
 
-const pageEcosystemItems = [
-  { type: "culture", tag: "Culture", title: "Work. Play. Repeat." },
-  { type: "team", tag: "Team", title: "A Team That Cares, Builds, and Grows" },
-  { type: "faq", tag: "FAQ", title: "Got Questions? We've Got Answers." },
-  { type: "contact", tag: "Contact", title: "Let's Talk. We're All Ears." },
+import sweeterjoy from "../../assets/projects/sweeter-joy.png";
+import sweeterJoy1 from "../../assets/projects/sweeter-joy1.png";
+import sweeterJoy2 from "../../assets/projects/sweeter-joy2.png";
+import sweeterJoy3 from "../../assets/projects/sweeter-joy3.png";
+import sweeterJoy4 from "../../assets/projects/sweeter-joy4.png";
+import sweeterJoy5 from "../../assets/projects/sweeter-joy5.png";
+import sweeterJoy6 from "../../assets/projects/sweeter-joy6.png";
+import sweeterJoy7 from "../../assets/projects/sweeter-joy7.png";
+import sweeterJoy8 from "../../assets/projects/sweeter-joy8.png";
+import sweeterJoy9 from "../../assets/projects/sweeter-joy9.png";
+import sweeterJoy10 from "../../assets/projects/sweeter-joy10.png";
+
+// 👇 Ithe pratyek image samor tyacha khara tag (page name) lihi.
+// Fakt "tag" value badal, order same theva jasa images add kelya aahet.
+const project1Data = [
+  { image: sweeterjoy, tag: "Home" },
+  { image: sweeterJoy1, tag: "About Us" },
+  { image: sweeterJoy2, tag: "Our Chocolates" },
+  { image: sweeterJoy3, tag: "Contact Us" },
+  { image: sweeterJoy4, tag: "FAQ" },
+  { image: sweeterJoy5, tag: "Gallery" },
+  { image: sweeterJoy6, tag: "Reviews" },
+  { image: sweeterJoy7, tag: "Blog" },
+  { image: sweeterJoy8, tag: "Order Now" },
+  { image: sweeterJoy9, tag: "Careers" },
+  { image: sweeterJoy10, tag: "Privacy Policy" },
 ];
 
+const project1Slots = project1Data.map((item) => ({
+  type: "project",
+  tag: item.tag,
+  image: item.image,
+}));
+
+// Bottom row — Project 2. No images yet: drop them into
+// src/assets/projects/ (e.g. project2-1.png .. project2-10.png),
+// import them above, and swap them into project2Data the same way as project1Data.
+const project2Data = [];
+
+const project2Slots = Array.from({ length: 10 }, (_, i) => ({
+  type: project2Data[i] ? "project" : "project-placeholder",
+  tag: project2Data[i] ? project2Data[i].tag : "Student Project",
+  image: project2Data[i] ? project2Data[i].image : undefined,
+}));
+
+function EcosystemCard({ item }) {
+  return (
+    <div className="page-ecosystem-card">
+      <span className="page-ecosystem-card__tag">{item.tag}</span>
+
+      {item.type === "project" && (
+        <div className="pe-project">
+          <img src={item.image} alt={item.tag} loading="lazy" />
+        </div>
+      )}
+
+      {item.type === "project-placeholder" && (
+        <div className="pe-project pe-project--placeholder">
+          <span>Image coming soon</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function PageEcosystemSection() {
   return (
@@ -27,111 +84,20 @@ export default function PageEcosystemSection() {
 
         <div className="page-ecosystem-marquee">
           <div className="page-ecosystem-marquee__track">
-            {[...pageEcosystemItems, ...pageEcosystemItems].map((item, i) => (
-              <div className="page-ecosystem-card" key={`${item.type}-${i}`}>
-                <span className="page-ecosystem-card__tag">{item.tag}</span>
-
-                {item.type === "culture" && (
-                  <div className="pe-culture">
-                    <div className="pe-culture__grid">
-                      <span /><span /><span /><span />
-                    </div>
-                    <div className="pe-culture__stat">
-                      <strong>5,200+</strong>
-                      <em>Inside Jokes &amp; Team Moments</em>
-                    </div>
-                  </div>
-                )}
-
-                {item.type === "team" && (
-                  <div className="pe-team">
-                    <div className="pe-team__avatars">
-                      <span /><span /><span /><span /><span />
-                    </div>
-                  </div>
-                )}
-
-                {item.type === "faq" && (
-                  <div className="pe-faq">
-                    <div className="pe-faq__row pe-faq__row--open">
-                      What kind of support is included?
-                    </div>
-                    <div className="pe-faq__row">Can I switch plans later?</div>
-                    <div className="pe-faq__row">Do you offer discounts?</div>
-                  </div>
-                )}
-
-                {item.type === "contact" && (
-                  <div className="pe-contact">
-                    <span className="pe-contact__field" />
-                    <span className="pe-contact__field" />
-                    <span className="pe-contact__field pe-contact__field--tall" />
-                    <span className="pe-contact__btn" />
-                  </div>
-                )}
-
-                <h4>{item.title}</h4>
-              </div>
+            {[...project1Slots, ...project1Slots].map((item, i) => (
+              <EcosystemCard item={item} key={`p1-${i}`} />
             ))}
           </div>
         </div>
+
         <div className="page-ecosystem-marquee page-ecosystem-marquee--reverse">
-  <div className="page-ecosystem-marquee__track page-ecosystem-marquee__track--reverse">
-    {[...pageEcosystemItems, ...pageEcosystemItems].map((item, i) => (
-      <div className="page-ecosystem-card" key={`reverse-${item.type}-${i}`}>
-        <span className="page-ecosystem-card__tag">{item.tag}</span>
-
-        {item.type === "culture" && (
-          <div className="pe-culture">
-            <div className="pe-culture__grid">
-              <span /><span /><span /><span />
-            </div>
-
-            <div className="pe-culture__stat">
-              <strong>5,200+</strong>
-              <em>Inside Jokes & Team Moments</em>
-            </div>
+          <div className="page-ecosystem-marquee__track page-ecosystem-marquee__track--reverse">
+            {[...project2Slots, ...project2Slots].map((item, i) => (
+              <EcosystemCard item={item} key={`p2-${i}`} />
+            ))}
           </div>
-        )}
-
-        {item.type === "team" && (
-          <div className="pe-team">
-            <div className="pe-team__avatars">
-              <span /><span /><span /><span /><span />
-            </div>
-          </div>
-        )}
-
-        {item.type === "faq" && (
-          <div className="pe-faq">
-            <div className="pe-faq__row pe-faq__row--open">
-              What kind of support is included?
-            </div>
-            <div className="pe-faq__row">
-              Can I switch plans later?
-            </div>
-            <div className="pe-faq__row">
-              Do you offer discounts?
-            </div>
-          </div>
-        )}
-
-        {item.type === "contact" && (
-          <div className="pe-contact">
-            <span className="pe-contact__field" />
-            <span className="pe-contact__field" />
-            <span className="pe-contact__field pe-contact__field--tall" />
-            <span className="pe-contact__btn" />
-          </div>
-        )}
-
-        <h4>{item.title}</h4>
-      </div>
-    ))}
-  </div>
-</div>
+        </div>
       </section>
-
     </>
   );
 }
