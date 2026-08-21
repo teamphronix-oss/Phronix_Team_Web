@@ -768,7 +768,7 @@
     .stickyscroll__step { transition: none; }
   }
 
-  /* ── Floating dock (right side, Home page only) ─────────────── */
+   /* ── Floating dock (right side, Home page only) ─────────────── */
   /*
    * The dock is a real fixed layer above the page. Each card owns its
    * background, so page content cannot visually bleed through it.
@@ -834,7 +834,6 @@
       0 26px 55px -26px rgba(0, 0, 0, 0.98),
       0 0 24px -16px rgba(14, 165, 233, 0.55);
   }
-
   .floating-dock__row {
     position: relative;
     z-index: 2;
@@ -856,21 +855,57 @@
     letter-spacing: 0.035em;
     text-align: left;
     cursor: pointer;
+    text-decoration: none;
 
     transition:
       background 0.28s ease,
       color 0.22s ease;
   }
 
-  .floating-dock__item:first-child .floating-dock__row {
+  /* Pinned rows (Get in touch + Start a project) share the same
+     highlighted CTA treatment so both read as primary actions. */
+  .floating-dock__item:first-child .floating-dock__row,
+  .floating-dock__item--pinned .floating-dock__row {
     background:
       linear-gradient(135deg, rgba(56, 189, 248, 0.20), rgba(7, 17, 31, 0.99) 62%);
   }
 
-  .floating-dock__row:hover {
+  .floating-dock__row--link:hover {
     color: #7ddcff;
-    background:
-      linear-gradient(135deg, rgba(14, 165, 233, 0.18), #07111f 72%);
+  }
+
+  /* "Start a project" pill — mirrors the hero's own primary CTA so the
+     floating version reads as the same button, not a new dock card. */
+  .floating-dock__item--cta {
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    box-shadow: none;
+  }
+
+  .floating-dock__item--pinned .floating-dock__row--cta,
+  .floating-dock__row--cta {
+    min-height: 46px;
+    border-radius: 999px;
+    padding: 0 20px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
+    color: #02050b;
+    background: linear-gradient(120deg, #fff 0%, #9fd7ff 44%, #38e5d0 100%);
+    box-shadow: 0 18px 45px -18px rgba(35, 219, 210, .75);
+    transition: transform .25s var(--ease, ease), box-shadow .25s var(--ease, ease);
+  }
+
+  .floating-dock__row--cta:hover {
+    color: #02050b;
+    transform: translateY(-2px);
+  }
+
+  .floating-dock__row--cta .floating-dock__row-label {
+    justify-content: center;
   }
 
   .floating-dock__item--open .floating-dock__row {
@@ -901,7 +936,6 @@
     border: 1px solid rgba(125, 220, 255, 0.28);
     box-shadow: 0 0 18px -10px rgba(56, 189, 248, 0.9);
   }
-
   /* Smooth media open/close. The panel stays in the same card, so opening
      it never moves the other cards to a new x/y position. */
   .floating-dock__panel {

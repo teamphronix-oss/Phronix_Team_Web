@@ -46,6 +46,7 @@ const TABS = [
   { id: "youtube", label: "YouTube" },
   { id: "ongoing", label: "Ongoing Projects" },
   { id: "why", label: "Why Phronix" },
+  { id: "powerhouse", label: "Powerhouse" },
 ];
 
 export default function AdminDashboard() {
@@ -97,6 +98,7 @@ export default function AdminDashboard() {
         {tab === "youtube" && <YoutubePanel />}
         {tab === "ongoing" && <OngoingPanel />}
         {tab === "why" && <WhyPanel />}
+        {tab === "powerhouse" && <PowerhousePanel />}
       </div>
     </div>
   );
@@ -1544,5 +1546,187 @@ function WhyFeaturesPanel() {
         { key: "order", label: "Order", type: "number" },
       ]}
     />
+  );
+}
+
+// ── Powerhouse ("Everything You Need, Built Right In") ─────────────
+
+function PowerhousePanel() {
+  return (
+    <div className="admin-panel">
+      <PowerhouseCardsPanel />
+      <PowerhouseTrioPanel />
+    </div>
+  );
+}
+
+// Form 1 — Box 1 (Fast Project Kickoffs) + Box 2 (Integrated Tech Stack)
+function PowerhouseCardsPanel() {
+  const [form, setForm] = useState({
+    card1Title: "Fast Project Kickoffs",
+    card1Description:
+      "Save weeks of setup. We spin up a production-ready boilerplate so your idea starts shipping from day one.",
+    card2Title: "Integrated Tech Stack",
+    card2Description:
+      "Every tool you need — no extra cost, no hassle. Battle-tested integrations, ready out of the box.",
+    stackItems: "PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm((f) => ({
+          card1Title: d.settings?.powerhouseCard1Title || f.card1Title,
+          card1Description: d.settings?.powerhouseCard1Description || f.card1Description,
+          card2Title: d.settings?.powerhouseCard2Title || f.card2Title,
+          card2Description: d.settings?.powerhouseCard2Description || f.card2Description,
+          stackItems: d.settings?.powerhouseStackItems || f.stackItems,
+        }));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+    try {
+      await apiFetch("/settings/powerhouse-cards", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) return <p className="admin-panel__status">Loading…</p>;
+
+  return (
+    <div className="card admin-panel">
+      <h3>Powerhouse — Box 1 &amp; Box 2</h3>
+      {status && <p className="admin-panel__status">{status}</p>}
+
+      <label className="admin-field">
+        <span>Box 1 title (Fast Project Kickoffs)</span>
+        <input value={form.card1Title} onChange={(e) => setForm({ ...form, card1Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 1 description</span>
+        <textarea rows={2} value={form.card1Description} onChange={(e) => setForm({ ...form, card1Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 2 title (Integrated Tech Stack)</span>
+        <input value={form.card2Title} onChange={(e) => setForm({ ...form, card2Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 2 description</span>
+        <textarea rows={2} value={form.card2Description} onChange={(e) => setForm({ ...form, card2Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 2 tech stack items (comma separated)</span>
+        <input value={form.stackItems} onChange={(e) => setForm({ ...form, stackItems: e.target.value })} placeholder="PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native" />
+      </label>
+
+      <button className="btn btn--gold btn--sm" onClick={save}>
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+// Form 2 — Box 3 (Pick Your Stack), Box 4 (Structured Page Builder), Box 5 (SEO-Ready & Blazing Fast)
+function PowerhouseTrioPanel() {
+  const [form, setForm] = useState({
+    box3Title: "Pick Your Stack",
+    box3Description: "Choose the frameworks and integrations that fit your product — nothing forced, nothing locked in.",
+    box4Title: "Structured Page Builder",
+    box4Description: "Every page follows a clean header–content–footer architecture, easy to extend as you grow.",
+    box5Title: "SEO-Ready & Blazing Fast",
+    box5Description: "Built for speed and top scores on Core Web Vitals — no extra optimization work needed.",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm((f) => ({
+          box3Title: d.settings?.powerhouseBox3Title || f.box3Title,
+          box3Description: d.settings?.powerhouseBox3Description || f.box3Description,
+          box4Title: d.settings?.powerhouseBox4Title || f.box4Title,
+          box4Description: d.settings?.powerhouseBox4Description || f.box4Description,
+          box5Title: d.settings?.powerhouseBox5Title || f.box5Title,
+          box5Description: d.settings?.powerhouseBox5Description || f.box5Description,
+        }));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+    try {
+      await apiFetch("/settings/powerhouse-trio", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) return <p className="admin-panel__status">Loading…</p>;
+
+  return (
+    <div className="card admin-panel">
+      <h3>Powerhouse — Box 3, 4 &amp; 5</h3>
+      {status && <p className="admin-panel__status">{status}</p>}
+
+      <label className="admin-field">
+        <span>Box 3 title (Pick Your Stack)</span>
+        <input value={form.box3Title} onChange={(e) => setForm({ ...form, box3Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 3 description</span>
+        <textarea rows={2} value={form.box3Description} onChange={(e) => setForm({ ...form, box3Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 4 title (Structured Page Builder)</span>
+        <input value={form.box4Title} onChange={(e) => setForm({ ...form, box4Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 4 description</span>
+        <textarea rows={2} value={form.box4Description} onChange={(e) => setForm({ ...form, box4Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 5 title (SEO-Ready &amp; Blazing Fast)</span>
+        <input value={form.box5Title} onChange={(e) => setForm({ ...form, box5Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 5 description</span>
+        <textarea rows={2} value={form.box5Description} onChange={(e) => setForm({ ...form, box5Description: e.target.value })} />
+      </label>
+
+      <button className="btn btn--gold btn--sm" onClick={save}>
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
   );
 }
