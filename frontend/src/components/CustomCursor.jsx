@@ -43,10 +43,14 @@ export default function CustomCursor() {
     const setVisibleState = (visible) => {
       isVisible = visible;
       if (dot) {
+        dot.style.opacity = visible ? "1" : "0";
+        dot.style.visibility = visible ? "visible" : "hidden";
         if (visible) dot.classList.remove("custom-cursor--hidden");
         else dot.classList.add("custom-cursor--hidden");
       }
       if (ring) {
+        ring.style.opacity = visible ? "1" : "0";
+        ring.style.visibility = visible ? "visible" : "hidden";
         if (visible) ring.classList.remove("custom-cursor--hidden");
         else ring.classList.add("custom-cursor--hidden");
       }
@@ -58,6 +62,12 @@ export default function CustomCursor() {
     const handleMouseMove = (e) => {
       const x = e.clientX;
       const y = e.clientY;
+
+      // Hide instantly if pointer is at/outside window boundaries
+      if (x <= 1 || y <= 1 || x >= window.innerWidth - 1 || y >= window.innerHeight - 1) {
+        setVisibleState(false);
+        return;
+      }
 
       mouseX = x;
       mouseY = y;
@@ -147,7 +157,9 @@ export default function CustomCursor() {
     };
 
     const handleMouseOver = (e) => {
-      if (!isVisible) setVisibleState(true);
+      if (e.clientX > 1 && e.clientY > 1 && e.clientX < window.innerWidth - 1 && e.clientY < window.innerHeight - 1) {
+        if (!isVisible) setVisibleState(true);
+      }
 
       const target = e.target;
       if (!target || !(target instanceof Element)) return;
@@ -192,29 +204,78 @@ export default function CustomCursor() {
       ring?.classList.remove("custom-cursor__ring--active");
     };
 
+    const handleMouseOut = (e) => {
+      if (!e.relatedTarget && !e.toElement) {
+        setVisibleState(false);
+      }
+    };
+
+    const handlePointerOut = (e) => {
+      if (!e.relatedTarget && !e.toElement) {
+        setVisibleState(false);
+      }
+    };
+
     const handleMouseLeaveWindow = () => {
       setVisibleState(false);
     };
 
-    const handleMouseEnterWindow = () => {
-      setVisibleState(true);
+    const handleMouseEnterWindow = (e) => {
+      if (e.clientX > 1 && e.clientY > 1 && e.clientX < window.innerWidth - 1 && e.clientY < window.innerHeight - 1) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        setVisibleState(true);
+      }
     };
 
+    const handleBlur = () => {
+      setVisibleState(false);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setVisibleState(false);
+      }
+    };
+
+    // Use pointer events (fired by macOS/browsers even when window is not focused)
+    window.addEventListener("pointermove", handleMouseMove, { passive: true });
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("pointerover", handleMouseOver, { passive: true });
     window.addEventListener("mouseover", handleMouseOver, { passive: true });
+    window.addEventListener("pointerdown", handleMouseDown, { passive: true });
     window.addEventListener("mousedown", handleMouseDown, { passive: true });
+    window.addEventListener("pointerup", handleMouseUp, { passive: true });
     window.addEventListener("mouseup", handleMouseUp, { passive: true });
+    window.addEventListener("mouseout", handleMouseOut, { passive: true });
+    window.addEventListener("pointerout", handlePointerOut, { passive: true });
+
     document.addEventListener("mouseleave", handleMouseLeaveWindow);
+    document.documentElement.addEventListener("mouseleave", handleMouseLeaveWindow);
     document.addEventListener("mouseenter", handleMouseEnterWindow);
+    window.addEventListener("blur", handleBlur);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     rafId = requestAnimationFrame(animate);
 
     return () => {
+      window.removeEventListener("pointermove", handleMouseMove);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointerover", handleMouseOver);
       window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("pointerdown", handleMouseDown);
       window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("pointerup", handleMouseUp);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseout", handleMouseOut);
+      window.removeEventListener("pointerout", handlePointerOut);
+
       document.removeEventListener("mouseleave", handleMouseLeaveWindow);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeaveWindow);
       document.removeEventListener("mouseenter", handleMouseEnterWindow);
+      window.removeEventListener("blur", handleBlur);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+
       cancelAnimationFrame(rafId);
     };
   }, []);

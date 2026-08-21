@@ -102,10 +102,17 @@ export default function CursorTrailBlobs() {
     };
 
     const handleMouseMove = (e) => {
-      isMouseInWindow = true;
-      lastMoveTime = performance.now();
       const x = e.clientX;
       const y = e.clientY;
+
+      if (x <= 1 || y <= 1 || x >= window.innerWidth - 1 || y >= window.innerHeight - 1) {
+        isMouseInWindow = false;
+        trailPoints.length = 0;
+        return;
+      }
+
+      isMouseInWindow = true;
+      lastMoveTime = performance.now();
 
       const dx = x - (lastMouseX === -100 ? x : lastMouseX);
       const dy = y - (lastMouseY === -100 ? y : lastMouseY);
@@ -140,11 +147,21 @@ export default function CursorTrailBlobs() {
 
     const handleMouseLeave = () => {
       isMouseInWindow = false;
+      trailPoints.length = 0;
     };
 
-    const handleMouseEnter = () => {
-      isMouseInWindow = true;
-      lastMoveTime = performance.now();
+    const handleMouseOut = (e) => {
+      if (!e.relatedTarget && !e.toElement) {
+        isMouseInWindow = false;
+        trailPoints.length = 0;
+      }
+    };
+
+    const handleMouseEnter = (e) => {
+      if (e.clientX > 1 && e.clientY > 1 && e.clientX < window.innerWidth - 1 && e.clientY < window.innerHeight - 1) {
+        isMouseInWindow = true;
+        lastMoveTime = performance.now();
+      }
     };
 
     const render = () => {
@@ -268,19 +285,46 @@ export default function CursorTrailBlobs() {
       rafId = requestAnimationFrame(render);
     };
 
+    const handleBlur = () => {
+      isMouseInWindow = false;
+      trailPoints.length = 0;
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        isMouseInWindow = false;
+        trailPoints.length = 0;
+      }
+    };
+
     window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("pointermove", handleMouseMove, { passive: true });
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("pointerdown", handleMouseDown, { passive: true });
     window.addEventListener("mousedown", handleMouseDown, { passive: true });
+    window.addEventListener("mouseout", handleMouseOut, { passive: true });
+    window.addEventListener("pointerout", handleMouseOut, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
+    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
+    window.addEventListener("blur", handleBlur);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     rafId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", handleMouseMove);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointerdown", handleMouseDown);
       window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseout", handleMouseOut);
+      window.removeEventListener("pointerout", handleMouseOut);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
+      window.removeEventListener("blur", handleBlur);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(rafId);
     };
   }, []);
