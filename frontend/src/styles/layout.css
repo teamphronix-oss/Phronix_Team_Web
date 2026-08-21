@@ -1257,54 +1257,10 @@ border-color: var(--line);
   }
 
   /* ═══════════════════════════════════════════════════════════
-    CARDS on dark bg — white face pops (tilt already inline)
+    CARDS on dark bg — clean spacing
     ═══════════════════════════════════════════════════════════ */
   .section--space .card-carousel__stage {
-    height: 460px;
-    perspective: 2000px;
-  }
-
-  .section--space .card-carousel__item .card {
-    min-height: 340px;
-
-    /* Glass / transparent-blue look (matches feature-trio cards) */
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--gold) 22%, transparent),
-      color-mix(in srgb, white 14%, transparent)
-    );
-    border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow:
-      0 30px 60px -20px rgba(14, 165, 233, 0.35),
-      0 0 40px color-mix(in srgb, var(--gold) 15%, transparent);
-  }
-
-  .section--space .card-carousel__item .card:hover {
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--gold) 30%, transparent),
-      color-mix(in srgb, white 18%, transparent)
-    );
-  }
-
-  @media (max-width: 900px) {
-    .section--space .card-carousel__stage { height: 420px; }
-    .section--space .card-carousel__item .card { min-height: 320px; }
-  }
-
-  /* ── Phone: taller service cards, normal width ───────────────── */
-  @media (max-width: 640px) {
-    .section--space .card-carousel__stage { height: 480px; }
-    .section--space .card-carousel__item .card { min-height: 420px; }
-  }
-
-  .section--space .card-carousel__dot {
-    background: rgba(255, 255, 255, 0.25);
-  }
-  .section--space .card-carousel__dot--active {
-    background: var(--gold);
+    perspective: 1200px;
   }
 
 

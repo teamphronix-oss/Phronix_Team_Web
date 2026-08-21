@@ -16,11 +16,11 @@ export default function ServicesSection() {
             title="Services built around real product needs"
             description="From first prototype to scaled infrastructure — six disciplines, one team."
           />
-          <CardCarousel interval={3000}>
-  {services.slice(0, 3).map((s) => (
-    <ServiceCard key={s.id} service={s} />
-  ))}
-</CardCarousel>
+          <CardCarousel interval={4000}>
+            {services.map((s, idx) => (
+              <ServiceCard key={s.id} service={s} index={idx} />
+            ))}
+          </CardCarousel>
           <Link to="/services" className="btn btn--outline home__more-link">
             See all services <ArrowUpRight size={16} />
           </Link>
