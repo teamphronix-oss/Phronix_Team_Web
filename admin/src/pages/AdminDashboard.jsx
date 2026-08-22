@@ -47,6 +47,8 @@ const TABS = [
   { id: "ongoing", label: "Ongoing Projects" },
   { id: "why", label: "Why Phronix" },
   { id: "powerhouse", label: "Powerhouse" },
+  { id: "about", label: "About Phronix" },
+  { id: "contact", label: "Contact" },
 ];
 
 export default function AdminDashboard() {
@@ -99,6 +101,8 @@ export default function AdminDashboard() {
         {tab === "ongoing" && <OngoingPanel />}
         {tab === "why" && <WhyPanel />}
         {tab === "powerhouse" && <PowerhousePanel />}
+        {tab === "about" && <AboutPanel />}
+        {tab === "contact" && <ContactPanel />}
       </div>
     </div>
   );
@@ -1728,5 +1732,287 @@ function PowerhouseTrioPanel() {
         Save
       </button>
     </div>
+  );
+}
+
+// ── Contact (Email, Phone, Address, GST Number) ─────────────────────
+
+function ContactPanel() {
+  const [form, setForm] = useState({
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    gstNumber: "",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm((f) => ({
+          email: d.settings?.email || f.email,
+          phone: d.settings?.phone || f.phone,
+          addressLine1: d.settings?.addressLine1 || f.addressLine1,
+          addressLine2: d.settings?.addressLine2 || f.addressLine2,
+          gstNumber: d.settings?.gstNumber || f.gstNumber,
+        }));
+      })
+      .catch(() => {
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      await apiFetch("/settings/contact", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) {
+    return <p className="admin-panel__status">Loading…</p>;
+  }
+
+  return (
+    <div className="card admin-panel">
+      <h3>Contact details</h3>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      <label className="admin-field">
+        <span>Email</span>
+
+        <input
+          type="email"
+          value={form.email}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              email: e.target.value,
+            })
+          }
+          placeholder="hello@phronix.io"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Phone number</span>
+
+        <input
+          value={form.phone}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              phone: e.target.value,
+            })
+          }
+          placeholder="+91 90000 00000"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Address — line 1</span>
+
+        <input
+          value={form.addressLine1}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              addressLine1: e.target.value,
+            })
+          }
+          placeholder="4th Floor, Prism Business Park"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Address — line 2</span>
+
+        <input
+          value={form.addressLine2}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              addressLine2: e.target.value,
+            })
+          }
+          placeholder="College Road, Nashik, Maharashtra 422005"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>GST Number</span>
+
+        <input
+          value={form.gstNumber}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              gstNumber: e.target.value,
+            })
+          }
+          placeholder="27ABCDE1234F1Z5"
+        />
+      </label>
+
+      <button
+        className="btn btn--gold btn--sm"
+        onClick={save}
+      >
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+
+// ── About Phronix (heading + description + 3 point cards) ───────────
+
+function AboutPanel() {
+  return (
+    <div className="admin-panel">
+      <AboutIntroPanel />
+      <AboutPointsPanel />
+    </div>
+  );
+}
+
+function AboutIntroPanel() {
+  const [form, setForm] = useState({
+    title: "A small studio, deliberately.",
+    description:
+      "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm({
+          title: d.settings?.aboutTitle || "A small studio, deliberately.",
+          description:
+            d.settings?.aboutDescription ||
+            "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+        });
+      })
+      .catch(() => {
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      await apiFetch("/settings/about-intro", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) {
+    return <p className="admin-panel__status">Loading…</p>;
+  }
+
+  return (
+    <div className="card admin-panel">
+      <h3>"About Phronix" — heading &amp; intro</h3>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      <label className="admin-field">
+        <span>Title</span>
+
+        <input
+          value={form.title}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              title: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Description</span>
+
+        <textarea
+          rows={3}
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <button
+        className="btn btn--gold btn--sm"
+        onClick={save}
+      >
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+const emptyAboutPoint = {
+  eyebrow: "",
+  title: "",
+  description: "",
+  order: 0,
+};
+
+function AboutPointsPanel() {
+  return (
+    <GenericPanel
+      basePath="/about-points"
+      listKey="points"
+      emptyItem={emptyAboutPoint}
+      addLabel="Add point"
+      emptyLabel="No points yet."
+      formTitle="point"
+      rowLabel={(p) => p.title}
+      rowSub={(p) => p.eyebrow || ""}
+      fields={[
+        { key: "eyebrow", label: "Label (e.g. PHX / 01)", type: "text" },
+        { key: "title", label: "Title", type: "text", required: true },
+        { key: "description", label: "Description", type: "textarea", required: true },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
   );
 }
