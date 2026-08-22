@@ -285,11 +285,11 @@
 /* ── Mobile Phone Viewports ──────────────────────────────────── */
 @media (max-width: 640px) {
   .card-carousel--minimal .card-carousel__stage {
-    height: 440px;
+    height: 500px;
   }
   .service-card--minimal {
-    padding: 26px 22px !important;
-    min-height: 350px !important;
+    padding: 28px 22px !important;
+    min-height: 410px !important;
     border-radius: 18px !important;
   }
   .service-card__title {
@@ -311,10 +311,10 @@
 /* ── Small Mobile Phones ─────────────────────────────────────── */
 @media (max-width: 400px) {
   .card-carousel--minimal .card-carousel__stage {
-    height: 465px;
+    height: 520px;
   }
   .service-card--minimal {
-    min-height: 375px !important;
+    min-height: 435px !important;
     padding: 24px 18px !important;
   }
 }

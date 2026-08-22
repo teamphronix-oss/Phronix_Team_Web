@@ -19,9 +19,9 @@ export default function PayUpdateSection() {
             <h2 className="pay-update__title">
               Pay Once.
               <br />
-              <span>Update Forever.</span>
+              <span>own it forever.</span>
               <br />
-              <small>1 Months Support from Experts.</small>
+              <small>build to actually last.</small>
             </h2>
 
             <p className="pay-update__description">

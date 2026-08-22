@@ -390,7 +390,7 @@ export default function ParticlePhoenix({ onInteraction }) {
          */
         introTimer = window.setTimeout(() => {
           if (!disposed) formationTarget = 1;
-        }, reducedMotion ? 120 : 2000);
+        }, reducedMotion ? 120 : 1000);
       },
       undefined,
       (error) => {

@@ -3,13 +3,11 @@ import {
   Sparkles,
   Cpu,
   Wand2,
-  Brain,
   Mic,
   MessageSquare,
   Zap,
   Eye,
   Workflow,
-  Database,
   Target,
   Video,
   UserCircle,
@@ -37,18 +35,18 @@ import SectionHeading from "../SectionHeading";
 import "../../styles/home/showcase.css";
 
 const aiTools = [
-  { icon: Bot, label: "Chatbot" },
-  { icon: Sparkles, label: "AI Assistant" },
-  { icon: Cpu, label: "Automation" },
-  { icon: Wand2, label: "Image AI" },
-  { icon: Brain, label: "Smart Insights" },
+  { icon: Bot, label: "AI Chatbots" },
+  { icon: Sparkles, label: "AI Assistants" },
+  { icon: Cpu, label: "AI Agents" },
+  { icon: Zap, label: "AI Automation" },
+  { icon: Wand2, label: "Generative AI" },
   { icon: Mic, label: "Voice AI" },
-  { icon: MessageSquare, label: "NLP" },
-  { icon: Zap, label: "Predictive" },
-  { icon: Eye, label: "Vision AI" },
-  { icon: Workflow, label: "Workflow AI" },
-  { icon: Database, label: "Data Analysis" },
-  { icon: Target, label: "Recommendations" }
+  { icon: FileText, label: "Document Intelligence" },
+  { icon: Eye, label: "Computer Vision" },
+  { icon: Workflow, label: "AI Workflows" },
+  { icon: BarChart3, label: "AI Data Analysis" },
+  { icon: TrendingUp, label: "Predictive Analytics" },
+  { icon: UserCircle, label: "AI Personalization" }
 ];
 
 const websiteTools = [
@@ -99,9 +97,12 @@ export default function ShowcaseSection() {
             <div className="spec-bento__header">
               <div className="spec-bento__badge-wrap">
                 <div className="spec-bento__icon-badge spec-bento__icon-badge--ai">
-                  <Bot size={16} />
+                  <Sparkles size={16} />
                 </div>
-                <h3 className="spec-bento__title">AI tools</h3>
+                <div className="spec-bento__title-group">
+                  <h3 className="spec-bento__title">AI capabilities</h3>
+                  <p className="spec-bento__subtitle">Intelligent solutions we build into your product.</p>
+                </div>
               </div>
               <span className="spec-bento__count">×12</span>
             </div>

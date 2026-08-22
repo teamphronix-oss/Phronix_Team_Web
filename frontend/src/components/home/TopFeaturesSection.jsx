@@ -51,7 +51,7 @@ export default function TopFeaturesSection() {
               <div className="tf-card__icon">
                 <ShieldCheck size={24} strokeWidth={1.8} />
               </div>
-              <h4>Security & High-Speed Performance</h4>
+              <h4>Secure & High-Speed Performance</h4>
               <p>Locked-down, optimized code that stays fast without cutting corners.</p>
             </div>
 
