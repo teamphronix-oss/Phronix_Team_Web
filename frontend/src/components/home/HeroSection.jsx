@@ -55,11 +55,7 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="hero__bottom">
-          <span>SCROLL TO BUILD</span>
-          <span className="hero__bottom-line" />
-          <span>PHRONIX / 01</span>
-        </div>
+
       </section>
 
       <ProjectIntakeModal
