@@ -44,6 +44,7 @@ export default function Navbar() {
   const [mobileDropdown, setMobileDropdown] = useState(null);
   const [desktopSubmenu, setDesktopSubmenu] = useState(null);
   const [mobileSubmenu, setMobileSubmenu] = useState(null);
+  const [pendingNav, setPendingNav] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const closeTimer = useRef(null);
@@ -180,7 +181,6 @@ export default function Navbar() {
                           key={c.label}
                           className="navbar__submenu"
                           onMouseEnter={() => openSubmenu(c.label)}
-                          onMouseLeave={scheduleCloseSubmenu}
                         >
                           <button
                             type="button"
@@ -234,19 +234,19 @@ export default function Navbar() {
                           )}
                         </div>
                       ) : (
-                        <NavLink
-                          key={c.to}
-                          to={c.to}
-                          className={({ isActive }) =>
-                            `navbar__dropdown-item ${
-                              isActive ? "navbar__dropdown-item--active" : ""
-                            }`
-                          }
-                          role="menuitem"
-                          onClick={() => handleNavClick(c.to)}
-                        >
-                          {c.label}
-                        </NavLink>
+                      <NavLink
+  key={c.to}
+  to={c.to}
+  className={({ isActive }) =>
+    `navbar__dropdown-item ${
+      isActive ? "navbar__dropdown-item--active" : ""
+    }`
+  }
+  role="menuitem"
+  onClick={() => handleNavClick(c.to)}
+>
+  {c.label}
+</NavLink>
                       )
                     )}
                   </div>

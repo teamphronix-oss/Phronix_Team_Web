@@ -1,13 +1,7 @@
 import {
-  Bot,
   Sparkles,
-  Cpu,
-  Wand2,
-  Mic,
   MessageSquare,
   Zap,
-  Eye,
-  Workflow,
   Target,
   Video,
   UserCircle,
@@ -30,23 +24,86 @@ import {
   Palette,
   ArrowUpRight
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import SectionHeading from "../SectionHeading";
 import "../../styles/home/showcase.css";
+import {
+  IconAiChatbots,
+  IconAiAssistants,
+  IconAiAgents,
+  IconAiAutomation,
+  IconGenerativeAi,
+  IconVoiceAi,
+  IconDocumentIntelligence,
+  IconComputerVision,
+  IconAiWorkflows,
+  IconAiDataAnalysis,
+  IconPredictiveAnalytics,
+  IconAiPersonalization,
+} from "./AiCapabilityIcons";
 
 const aiTools = [
-  { icon: Bot, label: "AI Chatbots" },
-  { icon: Sparkles, label: "AI Assistants" },
-  { icon: Cpu, label: "AI Agents" },
-  { icon: Zap, label: "AI Automation" },
-  { icon: Wand2, label: "Generative AI" },
-  { icon: Mic, label: "Voice AI" },
-  { icon: FileText, label: "Document Intelligence" },
-  { icon: Eye, label: "Computer Vision" },
-  { icon: Workflow, label: "AI Workflows" },
-  { icon: BarChart3, label: "AI Data Analysis" },
-  { icon: TrendingUp, label: "Predictive Analytics" },
-  { icon: UserCircle, label: "AI Personalization" }
+  {
+    icon: IconAiChatbots,
+    label: "AI Chatbots",
+    description: "Smart conversational experiences that engage.",
+  },
+  {
+    icon: IconAiAssistants,
+    label: "AI Assistants",
+    description: "Intelligent assistants that help users get things done.",
+  },
+  {
+    icon: IconAiAgents,
+    label: "AI Agents",
+    description: "Autonomous agents that think, plan and act.",
+  },
+  {
+    icon: IconAiAutomation,
+    label: "AI Automation",
+    description: "Automate repetitive tasks and business processes.",
+  },
+  {
+    icon: IconGenerativeAi,
+    label: "Generative AI",
+    description: "Generate text, images, code and more.",
+  },
+  {
+    icon: IconVoiceAi,
+    label: "Voice AI",
+    description: "Voice interactions and speech understanding.",
+  },
+  {
+    icon: IconDocumentIntelligence,
+    label: "Document Intelligence",
+    description: "Extract, analyze and understand data from documents.",
+  },
+  {
+    icon: IconComputerVision,
+    label: "Computer Vision",
+    description: "Analyze images and videos with AI-powered vision.",
+  },
+  {
+    icon: IconAiWorkflows,
+    label: "AI Workflows",
+    description: "Build intelligent workflows that connect everything.",
+  },
+  {
+    icon: IconAiDataAnalysis,
+    label: "AI Data Analysis",
+    description: "Turn raw data into meaningful insights and reports.",
+  },
+  {
+    icon: IconPredictiveAnalytics,
+    label: "Predictive Analytics",
+    description: "Predict trends and outcomes to make better decisions.",
+  },
+  {
+    icon: IconAiPersonalization,
+    label: "AI Personalization",
+    description: "Deliver personalized experiences that adapt to every user.",
+  },
 ];
 
 const websiteTools = [
@@ -80,6 +137,58 @@ const marketingTools = [
 ];
 
 export default function ShowcaseSection() {
+  /* Both marquees are frozen on their first item (top of the list /
+     left of the row) until the tile is actually on screen. Unlike a
+     one-shot trigger, this restarts the animation from scratch every
+     time the tile re-enters the viewport — bumping a "key" forces
+     React to remount the track, which resets the CSS animation to
+     0%. Without that reset, scrolling down (which takes a few
+     seconds) would let the animation keep running in the background,
+     so you'd always land on a mid-list frame instead of item 1. */
+  const webTickerRef = useRef(null);
+  const [webTickerPlaying, setWebTickerPlaying] = useState(false);
+  const [webTickerKey, setWebTickerKey] = useState(0);
+
+  const mktTickerRef = useRef(null);
+  const [mktTickerPlaying, setMktTickerPlaying] = useState(false);
+  const [mktTickerKey, setMktTickerKey] = useState(0);
+
+  useEffect(() => {
+    const node = webTickerRef.current;
+    if (!node) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setWebTickerKey((k) => k + 1);
+          setWebTickerPlaying(true);
+        } else {
+          setWebTickerPlaying(false);
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const node = mktTickerRef.current;
+    if (!node) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMktTickerKey((k) => k + 1);
+          setMktTickerPlaying(true);
+        } else {
+          setMktTickerPlaying(false);
+        }
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="section showcase-section">
       <div className="container">
@@ -112,8 +221,11 @@ export default function ShowcaseSection() {
                 const Icon = item.icon;
                 return (
                   <div key={idx} className="spec-bento__ai-card">
-                    <Icon size={16} className="spec-bento__ai-icon" />
+                    <Icon size={34} className="spec-bento__ai-icon" />
                     <span className="spec-bento__ai-label">{item.label}</span>
+                    {item.description && (
+                      <p className="spec-bento__ai-desc">{item.description}</p>
+                    )}
                   </div>
                 );
               })}
@@ -132,8 +244,13 @@ export default function ShowcaseSection() {
               <span className="spec-bento__count">×12</span>
             </div>
 
-            <div className="spec-bento__ticker-vertical">
-              <div className="spec-bento__ticker-v-track">
+            <div className="spec-bento__ticker-vertical" ref={webTickerRef}>
+              <div
+                key={webTickerKey}
+                className={`spec-bento__ticker-v-track${
+                  webTickerPlaying ? " is-playing" : ""
+                }`}
+              >
                 {/* First copy for screen readers and visible flow */}
                 <div className="spec-bento__v-list">
                   {websiteTools.map((item, idx) => {
@@ -178,8 +295,13 @@ export default function ShowcaseSection() {
               <p className="spec-bento__stat-subhead">ways to reach an audience</p>
             </div>
 
-            <div className="spec-bento__ticker-horizontal">
-              <div className="spec-bento__ticker-h-track">
+            <div className="spec-bento__ticker-horizontal" ref={mktTickerRef}>
+              <div
+                key={mktTickerKey}
+                className={`spec-bento__ticker-h-track${
+                  mktTickerPlaying ? " is-playing" : ""
+                }`}
+              >
                 {/* First copy */}
                 <div className="spec-bento__h-list">
                   {marketingTools.map((item, idx) => {

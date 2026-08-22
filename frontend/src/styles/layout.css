@@ -895,7 +895,7 @@
     position: fixed;
     top: 88px;
     right: 18px;
-    width: min(240px, calc(100vw - 28px));
+    width: min(190px, calc(100vw - 28px));
     z-index: 500;
     display: flex;
     flex-direction: column;

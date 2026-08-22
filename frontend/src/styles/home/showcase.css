@@ -158,20 +158,20 @@
 .spec-bento__ai-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 12px;
 }
 
 .spec-bento__ai-card {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 13px 8px;
+  border-radius: 14px;
+  padding: 20px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
-  gap: 7px;
+  gap: 11px;
   transition: all 0.18s ease;
 }
 
@@ -187,9 +187,19 @@
 }
 
 .spec-bento__ai-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #f1f5f9;
+  max-width: 100%;
+  letter-spacing: -0.01em;
+}
+
+.spec-bento__ai-desc {
   font-size: 11.5px;
-  line-height: 1.18;
-  color: #cbd5e1;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.8);
+  margin: -4px 0 0;
   max-width: 100%;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -211,7 +221,16 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  /* Frozen on its first frame (item 1 at the top) until the tile
+     scrolls into view — see .is-playing below. This stops the
+     marquee from already looking mid-loop by the time you scroll
+     down to it. */
   animation: tickerVerticalScroll 22s linear infinite;
+  animation-play-state: paused;
+}
+
+.spec-bento__ticker-v-track.is-playing {
+  animation-play-state: running;
 }
 
 .spec-bento__v-list {
@@ -281,7 +300,14 @@
   display: flex;
   gap: 8px;
   width: max-content;
+  /* Same fix as the vertical ticker: stays paused on its first
+     frame until the tile is actually in view. */
   animation: tickerHorizontalScroll 20s linear infinite;
+  animation-play-state: paused;
+}
+
+.spec-bento__ticker-h-track.is-playing {
+  animation-play-state: running;
 }
 
 .spec-bento__h-list {
@@ -387,16 +413,20 @@
   }
 
   .spec-bento__ai-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
 
 @media (max-width: 540px) {
   .spec-bento__ai-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
   .spec-bento__ai-card {
-    padding: 10px 4px;
+    padding: 14px 8px;
+  }
+  .spec-bento__ai-desc {
+    display: none;
   }
 }
