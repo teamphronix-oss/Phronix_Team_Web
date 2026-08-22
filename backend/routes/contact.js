@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
-import nodemailer from "nodemailer";
+import { sendMail } from "../config/resend.js";
 import { createContactMessage } from "../models/ContactMessage.js";
 
 const router = Router();
@@ -23,17 +23,6 @@ const validators = [
   body("message").trim().isLength({ min: 10 }).withMessage("Message is too short."),
 ];
 
-let transporter = null;
-function getTransporter() {
-  if (transporter) return transporter;
-  transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-  });
-  return transporter;
-}
-
 router.post("/", contactLimiter, validators, async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -44,19 +33,12 @@ router.post("/", contactLimiter, validators, async (req, res, next) => {
     const { name, email, phone, subject, message } = req.body;
     const saved = await createContactMessage({ name, email, phone, subject, message });
 
-    if (process.env.SMTP_HOST) {
-      try {
-        await getTransporter().sendMail({
-          from: `"Phronix Website" <${process.env.SMTP_USER}>`,
-          to: process.env.CONTACT_TO_EMAIL,
-          replyTo: email,
-          subject: `New enquiry: ${subject}`,
-          text: `From: ${name} <${email}>\nPhone: ${phone || "—"}\n\n${message}`,
-        });
-      } catch (mailErr) {
-        console.error("Contact email failed to send:", mailErr.message);
-      }
-    }
+    await sendMail({
+      to: process.env.CONTACT_TO_EMAIL,
+      replyTo: email,
+      subject: `New enquiry: ${subject}`,
+      text: `From: ${name} <${email}>\nPhone: ${phone || "—"}\n\n${message}`,
+    });
 
     res.status(201).json({ ok: true, id: saved.id });
   } catch (err) {

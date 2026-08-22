@@ -3,7 +3,7 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";
-import nodemailer from "nodemailer";
+import { sendMail } from "../config/resend.js";
 import {
   findAdminByUsername,
   findAdminByEmail,
@@ -75,19 +75,12 @@ router.post("/forgot-password", loginLimiter, async (req, res, next) => {
 
       const resetUrl = `${process.env.CLIENT_URL}/admin/reset-password/${rawToken}`;
 
-      if (process.env.SMTP_HOST) {
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: Number(process.env.SMTP_PORT || 587),
-          auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-        });
-        await transporter.sendMail({
-          from: process.env.CONTACT_TO_EMAIL,
-          to: admin.email,
-          subject: "Reset your Phronix admin password",
-          text: `Reset your password using this link (valid 30 minutes): ${resetUrl}`,
-        });
-      } else {
+      const sent = await sendMail({
+        to: admin.email,
+        subject: "Reset your Phronix admin password",
+        text: `Reset your password using this link (valid 30 minutes): ${resetUrl}`,
+      });
+      if (!sent) {
         console.log("Password reset link:", resetUrl);
       }
     }
