@@ -3,7 +3,7 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";
-import { sendMail } from "../config/resend.js";
+import resend from "../config/resend.js";
 import {
   findAdminByUsername,
   findAdminByEmail,
@@ -75,14 +75,18 @@ router.post("/forgot-password", loginLimiter, async (req, res, next) => {
 
       const resetUrl = `${process.env.CLIENT_URL}/admin/reset-password/${rawToken}`;
 
-      const sent = await sendMail({
-        to: admin.email,
-        subject: "Reset your Phronix admin password",
-        text: `Reset your password using this link (valid 30 minutes): ${resetUrl}`,
-      });
-      if (!sent) {
-        console.log("Password reset link:", resetUrl);
-      }
+      if (process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL) {
+  await resend.emails.send({
+    from:
+      process.env.RESEND_FROM_EMAIL ||
+      "Phronix Website <onboarding@resend.dev>",
+    to: admin.email,
+    subject: "Reset your Phronix admin password",
+    text: `Reset your password using this link (valid 30 minutes): ${resetUrl}`,
+  });
+} else {
+  console.log("Password reset link:", resetUrl);
+}
     }
 
     res.json({ message: "If that email is registered, a reset link has been sent." });
