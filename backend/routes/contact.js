@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import { createContactMessage } from "../models/ContactMessage.js";
-import resend from "../config/resend.js";
+import { sendMail } from "../config/resend.js";
 
 const router = Router();
 
@@ -15,13 +15,26 @@ const contactLimiter = rateLimit({
 });
 
 const validators = [
-  body("name").trim().notEmpty().withMessage("Name is required."),
-  body("email").trim().isEmail().withMessage("A valid email is required."),
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Name is required."),
+
+  body("email")
+    .trim()
+    .isEmail()
+    .withMessage("A valid email is required."),
+
   body("phone")
     .optional({ checkFalsy: true })
     .matches(/^[+\d][\d\s-]{7,15}$/)
     .withMessage("Phone number looks invalid."),
-  body("subject").trim().notEmpty().withMessage("Subject is required."),
+
+  body("subject")
+    .trim()
+    .notEmpty()
+    .withMessage("Subject is required."),
+
   body("message")
     .trim()
     .isLength({ min: 10 })
@@ -49,26 +62,19 @@ router.post("/", contactLimiter, validators, async (req, res, next) => {
       message,
     });
 
-    if (process.env.RESEND_API_KEY && process.env.CONTACT_TO_EMAIL) {
-      try {
-        await resend.emails.send({
-          from:
-            process.env.RESEND_FROM_EMAIL ||
-            "Phronix Website <onboarding@resend.dev>",
-          to: process.env.CONTACT_TO_EMAIL,
-          reply_to: email,
-          subject: `New enquiry: ${subject}`,
-          text: `From: ${name} <${email}>
+    if (
+      process.env.RESEND_API_KEY &&
+      process.env.CONTACT_TO_EMAIL
+    ) {
+      await sendMail({
+        to: process.env.CONTACT_TO_EMAIL,
+        subject: `New enquiry: ${subject}`,
+        text: `From: ${name} <${email}>
 Phone: ${phone || "—"}
 
 ${message}`,
-        });
-      } catch (mailErr) {
-        console.error(
-          "Contact email failed to send:",
-          mailErr.message
-        );
-      }
+        replyTo: email,
+      });
     }
 
     res.status(201).json({
