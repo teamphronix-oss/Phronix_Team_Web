@@ -55,9 +55,7 @@ export default function TeamCarousel() {
           `translateX(${posRef.current}px)`;
       }
 
-      const containerRect =
-        container.getBoundingClientRect();
-
+      const containerRect = container.getBoundingClientRect();
       const containerCenter =
         containerRect.left + containerRect.width / 2;
 
@@ -102,8 +100,7 @@ export default function TeamCarousel() {
         requestAnimationFrame(step);
     };
 
-    rafRef.current =
-      requestAnimationFrame(step);
+    rafRef.current = requestAnimationFrame(step);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
@@ -114,11 +111,7 @@ export default function TeamCarousel() {
     return null;
   }
 
-  const LOOP_TEAM = [
-    ...team,
-    ...team,
-    ...team,
-  ];
+  const LOOP_TEAM = [...team, ...team, ...team];
 
   return (
     <div

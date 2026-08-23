@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTopButton from "./components/ScrollToTopButton";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 import PageLoader from "./components/PageLoader";
@@ -50,6 +51,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <ScrollToTopButton />
       <WhatsAppButton />
     </AuthProvider>
   );

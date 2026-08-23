@@ -1,80 +1,82 @@
-/* ── Powerhouse Features (dark two-card feature band) ────────── */
+/* ─────────────────────────────────────────────────────────────
+   Phronix Powerhouse Features Section
+   Dark Obsidian Glassmorphism · Cyan/Teal Arctic Theme
+   ───────────────────────────────────────────────────────────── */
 
 .features-powerhouse .container {
-  max-width: 1360px;
+  max-width: 1200px;
 }
 
 .features-powerhouse__grid {
   margin-top: 44px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 26px;
+  gap: 22px;
 }
 
 .features-powerhouse__card {
   border-radius: 20px;
-  padding: 36px 34px;
+  padding: 34px 30px;
+  background: linear-gradient(165deg, rgba(8, 18, 34, 0.94) 0%, rgba(4, 10, 20, 0.98) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.75),
+              0 0 20px rgba(14, 165, 233, 0.04);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
 
-  /* Glass / transparent-blue look (matches PHRONIX CARE price card) */
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--gold) 22%, transparent),
-    color-mix(in srgb, white 14%, transparent)
-  );
-
-  border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  box-shadow:
-    0 30px 60px -20px rgba(14, 165, 233, 0.35),
-    0 0 40px color-mix(in srgb, var(--gold) 15%, transparent);
+.features-powerhouse__card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.38);
+  box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.85),
+              0 0 35px rgba(14, 165, 233, 0.14);
 }
 
 .features-powerhouse__card h3 {
-  font-size: 22px;
-  color: var(--ink);
+  font-size: 21px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
 }
 
 .features-powerhouse__card p {
-  margin-top: 12px;
-  color: var(--ink-soft);
-  font-size: 14.5px;
-  max-width: 42ch;
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 44ch;
 }
 
-
 /* ── Left card — browser mock with hover download pill ─────── */
-
 .fp-mock {
   position: relative;
-  margin-top: 28px;
+  margin-top: 24px;
   border-radius: 12px;
   overflow: visible;
-
-  background: var(--panel-dark);
-
-  border: 1px solid var(--line-dark);
+  background: rgba(4, 9, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .fp-mock__bar {
   display: flex;
   gap: 6px;
   padding: 10px 14px;
-
-  background: var(--panel-dark-soft);
-
-  border-bottom: 1px solid var(--line-dark);
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .fp-mock__bar span {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.18);
 }
+.fp-mock__bar span:nth-child(1) { background: #ef4444; }
+.fp-mock__bar span:nth-child(2) { background: #f59e0b; }
+.fp-mock__bar span:nth-child(3) { background: #10b981; }
 
 .fp-mock__body {
   display: grid;
@@ -85,113 +87,107 @@
 
 .fp-mock__thumb {
   border-radius: 8px;
-  padding: 34px 14px;
+  padding: 30px 14px;
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--ink-on-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-/* Project-specific visual accent — intentionally purple */
 .fp-mock__thumb--a {
-  background: linear-gradient(
-    135deg,
-    #7c3aed,
-    #c026d3
-  );
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(56, 189, 248, 0.05) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
 }
 
-/* Global gold theme */
 .fp-mock__thumb--b {
-  background: linear-gradient(
-    135deg,
-    var(--gold),
-    var(--gold-bright)
-  );
-
-  color: var(--ink);
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.15) 0%, rgba(45, 212, 191, 0.05) 100%);
+  border: 1px solid rgba(45, 212, 191, 0.25);
+  color: #2dd4bf;
 }
 
 .fp-mock__download {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-
-  width: 40px;
-  height: 40px;
-
+  bottom: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-
-  background: color-mix(
-    in srgb,
-    var(--panel-dark) 92%,
-    transparent
-  );
-
-  border: 1px solid var(--line-dark);
-
-  color: var(--gold-bright);
+  background: rgba(8, 18, 34, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.2);
+  transition: all 0.2s ease;
 }
 
+.features-powerhouse__card:hover .fp-mock__download {
+  background: #38bdf8;
+  color: #030712;
+  transform: scale(1.08);
+}
 
 /* ── Right card — tech stack icon grid ─────────────────────── */
-
 .fp-stack-grid {
-  margin-top: 28px;
+  margin-top: 24px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 
 .fp-stack-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-
-  padding: 22px 10px;
+  gap: 8px;
+  padding: 18px 10px;
   border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-  background: color-mix(
-    in srgb,
-    var(--panel-dark-soft) 94%,
-    transparent
-  );
-
-  border: 1px solid var(--line-dark);
-
-  color: var(--ink-on-dark);
-
-  transition:
-    border-color 0.2s var(--ease),
-    transform 0.2s var(--ease),
-    background 0.2s var(--ease);
+.fp-stack-item svg {
+  color: #38bdf8;
+  transition: transform 0.2s ease;
 }
 
 .fp-stack-item:hover {
-  border-color: var(--gold);
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(14, 165, 233, 0.1);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
 
-  background: color-mix(
-    in srgb,
-    var(--panel-dark-soft) 100%,
-    transparent
-  );
-
-  transform: translateY(-3px);
+.fp-stack-item:hover svg {
+  transform: scale(1.1);
 }
 
 .fp-stack-item span {
   font-size: 11.5px;
   font-weight: 500;
-  color: rgba(242, 240, 234, 0.68);
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.fp-stack-item:hover span {
+  color: #f1f5f9;
 }
 
 @media (max-width: 900px) {
   .features-powerhouse__grid {
     grid-template-columns: 1fr;
   }
+  .fp-stack-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
+@media (max-width: 540px) {
   .fp-stack-grid {
     grid-template-columns: repeat(2, 1fr);
   }

@@ -1,0 +1,405 @@
+/* ─────────────────────────────────────────────────────────────
+   Phronix Minimalist Project Intake Modal
+   Ultra-clean, serene dark glassmorphism & minimal cognitive load
+   ───────────────────────────────────────────────────────────── */
+
+.intake-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(2, 6, 15, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.intake-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.intake-modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  background: #060d1a;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8),
+              0 0 40px rgba(14, 165, 233, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.97) translateY(8px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  color: #f8fafc;
+}
+
+.intake-backdrop.is-open .intake-modal {
+  transform: scale(1) translateY(0);
+}
+
+/* Minimal Top Progress Line */
+.intake-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.intake-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0ea5e9, #38bdf8, #2dd4bf);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Modal Header */
+.intake-modal__header {
+  padding: 24px 28px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.intake-step-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #38bdf8;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.intake-modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.intake-modal__subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.intake-modal__close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.intake-modal__close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Modal Body */
+.intake-modal__body {
+  padding: 8px 28px 24px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Clean Input Fields */
+.intake-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.intake-field__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  display: flex;
+  justify-content: space-between;
+}
+
+.intake-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-family: inherit;
+  transition: all 0.18s ease;
+}
+
+.intake-input::placeholder {
+  color: rgba(148, 163, 184, 0.4);
+}
+
+.intake-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  background: rgba(14, 165, 233, 0.05);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.intake-input.has-error {
+  border-color: #f87171;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+}
+
+.intake-error-msg {
+  font-size: 11px;
+  color: #f87171;
+}
+
+/* Clean 1-Tap Pills */
+.intake-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.intake-pill-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 7px 12px;
+  color: #cbd5e1;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.intake-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.intake-pill-btn.is-selected {
+  background: rgba(14, 165, 233, 0.15);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.2);
+}
+
+/* Phase 3: Minimal Scheduler */
+.cal-info-badge {
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-days-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.cal-day-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #cbd5e1;
+}
+
+.cal-day-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+}
+
+.cal-day-chip.is-selected {
+  background: rgba(14, 165, 233, 0.18);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.25);
+}
+
+.cal-day-chip-name {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.cal-day-chip.is-selected .cal-day-chip-name {
+  color: #38bdf8;
+}
+
+.cal-day-chip-num {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cal-slots-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.cal-slot-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.cal-slot-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+}
+
+.cal-slot-chip.is-selected {
+  background: #38bdf8;
+  border-color: #38bdf8;
+  color: #030712;
+  font-weight: 600;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+}
+
+/* Modal Footer */
+.intake-modal__footer {
+  padding: 14px 28px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.intake-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.intake-action-btn--ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.intake-action-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.intake-action-btn--primary {
+  background: #38bdf8;
+  border: 1px solid #38bdf8;
+  color: #030712;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(56, 189, 248, 0.3);
+}
+
+.intake-action-btn--primary:hover {
+  background: #7dd3fc;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Confirmation Screen */
+.intake-confirm-screen {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.intake-confirm-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1.5px solid #2dd4bf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2dd4bf;
+  box-shadow: 0 0 24px rgba(45, 212, 191, 0.3);
+}
+
+.intake-confirm-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+@media (max-width: 560px) {
+  .intake-modal {
+    max-height: 94vh;
+    border-radius: 16px;
+  }
+  .intake-modal__header {
+    padding: 20px 20px 12px;
+  }
+  .intake-modal__body {
+    padding: 8px 20px 18px;
+  }
+  .intake-modal__footer {
+    padding: 12px 20px 16px;
+  }
+  .cal-slots-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

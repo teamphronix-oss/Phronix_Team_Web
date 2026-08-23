@@ -1,7 +1,326 @@
-/* ── Trust bar — rounded pill row of checkmark highlights ───────
-    Sits below the hero as a standalone strip: dark rounded
-    background, a checkmark + short label per item, evenly spaced. */
-  .trust-bar {
+/* ─────────────────────────────────────────────────────────────
+   Phronix Minimalist Services Carousel & Card System
+   ───────────────────────────────────────────────────────────── */
+
+.card-carousel--minimal {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: visible;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card-carousel--minimal .card-carousel__stage {
+  position: relative;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  overflow: visible;
+}
+
+.card-carousel--minimal .card-carousel__item {
+  position: absolute;
+  width: min(540px, 90vw);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
+  cursor: default;
+}
+
+.card-carousel--minimal .card-carousel__item:not(.is-active) {
+  cursor: pointer;
+}
+
+/* Service Card Minimal Theme */
+.service-card--minimal {
+  background: linear-gradient(165deg, rgba(8, 18, 34, 0.94) 0%, rgba(4, 10, 20, 0.98) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.16) !important;
+  border-radius: 20px !important;
+  padding: 28px 32px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 290px !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75),
+              0 0 25px rgba(14, 165, 233, 0.08) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-carousel__item.is-active .service-card--minimal {
+  border-color: rgba(56, 189, 248, 0.38) !important;
+  box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.85),
+              0 0 35px rgba(14, 165, 233, 0.16) !important;
+}
+
+.service-card--minimal:hover {
+  border-color: rgba(45, 212, 191, 0.45) !important;
+}
+
+/* Card Top */
+.service-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.service-card__icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.15);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.service-card--minimal:hover .service-card__icon-wrap {
+  transform: scale(1.06);
+  border-color: #2dd4bf;
+  color: #2dd4bf;
+}
+
+.service-card__index {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(148, 163, 184, 0.4);
+  letter-spacing: 0.08em;
+}
+
+/* Card Body */
+.service-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.service-card__title {
+  font-size: 21px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.service-card__desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.service-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.service-card__tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #7dd3fc;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-radius: 6px;
+  padding: 3px 8px;
+  letter-spacing: 0.02em;
+}
+
+/* Card Footer */
+.service-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 12px;
+}
+
+.service-card__price-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.service-card__price-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  color: #64748b;
+}
+
+.service-card__price-val {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+  font-family: var(--font-mono);
+}
+
+.service-card__action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 8px;
+  padding: 7px 14px;
+  transition: all 0.18s ease;
+  text-decoration: none;
+}
+
+.service-card__action-btn:hover {
+  background: #38bdf8;
+  color: #030712;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Minimal Dots Pagination */
+.card-carousel__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 24px;
+}
+
+.card-carousel__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-carousel__dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.card-carousel__dot--active {
+  width: 22px;
+  background: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+/* ── Minimalist See All Services Button ───────────────────────── */
+.services-cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.services-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8, 18, 34, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #e2e8f0;
+  text-decoration: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.services-more-btn svg {
+  color: #38bdf8;
+  transition: transform 0.22s ease;
+}
+
+.services-more-btn:hover {
+  background: rgba(14, 165, 233, 0.12);
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.25), 0 12px 35px -10px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+.services-more-btn:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ── Tablet Viewports ─────────────────────────────────────────── */
+@media (max-width: 990px) {
+  .card-carousel--minimal .card-carousel__stage {
+    height: 420px;
+  }
+  .service-card--minimal {
+    padding: 26px 26px !important;
+    min-height: 320px !important;
+  }
+}
+
+/* ── Mobile Phone Viewports ──────────────────────────────────── */
+@media (max-width: 640px) {
+  .card-carousel--minimal .card-carousel__stage {
+    height: 500px;
+  }
+  .service-card--minimal {
+    padding: 28px 22px !important;
+    min-height: 410px !important;
+    border-radius: 18px !important;
+  }
+  .service-card__title {
+    font-size: 19.5px;
+  }
+  .service-card__desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .service-card__tags {
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .service-card__footer {
+    padding-top: 16px;
+  }
+}
+
+/* ── Small Mobile Phones ─────────────────────────────────────── */
+@media (max-width: 400px) {
+  .card-carousel--minimal .card-carousel__stage {
+    height: 520px;
+  }
+  .service-card--minimal {
+    min-height: 435px !important;
+    padding: 24px 18px !important;
+  }
+}
+
+/* ── Trust bar — rounded pill row of checkmark highlights ─────── */
+.trust-bar {
   position: relative;
   z-index: 1;
   display: flex;
@@ -13,8 +332,8 @@
   padding: 20px 32px;
   max-width: fit-content;
 
-  background: var(--panel-dark);
-  border: 1px solid var(--line-dark);
+  background: rgba(8, 18, 34, 0.94);
+  border: 1px solid rgba(56, 189, 248, 0.18);
   border-radius: 999px;
   box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.55);
 }
@@ -25,19 +344,20 @@
   gap: 10px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink-on-dark);
+  color: #cbd5e1;
   white-space: nowrap;
 }
 
 .trust-bar__item svg {
-  color: var(--gold-bright);
+  color: #38bdf8;
   flex-shrink: 0;
 }
-  @media (max-width: 640px) {
-    .trust-bar {
-      border-radius: var(--radius);
-      padding: 18px 22px;
-      gap: 12px 24px;
-    }
-    .trust-bar__item { font-size: 13px; }
+
+@media (max-width: 640px) {
+  .trust-bar {
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    gap: 12px 24px;
   }
+  .trust-bar__item { font-size: 13px; }
+}
