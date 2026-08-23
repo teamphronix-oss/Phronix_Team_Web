@@ -16,6 +16,14 @@ import adminRoutes from "./routes/admin.js";
 import projectRoutes from "./routes/projects.js";
 import teamRoutes from "./routes/team.js";
 import settingsRoutes from "./routes/settings.js";
+import serviceRoutes from "./routes/services.js";
+import testimonialRoutes from "./routes/testimonials.js";
+import careerRoutes from "./routes/careers.js";
+import youtubeVideoRoutes from "./routes/youtubeVideos.js";
+import ongoingProjectRoutes from "./routes/ongoingProjects.js";
+import whyFeatureRoutes from "./routes/whyFeatures.js";
+import clientRoutes from "./routes/clients.js";
+import feedbackRoutes from "./routes/feedback.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,7 +44,9 @@ app.use(express.json({ limit: "1mb" }));
 
 app.use(cookieParser());
 
-app.use("/uploads", express.static("uploads"));
+// Note: images are no longer served from local disk — everything uploaded
+// via the admin panel now goes straight to Cloudinary and the DB stores the
+// Cloudinary URL directly. The backend/uploads/ dir is unused for images.
 
 // ─────────────────────────────────────────────────────────────
 // CORS
@@ -48,6 +58,7 @@ app.use("/uploads", express.static("uploads"));
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5175",
+  "https://teamphronix-oss.github.io",
 ];
 
 app.use(
@@ -134,6 +145,22 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/team", teamRoutes);
 
 app.use("/api/settings", settingsRoutes);
+
+app.use("/api/services", serviceRoutes);
+
+app.use("/api/testimonials", testimonialRoutes);
+
+app.use("/api/careers", careerRoutes);
+
+app.use("/api/youtube-videos", youtubeVideoRoutes);
+
+app.use("/api/ongoing-projects", ongoingProjectRoutes);
+
+app.use("/api/why-features", whyFeatureRoutes);
+
+app.use("/api/clients", clientRoutes);
+
+app.use("/api/feedback", feedbackRoutes);
 
 // ─────────────────────────────────────────────────────────────
 // 404 handler

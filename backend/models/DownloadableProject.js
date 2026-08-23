@@ -8,6 +8,20 @@ export async function findDownloadableBySlug(slug) {
   return data;
 }
 
+export async function findDownloadableById(id) {
+  const { data, error } = await supabase.from(TABLE).select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function listDownloadables({ onlyPublished = false } = {}) {
+  let query = supabase.from(TABLE).select("*").order("order", { ascending: true });
+  if (onlyPublished) query = query.eq("is_published", true);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data;
+}
+
 export async function upsertDownloadable(item) {
   const { data, error } = await supabase
     .from(TABLE)
@@ -28,4 +42,27 @@ export async function upsertDownloadable(item) {
   return data;
 }
 
-export default { findDownloadableBySlug, upsertDownloadable };
+// Admin-panel metadata edits (description, image, order, published state).
+// filename/password_hash are intentionally NOT editable here — those are
+// set only via scripts/seedDownloads.js + hashPassword.js, since the actual
+// protected file has to be placed on disk to match.
+export async function updateDownloadableMeta(id, row) {
+  const { data, error } = await supabase.from(TABLE).update(row).eq("id", id).select().maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteDownloadable(id) {
+  const { data, error } = await supabase.from(TABLE).delete().eq("id", id).select().maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export default {
+  findDownloadableBySlug,
+  findDownloadableById,
+  listDownloadables,
+  upsertDownloadable,
+  updateDownloadableMeta,
+  deleteDownloadable,
+};

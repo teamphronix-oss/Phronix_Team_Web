@@ -1,64 +1,86 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
-import nodemailer from "nodemailer";
 import { createContactMessage } from "../models/ContactMessage.js";
+import { sendMail } from "../config/resend.js";
 
 const router = Router();
 
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
-  message: { message: "Too many messages sent. Please try again later." },
+  message: {
+    message: "Too many messages sent. Please try again later.",
+  },
 });
 
 const validators = [
-  body("name").trim().notEmpty().withMessage("Name is required."),
-  body("email").trim().isEmail().withMessage("A valid email is required."),
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Name is required."),
+
+  body("email")
+    .trim()
+    .isEmail()
+    .withMessage("A valid email is required."),
+
   body("phone")
     .optional({ checkFalsy: true })
     .matches(/^[+\d][\d\s-]{7,15}$/)
     .withMessage("Phone number looks invalid."),
-  body("subject").trim().notEmpty().withMessage("Subject is required."),
-  body("message").trim().isLength({ min: 10 }).withMessage("Message is too short."),
-];
 
-let transporter = null;
-function getTransporter() {
-  if (transporter) return transporter;
-  transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-  });
-  return transporter;
-}
+  body("subject")
+    .trim()
+    .notEmpty()
+    .withMessage("Subject is required."),
+
+  body("message")
+    .trim()
+    .isLength({ min: 10 })
+    .withMessage("Message is too short."),
+];
 
 router.post("/", contactLimiter, validators, async (req, res, next) => {
   try {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: errors.array()[0].msg, errors: errors.array() });
+      return res.status(400).json({
+        message: errors.array()[0].msg,
+        errors: errors.array(),
+      });
     }
 
     const { name, email, phone, subject, message } = req.body;
-    const saved = await createContactMessage({ name, email, phone, subject, message });
 
-    if (process.env.SMTP_HOST) {
-      try {
-        await getTransporter().sendMail({
-          from: `"Phronix Website" <${process.env.SMTP_USER}>`,
-          to: process.env.CONTACT_TO_EMAIL,
-          replyTo: email,
-          subject: `New enquiry: ${subject}`,
-          text: `From: ${name} <${email}>\nPhone: ${phone || "—"}\n\n${message}`,
-        });
-      } catch (mailErr) {
-        console.error("Contact email failed to send:", mailErr.message);
-      }
+    const saved = await createContactMessage({
+      name,
+      email,
+      phone,
+      subject,
+      message,
+    });
+
+    if (
+      process.env.RESEND_API_KEY &&
+      process.env.CONTACT_TO_EMAIL
+    ) {
+      await sendMail({
+        to: process.env.CONTACT_TO_EMAIL,
+        subject: `New enquiry: ${subject}`,
+        text: `From: ${name} <${email}>
+Phone: ${phone || "—"}
+
+${message}`,
+        replyTo: email,
+      });
     }
 
-    res.status(201).json({ ok: true, id: saved.id });
+    res.status(201).json({
+      ok: true,
+      id: saved.id,
+    });
   } catch (err) {
     next(err);
   }
