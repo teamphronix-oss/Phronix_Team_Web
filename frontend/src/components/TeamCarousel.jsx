@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import siteConfig from "../data/siteConfig";
 
 export default function TeamCarousel() {
   const [team, setTeam] = useState([]);
@@ -14,16 +13,17 @@ export default function TeamCarousel() {
   useEffect(() => {
     async function loadTeam() {
       try {
-        const response = await fetch(`${API}/team`);
+        const res = await fetch(`${siteConfig.apiBaseUrl}/team`);
 
-        if (!response.ok) {
-          throw new Error("Failed to load team");
+        if (!res.ok) {
+          throw new Error(`Failed to load team: ${res.status}`);
         }
 
-        const data = await response.json();
+        const data = await res.json();
         setTeam(data.team || []);
       } catch (error) {
-        console.error("Team API error:", error);
+        console.error("Failed to load team:", error);
+        setTeam([]);
       }
     }
 
@@ -31,10 +31,11 @@ export default function TeamCarousel() {
   }, []);
 
   useEffect(() => {
-    if (team.length === 0) return;
+    if (!team.length) return;
 
     const track = trackRef.current;
     const container = containerRef.current;
+
     if (!track || !container) return;
 
     const singleSetWidth = track.scrollWidth / 3;
@@ -63,6 +64,7 @@ export default function TeamCarousel() {
 
       for (let i = 0; i < cards.length; i++) {
         const rect = cards[i].getBoundingClientRect();
+
         const dist = Math.abs(
           rect.left + rect.width / 2 - containerCenter
         );
@@ -94,10 +96,12 @@ export default function TeamCarousel() {
 
     rafRef.current = requestAnimationFrame(step);
 
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [team]);
 
-  if (team.length === 0) {
+  if (!team.length) {
     return null;
   }
 
@@ -107,8 +111,12 @@ export default function TeamCarousel() {
     <div
       className="team-carousel"
       ref={containerRef}
-      onMouseEnter={() => (pausedRef.current = true)}
-      onMouseLeave={() => (pausedRef.current = false)}
+      onMouseEnter={() => {
+        pausedRef.current = true;
+      }}
+      onMouseLeave={() => {
+        pausedRef.current = false;
+      }}
     >
       <div className="team-carousel__track" ref={trackRef}>
         {LOOP_TEAM.map((member, i) => (
