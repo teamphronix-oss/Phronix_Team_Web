@@ -16,6 +16,8 @@ import adminRoutes from "./routes/admin.js";
 import projectRoutes from "./routes/projects.js";
 import teamRoutes from "./routes/team.js";
 import settingsRoutes from "./routes/settings.js";
+import projectRequestRoutes from "./routes/projectRequests.js";
+import googleAuthRoutes from "./routes/googleAuth.js";
 import serviceRoutes from "./routes/services.js";
 import testimonialRoutes from "./routes/testimonials.js";
 import careerRoutes from "./routes/careers.js";
@@ -145,6 +147,9 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/team", teamRoutes);
 
 app.use("/api/settings", settingsRoutes);
+
+app.use("/api/project-requests", projectRequestRoutes);
+app.use("/api/calendar", googleAuthRoutes);
 
 app.use("/api/services", serviceRoutes);
 
