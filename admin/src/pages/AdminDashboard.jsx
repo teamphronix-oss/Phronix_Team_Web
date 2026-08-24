@@ -1252,14 +1252,17 @@ function TestimonialsPanel() {
 
 const emptyCareer = {
   title: "",
+  slug: "",
   department: "",
   location: "",
-  type: "",
+  employment_type: "Full-time",
   experience: "",
   description: "",
   responsibilities: "",
   requirements: "",
-  open: true,
+  skills: "",
+  application_email: "",
+  is_open: true,
   order: 0,
 };
 
@@ -1273,17 +1276,20 @@ function CareersPanel() {
       emptyLabel="No open roles yet."
       formTitle="role"
       rowLabel={(c) => c.title}
-      rowSub={(c) => `${c.department || ""}${c.open ? "" : " · Closed"}`}
+      rowSub={(c) => `${c.department || ""}${c.is_open ? "" : " · Closed"}`}
       fields={[
         { key: "title", label: "Title", type: "text", required: true },
+        { key: "slug", label: "Slug (unique, used in the URL)", type: "text", required: true },
         { key: "department", label: "Department", type: "text" },
         { key: "location", label: "Location", type: "text" },
-        { key: "type", label: "Type", type: "text", placeholder: "Full-time / Internship" },
-        { key: "experience", label: "Experience", type: "text" },
+        { key: "employment_type", label: "Employment type", type: "text", placeholder: "Full-time / Internship" },
+        { key: "experience", label: "Experience required", type: "text", placeholder: "Fresher / 2+ years" },
         { key: "description", label: "Description", type: "textarea" },
         { key: "responsibilities", label: "Responsibilities (one per line)", type: "lines" },
         { key: "requirements", label: "Requirements (one per line)", type: "lines" },
-        { key: "open", label: "Role is open", type: "checkbox" },
+        { key: "skills", label: "Skills (comma separated)", type: "csv" },
+        { key: "application_email", label: "Application email (optional)", type: "text" },
+        { key: "is_open", label: "Role is open", type: "checkbox" },
         { key: "order", label: "Order", type: "number" },
       ]}
     />
