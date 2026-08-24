@@ -147,11 +147,11 @@
   width: 100%;
   display: grid;
   grid-template-columns:
-    minmax(430px, 0.82fr)
-    minmax(650px, 1.18fr);
+    minmax(350px, 0.82fr)
+    minmax(560px, 1.18fr);
   gap: 55px;
   align-items: start;
-  padding: 18px 0 60px;
+  padding: 18px 0 45px;
   color: #ffffff;
 }
 
@@ -160,9 +160,8 @@
    ========================================================= */
 
 .contact-admin__left {
-  width: 100%;
+  padding-top: 28px;
   min-width: 0;
-  padding-top: 0;
 }
 
 .contact-admin__eyebrow {
@@ -228,17 +227,29 @@
   gap: 19px;
   margin-bottom: 13px;
   padding: 18px 20px;
-  border: 1px solid rgba(82, 120, 170, 0.27);
+
+  border: 1px solid rgba(
+    82,
+    120,
+    170,
+    0.27
+  );
+
   border-radius: 15px;
+
   background:
     linear-gradient(
       135deg,
       rgba(9, 26, 46, 0.96),
       rgba(4, 16, 30, 0.96)
     );
+
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 12px 35px rgba(0, 0, 0, 0.18);
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.025),
+    0 12px 35px
+      rgba(0, 0, 0, 0.18);
+
   transition:
     transform 0.25s ease,
     border-color 0.25s ease;
@@ -246,27 +257,41 @@
 
 .contact-info-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(29, 220, 244, 0.45);
+
+  border-color: rgba(
+    29,
+    220,
+    244,
+    0.45
+  );
 }
 
 .contact-info-card__icon {
   width: 68px;
   height: 68px;
   flex: 0 0 68px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(67, 125, 240, 0.35);
+
+  border: 1px solid
+    rgba(67, 125, 240, 0.35);
+
   border-radius: 18px;
+
   background:
     linear-gradient(
       145deg,
       rgba(20, 52, 90, 0.85),
       rgba(22, 28, 70, 0.85)
     );
+
   color: #25dfff;
+
   box-shadow:
-    0 0 28px rgba(38, 168, 255, 0.05);
+    0 0 28px
+      rgba(38, 168, 255, 0.05);
 }
 
 .contact-info-card__content {
@@ -302,20 +327,35 @@
 .contact-whatsapp {
   width: 100%;
   height: 63px;
+
   display: flex;
   align-items: center;
   gap: 12px;
+
   margin-top: 17px;
   padding: 0 20px;
+
   border: 1px solid transparent;
   border-radius: 14px;
+
   background:
-    linear-gradient(#06182a, #06182a) padding-box,
-    linear-gradient(90deg, #0ce5f4, #8743ff) border-box;
+    linear-gradient(
+      #06182a,
+      #06182a
+    ) padding-box,
+    linear-gradient(
+      90deg,
+      #0ce5f4,
+      #8743ff
+    ) border-box;
+
   color: #16e1f3;
+
   font-size: 0.96rem;
   font-weight: 700;
+
   cursor: pointer;
+
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
@@ -323,8 +363,10 @@
 
 .contact-whatsapp:hover {
   transform: translateY(-2px);
+
   box-shadow:
-    0 10px 30px rgba(40, 120, 255, 0.12);
+    0 10px 30px
+      rgba(40, 120, 255, 0.12);
 }
 
 .contact-whatsapp__arrow {
@@ -338,15 +380,16 @@
    ========================================================= */
 
 .contact-admin__right {
-  width: 100%;
   min-width: 0;
 }
 
 .contact-form-card {
   width: 100%;
   padding: 31px;
+
   border: 1px solid transparent;
   border-radius: 20px;
+
   background:
     linear-gradient(
       145deg,
@@ -358,9 +401,12 @@
       rgba(70, 214, 255, 0.75),
       rgba(94, 75, 255, 0.65)
     ) border-box;
+
   box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.34),
-    0 0 65px rgba(45, 95, 255, 0.04);
+    0 25px 80px
+      rgba(0, 0, 0, 0.34),
+    0 0 65px
+      rgba(45, 95, 255, 0.04);
 }
 
 /* =========================================================
@@ -378,17 +424,23 @@
   width: 57px;
   height: 57px;
   flex: 0 0 57px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(34, 190, 255, 0.48);
+
+  border: 1px solid
+    rgba(34, 190, 255, 0.48);
+
   border-radius: 14px;
+
   background:
     linear-gradient(
       145deg,
       rgba(15, 50, 82, 0.85),
       rgba(23, 27, 70, 0.85)
     );
+
   color: #23dcfa;
 }
 
@@ -443,14 +495,23 @@
 .contact-input {
   width: 100%;
   height: 50px;
+
   display: flex;
   align-items: center;
   gap: 11px;
+
   padding: 0 14px;
-  border: 1px solid rgba(101, 127, 160, 0.38);
+
+  border: 1px solid
+    rgba(101, 127, 160, 0.38);
+
   border-radius: 10px;
-  background: rgba(6, 20, 35, 0.78);
+
+  background:
+    rgba(6, 20, 35, 0.78);
+
   color: #7f8da0;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -458,9 +519,12 @@
 
 .contact-input:focus-within {
   border-color: #20dff5;
+
   box-shadow:
-    0 0 0 3px rgba(32, 223, 245, 0.055),
-    0 0 20px rgba(32, 223, 245, 0.055);
+    0 0 0 3px
+      rgba(32, 223, 245, 0.055),
+    0 0 20px
+      rgba(32, 223, 245, 0.055);
 }
 
 .contact-input svg {
@@ -472,10 +536,14 @@
   width: 100%;
   min-width: 0;
   height: 100%;
+
   border: 0;
   outline: 0;
+
   background: transparent;
+
   color: #e7edf5;
+
   font-family: inherit;
   font-size: 0.88rem;
 }
@@ -492,12 +560,18 @@
   display: flex;
   align-items: flex-start;
   gap: 13px;
+
   margin-top: 3px;
   margin-bottom: 19px;
   padding: 16px;
-  border: 1px dashed rgba(102, 127, 161, 0.34);
+
+  border: 1px dashed
+    rgba(102, 127, 161, 0.34);
+
   border-radius: 11px;
-  background: rgba(7, 20, 35, 0.45);
+
+  background:
+    rgba(7, 20, 35, 0.45);
 }
 
 .contact-message-preview__icon {
@@ -512,7 +586,9 @@
 
 .contact-message-preview p {
   margin: 4px 0 0;
+
   color: #778598;
+
   font-size: 0.78rem;
   line-height: 1.5;
 }
@@ -524,12 +600,15 @@
 .contact-save-btn {
   width: 100%;
   height: 54px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
+
   border: 0;
   border-radius: 10px;
+
   background:
     linear-gradient(
       90deg,
@@ -537,12 +616,18 @@
       #477cf7 52%,
       #873cf2 100%
     );
+
   color: #ffffff;
+
   font-size: 0.94rem;
   font-weight: 700;
+
   cursor: pointer;
+
   box-shadow:
-    0 10px 30px rgba(62, 111, 245, 0.2);
+    0 10px 30px
+      rgba(62, 111, 245, 0.2);
+
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
@@ -550,8 +635,10 @@
 
 .contact-save-btn:hover {
   transform: translateY(-1px);
+
   box-shadow:
-    0 14px 35px rgba(62, 111, 245, 0.3);
+    0 14px 35px
+      rgba(62, 111, 245, 0.3);
 }
 
 .contact-save-btn:active {
@@ -565,16 +652,23 @@
 .contact-status {
   margin-top: 12px;
   padding: 10px 13px;
+
   border-radius: 8px;
+
   color: #ff8da8;
-  background: rgba(255, 50, 100, 0.06);
+
+  background:
+    rgba(255, 50, 100, 0.06);
+
   font-size: 0.8rem;
   text-align: center;
 }
 
 .contact-status--success {
   color: #2de5c4;
-  background: rgba(45, 229, 196, 0.06);
+
+  background:
+    rgba(45, 229, 196, 0.06);
 }
 
 /* =========================================================
@@ -586,8 +680,11 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
+
   margin-top: 17px;
+
   color: #6d7b8e;
+
   font-size: 0.73rem;
   text-align: center;
 }
@@ -604,171 +701,11 @@
 .contact-admin-loading {
   width: 100%;
   padding: 45px 20px;
+
   color: var(--ink-soft);
+
   text-align: center;
   font-size: 0.9rem;
-}
-
-/* =========================================================
-   DESKTOP
-   Keep left information and right form in ONE ROW
-   ========================================================= */
-
-@media (min-width: 1151px) {
-  .contact-admin {
-    grid-template-columns:
-      minmax(430px, 0.82fr)
-      minmax(650px, 1.18fr);
-    gap: 55px;
-    align-items: start;
-  }
-
-  .contact-admin__left {
-    grid-column: 1;
-  }
-
-  .contact-admin__right {
-    grid-column: 2;
-  }
-}
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 1250px) and (min-width: 901px) {
-  .contact-admin {
-    grid-template-columns:
-      minmax(360px, 0.85fr)
-      minmax(500px, 1.15fr);
-    gap: 30px;
-  }
-
-  .contact-form-card {
-    padding: 25px;
-  }
-
-  .contact-admin__title {
-    font-size: 3rem;
-  }
-}
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 900px) {
-  .contact-admin {
-    grid-template-columns: 1fr;
-    gap: 35px;
-    padding: 10px 0 40px;
-  }
-
-  .contact-admin__left,
-  .contact-admin__right {
-    grid-column: auto;
-  }
-
-  .contact-admin__left {
-    padding-top: 0;
-  }
-}
-
-@media (max-width: 700px) {
-  .contact-admin {
-    padding: 10px 0 30px;
-    gap: 28px;
-  }
-
-  .contact-admin__title {
-    font-size: 2.65rem;
-    letter-spacing: -1.5px;
-  }
-
-  .contact-admin__description {
-    font-size: 0.9rem;
-  }
-
-  .contact-form-card {
-    padding: 21px;
-    border-radius: 16px;
-  }
-
-  .contact-form-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .contact-info-card {
-    min-height: auto;
-    padding: 15px;
-  }
-
-  .contact-info-card__icon {
-    width: 55px;
-    height: 55px;
-    flex-basis: 55px;
-    border-radius: 14px;
-  }
-
-  .contact-info-card__content h4 {
-    font-size: 0.95rem;
-  }
-
-  .contact-info-card__content p {
-    font-size: 0.83rem;
-  }
-
-  .contact-info-card__content span {
-    font-size: 0.69rem;
-  }
-
-  .contact-form-card__header {
-    margin-bottom: 23px;
-  }
-
-  .contact-form-card__icon {
-    width: 52px;
-    height: 52px;
-    flex-basis: 52px;
-  }
-
-  .contact-form-card__header h3 {
-    font-size: 1.12rem;
-  }
-
-  .contact-form-card__header p {
-    font-size: 0.78rem;
-  }
-}
-
-@media (max-width: 430px) {
-  .contact-admin__title {
-    font-size: 2.25rem;
-  }
-
-  .contact-admin__eyebrow {
-    font-size: 0.64rem;
-    letter-spacing: 3px;
-  }
-
-  .contact-info-card {
-    gap: 12px;
-  }
-
-  .contact-info-card__icon {
-    width: 48px;
-    height: 48px;
-    flex-basis: 48px;
-  }
-
-  .contact-form-card {
-    padding: 17px;
-  }
-
-  .contact-security {
-    font-size: 0.68rem;
-  }
 }
 
 /* =========================================================
@@ -892,53 +829,5 @@
 
   .contact-security {
     font-size: 0.68rem;
-  }
-}
-
-
-
-/* =========================================================
-   FINAL CONTACT ALIGNMENT OVERRIDE
-   Both columns start on the exact same horizontal line.
-   ========================================================= */
-
-.contact-admin {
-  display: grid !important;
-  grid-template-columns: minmax(430px, 0.82fr) minmax(650px, 1.18fr) !important;
-  gap: 55px !important;
-  align-items: start !important;
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-.contact-admin__left,
-.contact-admin__right {
-  min-width: 0 !important;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
-
-.contact-form-card {
-  margin-top: 0 !important;
-  transform: none !important;
-}
-
-@media (max-width: 1250px) and (min-width: 901px) {
-  .contact-admin {
-    grid-template-columns: minmax(360px, 0.85fr) minmax(500px, 1.15fr) !important;
-    gap: 30px !important;
-  }
-}
-
-@media (max-width: 900px) {
-  .contact-admin {
-    grid-template-columns: 1fr !important;
-    gap: 35px !important;
-  }
-
-  .contact-admin__left,
-  .contact-admin__right {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
   }
 }
