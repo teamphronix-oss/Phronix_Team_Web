@@ -7,6 +7,13 @@ import {
   X,
   Pencil,
   Trash2,
+  Mail,
+  Phone,
+  MapPin,
+  FileText,
+  MessageSquare,
+  Send,
+  LockKeyhole,
 } from "lucide-react";
 
 import SectionHeading from "../components/SectionHeading";
@@ -1735,7 +1742,7 @@ function PowerhouseTrioPanel() {
   );
 }
 
-// ── Contact (Email, Phone, Address, GST Number) ─────────────────────
+// ── Contact ───────────────────────────────────────────────────────
 
 function ContactPanel() {
   const [form, setForm] = useState({
@@ -1745,6 +1752,7 @@ function ContactPanel() {
     addressLine2: "",
     gstNumber: "",
   });
+
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -1754,15 +1762,23 @@ function ContactPanel() {
         setForm((f) => ({
           email: d.settings?.email || f.email,
           phone: d.settings?.phone || f.phone,
-          addressLine1: d.settings?.addressLine1 || f.addressLine1,
-          addressLine2: d.settings?.addressLine2 || f.addressLine2,
-          gstNumber: d.settings?.gstNumber || f.gstNumber,
+          addressLine1:
+            d.settings?.addressLine1 || f.addressLine1,
+          addressLine2:
+            d.settings?.addressLine2 || f.addressLine2,
+          gstNumber:
+            d.settings?.gstNumber || f.gstNumber,
         }));
       })
-      .catch(() => {
-        // Backend endpoint isn't ready yet — keep the defaults shown above.
+      .catch((err) => {
+        console.error("Contact settings load error:", err);
+        setStatus(
+          err.message || "Unable to load contact details."
+        );
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   async function save() {
@@ -1771,113 +1787,411 @@ function ContactPanel() {
     try {
       await apiFetch("/settings/contact", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(form),
       });
 
-      setStatus("Saved.");
+      setStatus("Contact details updated successfully.");
     } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
+      setStatus(
+        err.message || "Backend not connected yet."
+      );
     }
   }
 
   if (loading) {
-    return <p className="admin-panel__status">Loading…</p>;
+    return (
+      <div className="contact-admin-loading">
+        Loading contact settings...
+      </div>
+    );
   }
 
   return (
-    <div className="card admin-panel">
-      <h3>Contact details</h3>
+    <div className="contact-admin">
 
-      {status && (
-        <p className="admin-panel__status">
-          {status}
+      {/* =====================================================
+          LEFT SIDE
+          ===================================================== */}
+
+      <div className="contact-admin__left">
+
+        <div className="contact-admin__eyebrow">
+          CONTACT US
+          <span />
+        </div>
+
+        <h2 className="contact-admin__title">
+          Let’s build
+          <br />
+          <span>something amazing</span>
+        </h2>
+
+        <p className="contact-admin__description">
+          Manage the contact information displayed
+          on your Phronix website.
         </p>
-      )}
 
-      <label className="admin-field">
-        <span>Email</span>
+        {/* EMAIL CARD */}
+        <div className="contact-info-card">
 
-        <input
-          type="email"
-          value={form.email}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              email: e.target.value,
-            })
-          }
-          placeholder="hello@phronix.io"
-        />
-      </label>
+          <div className="contact-info-card__icon">
+            <Mail size={25} />
+          </div>
 
-      <label className="admin-field">
-        <span>Phone number</span>
+          <div className="contact-info-card__content">
 
-        <input
-          value={form.phone}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              phone: e.target.value,
-            })
-          }
-          placeholder="+91 90000 00000"
-        />
-      </label>
+            <h4>Email Us</h4>
 
-      <label className="admin-field">
-        <span>Address — line 1</span>
+            <p>
+              {form.email || "hello@phronix.io"}
+            </p>
 
-        <input
-          value={form.addressLine1}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              addressLine1: e.target.value,
-            })
-          }
-          placeholder="4th Floor, Prism Business Park"
-        />
-      </label>
+            <span>
+              We usually reply within a few hours
+            </span>
 
-      <label className="admin-field">
-        <span>Address — line 2</span>
+          </div>
 
-        <input
-          value={form.addressLine2}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              addressLine2: e.target.value,
-            })
-          }
-          placeholder="College Road, Nashik, Maharashtra 422005"
-        />
-      </label>
+        </div>
 
-      <label className="admin-field">
-        <span>GST Number</span>
+        {/* PHONE CARD */}
+        <div className="contact-info-card">
 
-        <input
-          value={form.gstNumber}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              gstNumber: e.target.value,
-            })
-          }
-          placeholder="27ABCDE1234F1Z5"
-        />
-      </label>
+          <div className="contact-info-card__icon">
+            <Phone size={25} />
+          </div>
 
-      <button
-        className="btn btn--gold btn--sm"
-        onClick={save}
-      >
-        <Upload size={16} />
-        Save
-      </button>
+          <div className="contact-info-card__content">
+
+            <h4>Call / WhatsApp</h4>
+
+            <p>
+              {form.phone || "+91 90000 00000"}
+            </p>
+
+            <span>
+              Mon – Sat, 10:00 AM – 7:00 PM
+            </span>
+
+          </div>
+
+        </div>
+
+        {/* OFFICE CARD */}
+        <div className="contact-info-card">
+
+          <div className="contact-info-card__icon">
+            <MapPin size={25} />
+          </div>
+
+          <div className="contact-info-card__content">
+
+            <h4>Our Office</h4>
+
+            <p>
+              {form.addressLine1 ||
+                "4th Floor, Prism Business Park"}
+
+              <br />
+
+              {form.addressLine2 ||
+                "College Road, Nashik, Maharashtra 422005"}
+            </p>
+
+            <span>
+              Mon – Sat, 10:00 AM – 7:00 PM
+            </span>
+
+          </div>
+
+        </div>
+
+        {/* GST CARD */}
+        <div className="contact-info-card">
+
+          <div className="contact-info-card__icon">
+            <FileText size={25} />
+          </div>
+
+          <div className="contact-info-card__content">
+
+            <h4>GSTIN</h4>
+
+            <p>
+              {form.gstNumber ||
+                "27ABCDE1234F1Z5"}
+            </p>
+
+          </div>
+
+        </div>
+
+        {/* WHATSAPP BUTTON */}
+        <button
+          type="button"
+          className="contact-whatsapp"
+          onClick={() => {
+            const number = form.phone?.replace(/\D/g, "");
+
+            if (number) {
+              window.open(
+                `https://wa.me/${number}`,
+                "_blank",
+                "noopener,noreferrer"
+              );
+            }
+          }}
+        >
+
+          <Phone size={20} />
+
+          <span>
+            Chat on WhatsApp
+          </span>
+
+          <span className="contact-whatsapp__arrow">
+            →
+          </span>
+
+        </button>
+
+      </div>
+
+      {/* =====================================================
+          RIGHT SIDE
+          ===================================================== */}
+
+      <div className="contact-admin__right">
+
+        <div className="contact-form-card">
+
+          {/* FORM HEADER */}
+          <div className="contact-form-card__header">
+
+            <div className="contact-form-card__icon">
+              <MessageSquare size={25} />
+            </div>
+
+            <div>
+
+              <h3>
+                Send us a message
+              </h3>
+
+              <p>
+                Update your contact information
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* EMAIL + PHONE */}
+          <div className="contact-form-grid">
+
+            {/* EMAIL */}
+            <label className="contact-field">
+
+              <span>
+                Email Address <b>*</b>
+              </span>
+
+              <div className="contact-input">
+
+                <Mail size={18} />
+
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      email: e.target.value,
+                    })
+                  }
+                  placeholder="hello@phronix.io"
+                />
+
+              </div>
+
+            </label>
+
+            {/* PHONE */}
+            <label className="contact-field">
+
+              <span>
+                Phone / WhatsApp
+              </span>
+
+              <div className="contact-input">
+
+                <Phone size={18} />
+
+                <input
+                  value={form.phone}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      phone: e.target.value,
+                    })
+                  }
+                  placeholder="+91 90000 00000"
+                />
+
+              </div>
+
+            </label>
+
+          </div>
+
+          {/* ADDRESS LINE 1 */}
+          <label className="contact-field">
+
+            <span>
+              Office Address
+            </span>
+
+            <div className="contact-input">
+
+              <MapPin size={18} />
+
+              <input
+                value={form.addressLine1}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    addressLine1:
+                      e.target.value,
+                  })
+                }
+                placeholder="4th Floor, Prism Business Park"
+              />
+
+            </div>
+
+          </label>
+
+          {/* ADDRESS LINE 2 */}
+          <label className="contact-field">
+
+            <span>
+              Address Line 2
+            </span>
+
+            <div className="contact-input">
+
+              <MapPin size={18} />
+
+              <input
+                value={form.addressLine2}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    addressLine2:
+                      e.target.value,
+                  })
+                }
+                placeholder="College Road, Nashik, Maharashtra 422005"
+              />
+
+            </div>
+
+          </label>
+
+          {/* GST */}
+          <label className="contact-field">
+
+            <span>
+              GST Number
+            </span>
+
+            <div className="contact-input">
+
+              <FileText size={18} />
+
+              <input
+                value={form.gstNumber}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    gstNumber:
+                      e.target.value,
+                  })
+                }
+                placeholder="27ABCDE1234F1Z5"
+              />
+
+            </div>
+
+          </label>
+
+          {/* WEBSITE CONTACT PREVIEW */}
+          <div className="contact-message-preview">
+
+            <div className="contact-message-preview__icon">
+              <MessageSquare size={19} />
+            </div>
+
+            <div>
+
+              <strong>
+                Website Contact Form
+              </strong>
+
+              <p>
+                Visitors can use the Contact Us
+                section to reach your team.
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* SAVE BUTTON */}
+          <button
+            type="button"
+            className="contact-save-btn"
+            onClick={save}
+          >
+
+            <Send size={18} />
+
+            Save Contact Details
+
+          </button>
+
+          {/* STATUS */}
+          {status && (
+            <div
+              className={`contact-status ${
+                status.includes("successfully")
+                  ? "contact-status--success"
+                  : ""
+              }`}
+            >
+              {status}
+            </div>
+          )}
+
+          {/* SECURITY */}
+          <div className="contact-security">
+
+            <LockKeyhole size={14} />
+
+            <span>
+              Your information is safe with us.
+              We never share your data.
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
