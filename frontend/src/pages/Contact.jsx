@@ -1,191 +1,746 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, FileBadge, Loader2 } from "lucide-react";
-import SectionHeading from "../components/SectionHeading";
-import siteConfig from "../data/siteConfig";
 
-const initialForm = { name: "", email: "", phone: "", subject: "", message: "" };
+import {
+  Mail,
+  Phone,
+  MapPin,
+  FileBadge,
+  Loader2,
+  Send,
+  User,
+  BriefcaseBusiness,
+  Tag,
+  CalendarDays,
+  MessageCircle,
+  Paperclip,
+  ChevronDown,
+  PencilLine,
+  LockKeyhole,
+} from "lucide-react";
+
+import siteConfig from "../data/siteConfig";
+import "../styles/contact.css";
+const initialForm = {
+  name: "",
+  email: "",
+  phone: "",
+  projectType: "",
+  budget: "",
+  timeline: "",
+  contactMethod: "Email",
+  message: "",
+};
+
+const projectTypes = [
+  "Website Development",
+  "Web Application",
+  "Mobile Application",
+  "E-Commerce",
+  "UI / UX Design",
+  "AI / ML Project",
+  "Cloud / DevOps",
+  "Student Project",
+  "Other",
+];
+
+const budgetRanges = [
+  "Under ₹10,000",
+  "₹10,000 – ₹25,000",
+  "₹25,000 – ₹50,000",
+  "₹50,000 – ₹1,00,000",
+  "₹1,00,000 – ₹2,50,000",
+  "Above ₹2,50,000",
+];
+
+const timelines = [
+  "1 – 2 Weeks",
+  "2 – 4 Weeks",
+  "1 – 2 Months",
+  "2 – 3 Months",
+  "3+ Months",
+];
 
 function validate(form) {
   const errors = {};
-  if (!form.name.trim()) errors.name = "Please enter your name.";
+
+  if (!form.name.trim()) {
+    errors.name = "Please enter your name.";
+  }
+
   if (!form.email.trim()) {
     errors.email = "Please enter your email.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+  } else if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
+  ) {
     errors.email = "That doesn't look like a valid email.";
   }
-  if (form.phone && !/^[+\d][\d\s-]{7,15}$/.test(form.phone)) {
+
+  if (
+    form.phone &&
+    !/^[+\d][\d\s-]{7,15}$/.test(form.phone)
+  ) {
     errors.phone = "Please enter a valid phone number.";
   }
-  if (!form.subject.trim()) errors.subject = "Please add a subject.";
+
+  if (!form.projectType) {
+    errors.projectType = "Please select a project type.";
+  }
+
   if (!form.message.trim() || form.message.trim().length < 10) {
     errors.message = "Message should be at least 10 characters.";
   }
+
   return errors;
+}
+
+function ContactCard({ icon: Icon, title, children, accent = false }) {
+  return (
+    <div className={`contact-modern__card ${accent ? "contact-modern__card--accent" : ""}`}>
+      <div className="contact-modern__card-icon">
+        <Icon size={25} strokeWidth={1.8} />
+      </div>
+
+      <div className="contact-modern__card-content">
+        <strong>{title}</strong>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function InputIcon({ children }) {
+  return (
+    <span className="contact-modern__input-icon">
+      {children}
+    </span>
+  );
 }
 
 export default function Contact() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [status, setStatus] = useState("idle");
   const [serverMessage, setServerMessage] = useState("");
+  const [file, setFile] = useState(null);
 
   function update(field, value) {
-    setForm((f) => ({ ...f, [field]: value }));
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+
+    if (errors[field]) {
+      setErrors((current) => ({
+        ...current,
+        [field]: "",
+      }));
+    }
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     const validationErrors = validate(form);
+
     setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
     setStatus("loading");
     setServerMessage("");
+
     try {
-      const res = await fetch(`${siteConfig.apiBaseUrl}/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Something went wrong. Please try again.");
+      const res = await fetch(
+        `${siteConfig.apiBaseUrl}/contact`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            subject: form.projectType,
+            message: form.message,
+
+            // Additional frontend details.
+            projectType: form.projectType,
+            budget: form.budget,
+            timeline: form.timeline,
+            contactMethod: form.contactMethod,
+            attachmentName: file?.name || "",
+          }),
+        }
+      );
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(
+          data.message ||
+            "Something went wrong. Please try again."
+        );
+      }
+
       setStatus("success");
-      setServerMessage("Thanks — your message is in. We'll reply within one business day.");
+
+      setServerMessage(
+        "Thanks — your message is in. We'll reply within one business day."
+      );
+
       setForm(initialForm);
+      setFile(null);
     } catch (err) {
       setStatus("error");
       setServerMessage(err.message);
     }
   }
 
+  const whatsappNumber = siteConfig.whatsappNumber;
+  const whatsappMessage =
+    siteConfig.whatsappDefaultMessage ||
+    "Hello, I would like to discuss a project.";
+
   return (
-    <div className="page-head-section section">
-      <div className="container contact__grid">
-        <div>
-          <SectionHeading
-            eyebrow="Contact Us"
-            title="Let's talk about your project"
-            description="Fill out the form, or reach us directly using the details below."
-          />
+    <div className="page-head-section section contact-modern">
+      <div className="container">
+        <div className="contact-modern__grid">
 
-          <ul className="contact__info">
-            <li>
-              <Mail size={18} />
-              <div>
-                <strong>Email</strong>
-                <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
-              </div>
-            </li>
-            <li>
-              <Phone size={18} />
-              <div>
-                <strong>Phone / WhatsApp</strong>
-                <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}>{siteConfig.phone}</a>
-              </div>
-            </li>
-            <li>
-              <MapPin size={18} />
-              <div>
-                <strong>Office</strong>
-                <span>{siteConfig.address.line1}, {siteConfig.address.line2}</span>
-              </div>
-            </li>
-            <li>
-              <FileBadge size={18} />
-              <div>
-                <strong>GSTIN</strong>
-                <span>{siteConfig.gstNumber}</span>
-              </div>
-            </li>
-          </ul>
+          {/* =====================================================
+              LEFT SIDE
+          ====================================================== */}
 
-          <a
-            href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.whatsappDefaultMessage)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn--gold"
+          <div className="contact-modern__left">
+
+            <div className="contact-modern__heading">
+              <div className="contact-modern__eyebrow">
+                <span>CONTACT US</span>
+                <i />
+              </div>
+
+              <h1>
+                Let’s build
+                <br />
+                <span>something amazing</span>
+              </h1>
+
+              <p>
+                Have a project in mind or want to know more about
+                our services? We’d love to hear from you.
+              </p>
+            </div>
+
+            <div className="contact-modern__details">
+
+              <ContactCard
+                icon={Mail}
+                title="Email Us"
+              >
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="contact-modern__main-link"
+                >
+                  {siteConfig.email}
+                </a>
+
+                <small>
+                  We usually reply within a few hours
+                </small>
+              </ContactCard>
+
+              <ContactCard
+                icon={Phone}
+                title="Call / WhatsApp"
+              >
+                <a
+                  href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+                  className="contact-modern__main-link"
+                >
+                  {siteConfig.phone}
+                </a>
+
+                <small>
+                  Mon – Sat, 10:00 AM – 7:00 PM
+                </small>
+              </ContactCard>
+
+              <ContactCard
+                icon={MapPin}
+                title="Our Office"
+              >
+                <span className="contact-modern__address">
+                  {siteConfig.address.line1}
+                  <br />
+                  {siteConfig.address.line2}
+                </span>
+
+                <small>
+                  Mon – Sat, 10:00 AM – 7:00 PM
+                </small>
+              </ContactCard>
+
+              <ContactCard
+                icon={FileBadge}
+                title="GSTIN"
+              >
+                <span className="contact-modern__main-link">
+                  {siteConfig.gstNumber}
+                </span>
+              </ContactCard>
+
+            </div>
+
+            <a
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+                whatsappMessage
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-modern__whatsapp"
+            >
+              <MessageCircle size={22} />
+
+              <span>Chat on WhatsApp</span>
+
+              <span className="contact-modern__whatsapp-arrow">
+                →
+              </span>
+            </a>
+
+          </div>
+
+          {/* =====================================================
+              RIGHT SIDE FORM
+          ====================================================== */}
+
+          <form
+            className="contact-modern__form-card"
+            onSubmit={handleSubmit}
+            noValidate
           >
-            Chat on WhatsApp
-          </a>
+
+            <div className="contact-modern__form-header">
+
+              <div className="contact-modern__form-icon">
+                <PencilLine size={28} />
+              </div>
+
+              <div>
+                <h2>Send us a message</h2>
+
+                <p>
+                  We’re here to help you
+                </p>
+              </div>
+
+            </div>
+
+            {status === "success" && (
+              <div className="contact-modern__status contact-modern__status--success">
+                {serverMessage}
+              </div>
+            )}
+
+            {status === "error" && (
+              <div className="contact-modern__status contact-modern__status--error">
+                {serverMessage}
+              </div>
+            )}
+
+            {/* Name + Email */}
+
+            <div className="contact-modern__two-columns">
+
+              <div className="contact-modern__field">
+                <label htmlFor="contact-name">
+                  Full Name <span>*</span>
+                </label>
+
+                <div className="contact-modern__input-wrap">
+                  <InputIcon>
+                    <User size={18} />
+                  </InputIcon>
+
+                  <input
+                    id="contact-name"
+                    type="text"
+                    placeholder="Your name"
+                    value={form.name}
+                    onChange={(e) =>
+                      update("name", e.target.value)
+                    }
+                    className={
+                      errors.name
+                        ? "contact-modern__error-input"
+                        : ""
+                    }
+                  />
+                </div>
+
+                {errors.name && (
+                  <small className="contact-modern__field-error">
+                    {errors.name}
+                  </small>
+                )}
+              </div>
+
+              <div className="contact-modern__field">
+                <label htmlFor="contact-email">
+                  Email Address <span>*</span>
+                </label>
+
+                <div className="contact-modern__input-wrap">
+                  <InputIcon>
+                    <Mail size={18} />
+                  </InputIcon>
+
+                  <input
+                    id="contact-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={form.email}
+                    onChange={(e) =>
+                      update("email", e.target.value)
+                    }
+                    className={
+                      errors.email
+                        ? "contact-modern__error-input"
+                        : ""
+                    }
+                  />
+                </div>
+
+                {errors.email && (
+                  <small className="contact-modern__field-error">
+                    {errors.email}
+                  </small>
+                )}
+              </div>
+
+            </div>
+
+            {/* Phone */}
+
+            <div className="contact-modern__field">
+              <label htmlFor="contact-phone">
+                Phone / WhatsApp
+              </label>
+
+              <div className="contact-modern__input-wrap">
+                <InputIcon>
+                  <Phone size={18} />
+                </InputIcon>
+
+                <input
+                  id="contact-phone"
+                  type="tel"
+                  placeholder="+91 90000 00000"
+                  value={form.phone}
+                  onChange={(e) =>
+                    update("phone", e.target.value)
+                  }
+                  className={
+                    errors.phone
+                      ? "contact-modern__error-input"
+                      : ""
+                  }
+                />
+              </div>
+
+              {errors.phone && (
+                <small className="contact-modern__field-error">
+                  {errors.phone}
+                </small>
+              )}
+            </div>
+
+            {/* Project Type */}
+
+            <div className="contact-modern__field">
+              <label htmlFor="project-type">
+                Project Type
+              </label>
+
+              <div className="contact-modern__input-wrap">
+                <InputIcon>
+                  <BriefcaseBusiness size={18} />
+                </InputIcon>
+
+                <select
+                  id="project-type"
+                  value={form.projectType}
+                  onChange={(e) =>
+                    update("projectType", e.target.value)
+                  }
+                  className={
+                    errors.projectType
+                      ? "contact-modern__error-input"
+                      : ""
+                  }
+                >
+                  <option value="">
+                    Select project type
+                  </option>
+
+                  {projectTypes.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+
+                <ChevronDown
+                  className="contact-modern__select-arrow"
+                  size={18}
+                />
+              </div>
+
+              {errors.projectType && (
+                <small className="contact-modern__field-error">
+                  {errors.projectType}
+                </small>
+              )}
+            </div>
+
+            {/* Budget + Timeline */}
+
+            <div className="contact-modern__two-columns">
+
+              <div className="contact-modern__field">
+                <label htmlFor="budget">
+                  Budget Range
+                </label>
+
+                <div className="contact-modern__input-wrap">
+                  <InputIcon>
+                    <Tag size={18} />
+                  </InputIcon>
+
+                  <select
+                    id="budget"
+                    value={form.budget}
+                    onChange={(e) =>
+                      update("budget", e.target.value)
+                    }
+                  >
+                    <option value="">
+                      Select budget range
+                    </option>
+
+                    {budgetRanges.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ChevronDown
+                    className="contact-modern__select-arrow"
+                    size={18}
+                  />
+                </div>
+              </div>
+
+              <div className="contact-modern__field">
+                <label htmlFor="timeline">
+                  Timeline
+                </label>
+
+                <div className="contact-modern__input-wrap">
+                  <InputIcon>
+                    <CalendarDays size={18} />
+                  </InputIcon>
+
+                  <select
+                    id="timeline"
+                    value={form.timeline}
+                    onChange={(e) =>
+                      update("timeline", e.target.value)
+                    }
+                  >
+                    <option value="">
+                      Select timeline
+                    </option>
+
+                    {timelines.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ChevronDown
+                    className="contact-modern__select-arrow"
+                    size={18}
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Preferred Contact */}
+
+            <div className="contact-modern__field">
+              <label htmlFor="contact-method">
+                Preferred Contact Method
+              </label>
+
+              <div className="contact-modern__input-wrap">
+                <InputIcon>
+                  <Mail size={18} />
+                </InputIcon>
+
+                <select
+                  id="contact-method"
+                  value={form.contactMethod}
+                  onChange={(e) =>
+                    update(
+                      "contactMethod",
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value="Email">Email</option>
+                  <option value="Phone">
+                    Phone
+                  </option>
+                  <option value="WhatsApp">
+                    WhatsApp
+                  </option>
+                </select>
+
+                <ChevronDown
+                  className="contact-modern__select-arrow"
+                  size={18}
+                />
+              </div>
+            </div>
+
+            {/* Message */}
+
+            <div className="contact-modern__field">
+              <label htmlFor="contact-message">
+                Message / Project Details <span>*</span>
+              </label>
+
+              <div className="contact-modern__textarea-wrap">
+                <MessageCircle size={19} />
+
+                <textarea
+                  id="contact-message"
+                  rows={5}
+                  maxLength={1000}
+                  placeholder="Tell us about your project, requirements, goals..."
+                  value={form.message}
+                  onChange={(e) =>
+                    update("message", e.target.value)
+                  }
+                  className={
+                    errors.message
+                      ? "contact-modern__error-input"
+                      : ""
+                  }
+                />
+
+                <span className="contact-modern__counter">
+                  {form.message.length} / 1000
+                </span>
+              </div>
+
+              {errors.message && (
+                <small className="contact-modern__field-error">
+                  {errors.message}
+                </small>
+              )}
+            </div>
+
+            {/* Attachment */}
+
+            <div className="contact-modern__attachment">
+              <Paperclip size={22} />
+
+              <div>
+                <strong>
+                  {file
+                    ? file.name
+                    : "Attach File (Optional)"}
+                </strong>
+
+                <span>
+                  PDF, DOC, JPG, PNG (Max. 5MB)
+                </span>
+              </div>
+
+              <label
+                htmlFor="contact-file"
+                className="contact-modern__browse"
+              >
+                Browse
+              </label>
+
+              <input
+                id="contact-file"
+                type="file"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const selected =
+                    e.target.files?.[0];
+
+                  if (!selected) return;
+
+                  if (
+                    selected.size >
+                    5 * 1024 * 1024
+                  ) {
+                    alert(
+                      "File size must be less than 5MB."
+                    );
+                    e.target.value = "";
+                    return;
+                  }
+
+                  setFile(selected);
+                }}
+              />
+            </div>
+
+            {/* Submit */}
+
+            <button
+              type="submit"
+              className="contact-modern__submit"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? (
+                <>
+                  <Loader2
+                    size={20}
+                    className="contact-modern__spin"
+                  />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send size={20} />
+                  Send Message
+                </>
+              )}
+            </button>
+
+            <div className="contact-modern__security">
+              <LockKeyhole size={15} />
+
+              <span>
+                Your information is safe with us.
+                We never share your data.
+              </span>
+            </div>
+
+          </form>
         </div>
-
-        <form className="card contact-form" onSubmit={handleSubmit} noValidate>
-          {status === "success" && <div className="form-status form-status--success">{serverMessage}</div>}
-          {status === "error" && <div className="form-status form-status--error">{serverMessage}</div>}
-
-          <div className="field">
-            <label htmlFor="name">Name</label>
-            <input
-              id="name"
-              type="text"
-              value={form.name}
-              onChange={(e) => update("name", e.target.value)}
-              className={errors.name ? "has-error" : ""}
-              aria-invalid={!!errors.name}
-              aria-describedby={errors.name ? "name-error" : undefined}
-            />
-            {errors.name && <p id="name-error" className="field-error">{errors.name}</p>}
-          </div>
-
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={form.email}
-              onChange={(e) => update("email", e.target.value)}
-              className={errors.email ? "has-error" : ""}
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? "email-error" : undefined}
-            />
-            {errors.email && <p id="email-error" className="field-error">{errors.email}</p>}
-          </div>
-
-          <div className="field">
-            <label htmlFor="phone">Phone (optional)</label>
-            <input
-              id="phone"
-              type="tel"
-              value={form.phone}
-              onChange={(e) => update("phone", e.target.value)}
-              className={errors.phone ? "has-error" : ""}
-              aria-invalid={!!errors.phone}
-              aria-describedby={errors.phone ? "phone-error" : undefined}
-            />
-            {errors.phone && <p id="phone-error" className="field-error">{errors.phone}</p>}
-          </div>
-
-          <div className="field">
-            <label htmlFor="subject">Subject</label>
-            <input
-              id="subject"
-              type="text"
-              value={form.subject}
-              onChange={(e) => update("subject", e.target.value)}
-              className={errors.subject ? "has-error" : ""}
-              aria-invalid={!!errors.subject}
-              aria-describedby={errors.subject ? "subject-error" : undefined}
-            />
-            {errors.subject && <p id="subject-error" className="field-error">{errors.subject}</p>}
-          </div>
-
-          <div className="field">
-            <label htmlFor="message">Message</label>
-            <textarea
-              id="message"
-              value={form.message}
-              onChange={(e) => update("message", e.target.value)}
-              className={errors.message ? "has-error" : ""}
-              aria-invalid={!!errors.message}
-              aria-describedby={errors.message ? "message-error" : undefined}
-            />
-            {errors.message && <p id="message-error" className="field-error">{errors.message}</p>}
-          </div>
-
-          <button type="submit" className="btn btn--gold btn--block" disabled={status === "loading"}>
-            {status === "loading" ? <><Loader2 size={16} className="spin" /> Sending…</> : "Send Message"}
-          </button>
-        </form>
       </div>
     </div>
   );
