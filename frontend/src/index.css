@@ -345,111 +345,162 @@ button { font-family: inherit; cursor: pointer; }
   display: block;
 }
 
-/* ── Cursor trail blobs (lamalama-style shrinking dot-chain) ───── */
-/* Fixed full-viewport overlay, sits above content, never blocks
-   clicks. Mounted once near the app root so the trail works on
-   every page, not just one section. */
+/* ── Next-Gen Fluid Cursor Trail ──────────────────────────────── */
 .cursor-trail-blobs {
   position: fixed;
   inset: 0;
-  z-index: 9998;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99998;
   pointer-events: none;
+  mix-blend-mode: screen;
 }
 
-/* ── Custom cursor ───────────────────────────────────────────── */
-/* Two pieces: a small solid dot that sticks exactly to the real mouse
-   position, and a larger soft ring that trails behind it. Both are
-   fixed-position, pointer-events:none so they never block clicks.
-
-   White + mix-blend-mode: difference gives the lamalama.com-style
-   effect — the cursor auto-inverts to stay visible on both dark and
-   light/white backgrounds without needing per-section overrides. */
-
+/* ── Next-Gen Interactive Custom Cursor ───────────────────────── */
 .custom-cursor__dot,
 .custom-cursor__ring {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 100000;
   pointer-events: none;
   border-radius: 50%;
   will-change: transform;
 }
 
+/* Central Pinpoint Spark */
 .custom-cursor__dot {
-  width: 8px;
-  height: 8px;
-  background: #0EA5E9;
-  transition: width 0.2s var(--ease, ease), height 0.2s var(--ease, ease),
-    background 0.2s var(--ease, ease), opacity 0.2s ease;
-}
-.custom-cursor__dot--hover {
-  width: 0px;
-  height: 0px;
-  opacity: 0;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1.5px rgba(56, 189, 248, 0.8),
+    0 0 10px #38bdf8,
+    0 0 20px rgba(31, 224, 197, 0.6);
+  transition: width 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.18s ease,
+              box-shadow 0.18s ease;
 }
 
-.custom-cursor__ring {
-  width: 34px;
-  height: 34px;
-  border: 1.5px solid rgba(14, 165, 233, 0.65);
-  background: rgba(14, 165, 233, 0.1);
-  transition: width 0.25s var(--ease, ease), height 0.25s var(--ease, ease),
-    background 0.25s var(--ease, ease), border-color 0.25s var(--ease, ease),
-    opacity 0.2s ease;
+.custom-cursor__dot--hover {
+  width: 8px;
+  height: 8px;
+  background: #1fe0c5;
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 14px #1fe0c5,
+    0 0 28px rgba(56, 189, 248, 0.8);
 }
+
+.custom-cursor__dot--active {
+  background: #ffffff;
+  box-shadow: 0 0 18px #ffffff, 0 0 30px #38bdf8;
+}
+
+/* Velocity-Aware Aerodynamic Ring */
+.custom-cursor__ring {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(56, 189, 248, 0.55);
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(31, 224, 197, 0.03) 70%, transparent 100%);
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.25);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  transition: width 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.24s ease,
+              border-color 0.24s ease,
+              box-shadow 0.24s ease;
+}
+
+.custom-cursor__ring-core {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px dashed rgba(56, 189, 248, 0.25);
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
 .custom-cursor__ring--hover {
-  width: 58px;
-  height: 58px;
-  background: rgba(14, 165, 233, 0.2);
-  border-color: rgba(14, 165, 233, 0.95);
+  width: 52px;
+  height: 52px;
+  background: radial-gradient(circle, rgba(31, 224, 197, 0.18) 0%, rgba(14, 165, 233, 0.08) 70%, transparent 100%);
+  border-color: #38bdf8;
+  box-shadow:
+    0 0 24px rgba(56, 189, 248, 0.45),
+    inset 0 0 12px rgba(31, 224, 197, 0.2);
+}
+
+.custom-cursor__ring--hover .custom-cursor__ring-core {
+  opacity: 0.9;
+  border-color: rgba(31, 224, 197, 0.5);
+  transform: rotate(45deg);
+}
+
+.custom-cursor__ring--active {
+  border-color: #ffffff;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.7);
 }
 
 .custom-cursor--hidden {
-  opacity: 0;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
-/* Floating text label/tag that follows the cursor — the "# Chocolate
-   Amsterdam" style pill seen on lamalama.com when hovering a logo or
-   card. Sits above the ring (translate -140% on Y) and fades/scales
-   in only when the hovered element carries data-cursor-label. */
+/* Floating context badge */
 .custom-cursor__label {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 100000;
   pointer-events: none;
   will-change: transform;
-  background: rgba(11, 11, 17, 0.92);
-  color: #ffffff;
+  background: rgba(3, 7, 18, 0.9);
+  color: #f8fafc;
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(14, 165, 233, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   opacity: 0;
   transform-origin: center bottom;
-  transition: opacity 0.2s var(--ease, ease), scale 0.2s var(--ease, ease);
-  scale: 0.85;
-}
-.custom-cursor__label--visible {
-  opacity: 1;
-  scale: 1;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate(-50%, -150%) scale(0.85);
 }
 
-/* Hide the real browser cursor site-wide once our custom one is active.
-   Only applied on fine-pointer (mouse/trackpad) devices — touch devices
-   never load the component at all, but this is a safety net too. */
+.custom-cursor__label--visible {
+  opacity: 1;
+  transform: translate(-50%, -150%) scale(1);
+}
+
+/* Hide native browser cursor on mouse devices */
 @media (pointer: fine) {
   html,
   body,
   a,
   button,
-  [role="button"] {
+  [role="button"],
+  .btn,
+  .card,
+  .intake-pill,
+  .intake-card-pill,
+  .cal-day-btn,
+  .cal-slot-btn {
     cursor: none;
+  }
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
   }
 }
 

@@ -1,130 +1,204 @@
 import { useState, useEffect, useRef, Children } from "react";
 
-// Must match the CSS transition duration on .card-carousel__item
-// (transform 0.6s ...) — used to time the invisible "wrap" teleport.
-const TRANSITION_MS = 600;
-
-export default function CardCarousel({ children, interval = 3000 }) {
+export default function CardCarousel({ children, interval = 4000 }) {
   const items = Children.toArray(children);
   const count = items.length;
 
-  // Visible slots run from -maxVisible..+maxVisible (e.g. -1,0,1 for 3 cards).
-  // exitAt is the first fully-invisible position just past the edge —
-  // this is where a card "disappears" before being teleported.
-  const maxVisible = Math.floor(count / 2);
-  const exitAt = maxVisible + 1;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // positions[i] = current slot offset of item i (-1 left, 0 center, 1 right, ...)
-  const [positions, setPositions] = useState(() =>
-    items.map((_, i) => i - maxVisible)
-  );
-  // Indices currently being teleported — rendered with transitions
-  // disabled for exactly one frame so the jump is never visible.
-  const [frozen, setFrozen] = useState(() => new Set());
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const deltaX = useRef(0);
+  const deltaY = useRef(0);
+  const isPointerDown = useRef(false);
 
-  const tickTimer = useRef(null);
-  const snapTimer = useRef(null);
-  const rafTimer = useRef([]);
-
+  // Auto rotate timer
   useEffect(() => {
-    if (count <= 1) return;
+    if (count <= 1 || isPaused || isDragging) return;
 
-    tickTimer.current = setInterval(() => {
-      // Step 1: everything shifts one slot to the right, with a normal
-      // transition — left card slides to center, center slides to right,
-      // right card slides out past the edge (fading to opacity 0).
-      setPositions((prev) => prev.map((p) => p + 1));
-
-      clearTimeout(snapTimer.current);
-      // Step 2: once that slide has visually finished, any card that
-      // landed on the invisible exit slot gets teleported back to the
-      // start of the line. Subtracting exactly `count` (not just "far
-      // enough left") keeps every card exactly 1 slot apart from the
-      // others at all times — that's what guarantees a card is always
-      // sitting in the center slot with no gap.
-      snapTimer.current = setTimeout(() => {
-        setPositions((prev) => {
-          const wrapping = new Set();
-          const next = prev.map((p, i) => {
-            if (p >= exitAt) {
-              wrapping.add(i);
-              return p - count;
-            }
-            return p;
-          });
-          if (wrapping.size) {
-            // Freeze: this render has transition disabled + forced
-            // opacity 0, so relocating it to the visible slot is
-            // invisible. Two rAFs later we un-freeze it, which lets
-            // it fade in smoothly in its new spot.
-            setFrozen(wrapping);
-            rafTimer.current.push(
-              requestAnimationFrame(() => {
-                rafTimer.current.push(
-                  requestAnimationFrame(() => setFrozen(new Set()))
-                );
-              })
-            );
-          }
-          return next;
-        });
-      }, TRANSITION_MS);
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % count);
     }, interval);
 
-    return () => {
-      clearInterval(tickTimer.current);
-      clearTimeout(snapTimer.current);
-      rafTimer.current.forEach(cancelAnimationFrame);
-      rafTimer.current = [];
-    };
-  }, [count, interval, exitAt]);
+    return () => clearInterval(timer);
+  }, [count, interval, isPaused, isDragging]);
 
-  const goTo = (i) => {
-    clearTimeout(snapTimer.current);
-    setFrozen(new Set());
-    // Re-center the arrangement around the clicked card.
-    setPositions((prev) => prev.map((_, idx) => idx - i));
+  const prev = () => {
+    setActiveIndex((cur) => (cur - 1 + count) % count);
+  };
+
+  const next = () => {
+    setActiveIndex((cur) => (cur + 1) % count);
+  };
+
+  const goTo = (index) => {
+    setActiveIndex(index);
+  };
+
+  // ── Unified Touch & Pointer Drag Handlers ──
+  const handleTouchStart = (e) => {
+    setIsPaused(true);
+    const touch = e.touches[0];
+    startX.current = touch.clientX;
+    startY.current = touch.clientY;
+    deltaX.current = 0;
+    deltaY.current = 0;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!e.touches[0]) return;
+    const touch = e.touches[0];
+    deltaX.current = touch.clientX - startX.current;
+    deltaY.current = touch.clientY - startY.current;
+  };
+
+  const handleTouchEnd = () => {
+    setIsPaused(false);
+    const dx = deltaX.current;
+    const dy = deltaY.current;
+
+    // Trigger swipe if horizontal displacement exceeds 30px and dominates vertical movement
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 0.8) {
+      if (dx < 0) {
+        next(); // Swiped left -> advance
+      } else {
+        prev(); // Swiped right -> go back
+      }
+    }
+    deltaX.current = 0;
+    deltaY.current = 0;
+  };
+
+  // Mouse / Desktop pointer drag support
+  const handlePointerDown = (e) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    isPointerDown.current = true;
+    startX.current = e.clientX;
+    startY.current = e.clientY;
+    deltaX.current = 0;
+    deltaY.current = 0;
+    setIsPaused(true);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isPointerDown.current) return;
+    deltaX.current = e.clientX - startX.current;
+    deltaY.current = e.clientY - startY.current;
+    if (Math.abs(deltaX.current) > 8) {
+      setIsDragging(true);
+    }
+  };
+
+  const handlePointerUp = () => {
+    if (!isPointerDown.current) return;
+    isPointerDown.current = false;
+    setIsPaused(false);
+
+    const dx = deltaX.current;
+    const dy = deltaY.current;
+
+    if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) * 0.8) {
+      if (dx < 0) next();
+      else prev();
+    }
+
+    setTimeout(() => {
+      setIsDragging(false);
+    }, 50);
+
+    deltaX.current = 0;
+    deltaY.current = 0;
   };
 
   return (
-    <div className="card-carousel">
+    <div
+      className={`card-carousel card-carousel--minimal ${isDragging ? "is-dragging" : ""}`}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => {
+        setIsPaused(false);
+        if (isPointerDown.current) handlePointerUp();
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+    >
       <div className="card-carousel__stage">
         {items.map((item, i) => {
-          const offset = positions[i];
-          const abs = Math.abs(offset);
-          const hidden = abs >= exitAt; // fully invisible right at the exit slot
-          const isFrozen = frozen.has(i);
+          // Calculate shortest circular offset from activeIndex
+          let offset = i - activeIndex;
+          if (offset > count / 2) offset -= count;
+          if (offset < -count / 2) offset += count;
 
-          const style = {
-            transform: `translateX(${offset * 118}%) translateZ(${-abs * 260}px) rotateY(${offset * -34}deg) scale(${1 - abs * 0.14})`,
-            zIndex: count - abs,
-            opacity: isFrozen ? 0 : hidden ? 0 : 1 - abs * 0.28,
-            pointerEvents: offset === 0 ? "auto" : "none",
-            transition: isFrozen
-              ? "none"
-              : "transform 0.6s var(--ease), opacity 0.6s var(--ease)",
-          };
+          const absOffset = Math.abs(offset);
+
+          let transform = "";
+          let opacity = 0;
+          let filter = "none";
+          let zIndex = count - absOffset;
+          let pointerEvents = "none";
+
+          if (offset === 0) {
+            transform = "translateX(0%) scale(1) translateY(0)";
+            opacity = 1;
+            filter = "blur(0px)";
+            pointerEvents = "auto";
+          } else if (offset === 1) {
+            transform = "translateX(104%) scale(0.9) translateY(6px)";
+            opacity = 0.38;
+            filter = "blur(1px)";
+            pointerEvents = "auto";
+          } else if (offset === -1) {
+            transform = "translateX(-104%) scale(0.9) translateY(6px)";
+            opacity = 0.38;
+            filter = "blur(1px)";
+            pointerEvents = "auto";
+          } else {
+            transform = `translateX(${offset * 120}%) scale(0.78)`;
+            opacity = 0;
+            pointerEvents = "none";
+          }
 
           return (
-            <div className="card-carousel__item" style={style} key={i}>
+            <div
+              key={i}
+              className={`card-carousel__item ${offset === 0 ? "is-active" : ""}`}
+              style={{
+                transform,
+                opacity,
+                filter,
+                zIndex,
+                pointerEvents: isDragging ? "none" : pointerEvents,
+              }}
+              onClick={() => {
+                if (!isDragging && offset !== 0) goTo(i);
+              }}
+            >
               {item}
             </div>
           );
         })}
       </div>
 
-      {count > 1 && (
-        <div className="card-carousel__dots">
-          {items.map((_, i) => (
-            <button
-              key={i}
-              className={`card-carousel__dot ${positions[i] === 0 ? "card-carousel__dot--active" : ""}`}
-              onClick={() => goTo(i)}
-              aria-label={`Go to card ${i + 1}`}
-            />
-          ))}
-        </div>
-      )}
+      {/* Minimal Dots Pagination */}
+      <div className="card-carousel__dots">
+        {items.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            className={`card-carousel__dot ${
+              i === activeIndex ? "card-carousel__dot--active" : ""
+            }`}
+            onClick={() => goTo(i)}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }

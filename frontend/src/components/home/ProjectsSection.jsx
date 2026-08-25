@@ -1,86 +1,108 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
-import projects from "../../data/projects";
+import SectionHeading from "../SectionHeading";
+import sweeterJoy from "../../assets/projects/sweeter-joy.png";
+import sweeterJoy1 from "../../assets/projects/sweeter-joy1.png";
+import sweeterJoy2 from "../../assets/projects/sweeter-joy2.png";
+import sweeterJoy3 from "../../assets/projects/sweeter-joy3.png";
+import sweeterJoy5 from "../../assets/projects/sweeter-joy5.png";
+import sweeterJoy7 from "../../assets/projects/sweeter-joy7.png";
 import "../../styles/home/projects.css";
+
+const featuredProjects = [
+  {
+    id: "sweeterjoy",
+    name: "Sweeter Joy",
+    category: "E-Commerce",
+    subhead: "Artisan confectionery & automated checkout",
+    image: sweeterJoy,
+  },
+  {
+    id: "orbitpay",
+    name: "OrbitPay",
+    category: "Fintech & Billing",
+    subhead: "Multi-vendor checkout & revenue analytics",
+    image: sweeterJoy3,
+  },
+  {
+    id: "pulseboard",
+    name: "Pulseboard",
+    category: "SaaS Analytics",
+    subhead: "Real-time user telemetry & alerting",
+    image: sweeterJoy5,
+  },
+  {
+    id: "wanderly",
+    name: "Wanderly",
+    category: "Mobile & Travel",
+    subhead: "Collaborative trip planner & offline maps",
+    image: sweeterJoy2,
+  },
+  {
+    id: "ledgerlite",
+    name: "LedgerLite",
+    category: "Productivity",
+    subhead: "Minimal bookkeeping for high-growth agencies",
+    image: sweeterJoy7,
+  },
+  {
+    id: "artisan-studio",
+    name: "Artisan Studio",
+    category: "Brand & Creative",
+    subhead: "Visual portfolio & client intake portal",
+    image: sweeterJoy1,
+  }
+];
 
 export default function ProjectsSection() {
   return (
-    <>
-      <section className="section section--space projects-showcase">
-        <div className="container projects-showcase__intro">
-          <div className="projects-showcase__stat">
-            <span className="projects-showcase__stat-number">40+</span>
-          </div>
-          <h2 className="projects-showcase__title">
-            Real-World Projects Built by Aspiring Developers
-          </h2>
-          <p>
-            From final-year submissions to portfolio-ready builds — practical,
-            industry-style projects crafted to help students learn by doing.
-          </p>
-        </div>
+    <section className="section projects-section">
+      <div className="container">
+        <SectionHeading
+          eyebrow="Featured Work"
+          title="Digital products engineered for scale"
+          description="From high-conversion e-commerce platforms to real-time analytics and custom mobile apps — explore our recent client builds."
+        />
+      </div>
 
-        <div className="projects-marquee">
-          <div className="projects-marquee__track">
-            {[...projects, ...projects].map((p, i) => (
-              <div className="browser-card" key={`${p.id}-${i}`}>
-                <div className="browser-card__bar">
-                  <span className="browser-card__dot browser-card__dot--red" />
-                  <span className="browser-card__dot browser-card__dot--yellow" />
-                  <span className="browser-card__dot browser-card__dot--green" />
-                  <span className="browser-card__badges">
-                    <span className={`browser-card__badge browser-card__badge--${i % 2 === 0 ? "a" : "b"}`}>
-                      {i % 2 === 0 ? "Popular" : "Trending"}
-                    </span>
-                    <span className="browser-card__badge browser-card__badge--c">New</span>
-                  </span>
-                </div>
-                <div className="browser-card__image">
-  <img src={p.image} alt={p.name} loading="lazy" />
-  <div className="browser-card__hover">
-    <button
-      type="button"
-      className={`browser-card__page-btn ${
-        (p.pageType ?? (i % 2 === 0 ? "one" : "multi")) === "one"
-          ? "browser-card__page-btn--active"
-          : ""
-      }`}
-    >
-      One Page
-    </button>
-    <button
-      type="button"
-      className={`browser-card__page-btn ${
-        (p.pageType ?? (i % 2 === 0 ? "one" : "multi")) === "multi"
-          ? "browser-card__page-btn--active"
-          : ""
-      }`}
-    >
-      Multi Page
-    </button>
-  </div>
-</div>
+      {/* Infinite Smooth Marquee */}
+      <div className="projects-marquee">
+        <div className="projects-marquee__track">
+          {[...featuredProjects, ...featuredProjects].map((p, i) => (
+            <Link
+              to="/projects"
+              className="project-card"
+              key={`${p.id}-${i}`}
+              data-cursor-label="View"
+            >
+              <div className="project-card__preview">
+                <img src={p.image} alt={p.name} loading="lazy" />
+                <span className="project-card__category">{p.category}</span>
               </div>
-            ))}
-          </div>
+
+              <div className="project-card__info">
+                <div className="project-card__meta">
+                  <h3 className="project-card__name">{p.name}</h3>
+                  <span className="project-card__subhead">{p.subhead}</span>
+                </div>
+                <div className="project-card__arrow">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
+      </div>
 
-       <div className="container">
-  <Link to="/projects" className="btn btn--outline home__more-link">
-    See all projects <ArrowUpRight size={16} />
-  </Link>
-
- <div className="demos-soon">
-    <span className="demos-soon__pill-wrap">
-      <span className="demos-soon__pill">More Demos Coming Soon</span>
-    </span>
-    <p className="demos-soon__sub">
-      New demos are added regularly to meet the latest SaaS trends.
-    </p>
-  </div>
-</div>
-      </section>
-
-    </>
+      <div className="container">
+        {/* Centered Minimalist CTA */}
+        <div className="projects-cta-wrap">
+          <Link to="/projects" className="projects-more-btn">
+            <span>Explore All Projects</span>
+            <ArrowUpRight size={15} />
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }

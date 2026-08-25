@@ -7,6 +7,8 @@ import {
   X,
   Pencil,
   Trash2,
+  CalendarDays,
+  ExternalLink,
 } from "lucide-react";
 
 import SectionHeading from "../components/SectionHeading";
@@ -20,10 +22,17 @@ import "../styles/admin-dashboard.css";
 const API = siteConfig.apiBaseUrl;
 
 async function apiFetch(url, options = {}) {
+  console.log("API REQUEST:", {
+    url,
+    method: options.method || "GET",
+  });
+
   const res = await fetch(`${API}${url}`, {
     credentials: "include",
     ...options,
   });
+
+  console.log("API RESPONSE:", res.status, `${API}${url}`);
 
   const data = await res.json().catch(() => ({}));
 
@@ -39,6 +48,7 @@ const TABS = [
   { id: "homeStats", label: "Homepage Stats" },
   { id: "projects", label: "Student Project" },
   { id: "team", label: "Team" },
+  { id: "projectRequests", label: "Project Requests" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
   { id: "clients", label: "Clients" },
@@ -47,6 +57,9 @@ const TABS = [
   { id: "youtube", label: "YouTube" },
   { id: "ongoing", label: "Ongoing Projects" },
   { id: "why", label: "Why Phronix" },
+  { id: "powerhouse", label: "Powerhouse" },
+  { id: "about", label: "About Phronix" },
+  { id: "contact", label: "Contact" },
 ];
 
 export default function AdminDashboard() {
@@ -77,9 +90,8 @@ export default function AdminDashboard() {
           {TABS.map((t) => (
             <button
               key={t.id}
-              className={`admin-tabs__btn ${
-                tab === t.id ? "admin-tabs__btn--active" : ""
-              }`}
+              className={`admin-tabs__btn ${tab === t.id ? "admin-tabs__btn--active" : ""
+                }`}
               onClick={() => setTab(t.id)}
             >
               {t.label}
@@ -91,6 +103,7 @@ export default function AdminDashboard() {
         {tab === "homeStats" && <HomeStatsPanel />}
         {tab === "projects" && <ProjectsPanel />}
         {tab === "team" && <TeamPanel />}
+        {tab === "projectRequests" && <ProjectRequestsPanel />}
         {tab === "services" && <ServicesPanel />}
         {tab === "testimonials" && <TestimonialsPanel />}
         {tab === "clients" && <ClientsPanel />}
@@ -99,6 +112,9 @@ export default function AdminDashboard() {
         {tab === "youtube" && <YoutubePanel />}
         {tab === "ongoing" && <OngoingPanel />}
         {tab === "why" && <WhyPanel />}
+        {tab === "powerhouse" && <PowerhousePanel />}
+        {tab === "about" && <AboutPanel />}
+        {tab === "contact" && <ContactPanel />}
       </div>
     </div>
   );
@@ -115,7 +131,7 @@ function LogoPanel() {
   useEffect(() => {
     apiFetch("/settings")
       .then((d) => setSettings(d.settings))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   function onPick(e) {
@@ -330,17 +346,17 @@ function ProjectsPanel() {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState("");
 
- function load() {
-  apiFetch("/projects")
-    .then((d) => {
-      setItems(d.projects || []);
-      setStatus("");
-    })
-    .catch((err) => {
-      console.error("Projects load error:", err);
-      setStatus(err.message);
-    });
-}
+  function load() {
+    apiFetch("/projects")
+      .then((d) => {
+        setItems(d.projects || []);
+        setStatus("");
+      })
+      .catch((err) => {
+        console.error("Projects load error:", err);
+        setStatus(err.message);
+      });
+  }
 
   useEffect(load, []);
 
@@ -604,12 +620,11 @@ function ProjectsPanel() {
             <img
               src={
                 p.image?.startsWith("http") ||
-                p.image?.startsWith("/uploads")
-                  ? `${API.replace(/\/api$/, "")}${
-                      p.image.startsWith("/uploads")
-                        ? p.image
-                        : ""
-                    }` || p.image
+                  p.image?.startsWith("/uploads")
+                  ? `${API.replace(/\/api$/, "")}${p.image.startsWith("/uploads")
+                    ? p.image
+                    : ""
+                  }` || p.image
                   : p.image
               }
               alt=""
@@ -684,7 +699,7 @@ function TeamPanel() {
   function load() {
     apiFetch("/team")
       .then((d) => setItems(d.team))
-      .catch(() => {});
+      .catch(() => { });
   }
 
   useEffect(load, []);
