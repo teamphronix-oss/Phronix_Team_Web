@@ -16,10 +16,9 @@ export default function TestimonialCard({ testimonial }) {
         <img src={testimonial.logo} alt={`${testimonial.company} logo`} loading="lazy" />
         <div>
           <strong>{testimonial.clientName}</strong>
-          <span>{testimonial.designation ? `${testimonial.designation}, ` : ""}{testimonial.company}</span>
+          <span>{testimonial.company}{testimonial.designation ? ` · ${testimonial.designation}` : ""}</span>
         </div>
       </div>
-      <p className="testimonial-card__project">Project: {testimonial.projectCompleted}</p>
     </div>
   );
 }
