@@ -41,6 +41,7 @@ const TABS = [
   { id: "team", label: "Team" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
+  { id: "clients", label: "Clients" },
   { id: "careers", label: "Careers" },
   { id: "downloads", label: "Client Project" },
   { id: "youtube", label: "YouTube" },
@@ -92,6 +93,7 @@ export default function AdminDashboard() {
         {tab === "team" && <TeamPanel />}
         {tab === "services" && <ServicesPanel />}
         {tab === "testimonials" && <TestimonialsPanel />}
+        {tab === "clients" && <ClientsPanel />}
         {tab === "careers" && <CareersPanel />}
         {tab === "downloads" && <DownloadsPanel />}
         {tab === "youtube" && <YoutubePanel />}
@@ -1206,42 +1208,216 @@ function ServicesPanel() {
 
 // ── Testimonials ─────────────────────────────────────────────────
 
+// ── Testimonials ─────────────────────────────────────────────────
+// Pehle GenericPanel (JSON-only) use ho raha tha, isliye:
+//   1) Logo file upload nahi ho sakta tha (sirf text URL field tha)
+//   2) Field names table se match nahi karte the (clientName vs name, etc.)
+// Ab ClientsPanel jaisa hi custom component hai — FormData + file upload.
+
 const emptyTestimonial = {
-  clientName: "",
-  company: "",
-  logo: "",
-  projectCompleted: "",
+  name: "",
+  company_name: "",
   designation: "",
   rating: 5,
-  feedback: "",
+  message: "",
+  is_visible: true,
   order: 0,
 };
 
 function TestimonialsPanel() {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyTestimonial);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch("/testimonials")
+      .then((d) => setItems(d.testimonials || []))
+      .catch((err) => {
+        console.error("Testimonials load error:", err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function startNew() {
+    setForm(emptyTestimonial);
+    setFile(null);
+    setEditing("new");
+  }
+
+  function startEdit(t) {
+    setForm({
+      name: t.name || "",
+      company_name: t.company_name || "",
+      designation: t.designation || "",
+      rating: t.rating || 5,
+      message: t.message || "",
+      is_visible: t.is_visible,
+      order: t.order,
+    });
+    setFile(null);
+    setEditing(t.id);
+  }
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("photo", file);
+
+      if (editing === "new") {
+        await apiFetch("/testimonials", { method: "POST", body });
+      } else {
+        await apiFetch(`/testimonials/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this testimonial?")) return;
+    try {
+      await apiFetch(`/testimonials/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   return (
-    <GenericPanel
-      basePath="/testimonials"
-      listKey="testimonials"
-      emptyItem={emptyTestimonial}
-      addLabel="Add testimonial"
-      emptyLabel="No testimonials yet."
-      formTitle="testimonial"
-      rowLabel={(t) => t.client_name}
-      rowSub={(t) => t.company || ""}
-      fields={[
-        { key: "clientName", label: "Client name", type: "text", required: true },
-        { key: "company", label: "Company", type: "text" },
-        { key: "logo", label: "Logo URL", type: "text" },
-        { key: "projectCompleted", label: "Project completed", type: "text" },
-        { key: "designation", label: "Designation", type: "text" },
-        { key: "rating", label: "Rating (1–5)", type: "number" },
-        { key: "feedback", label: "Feedback", type: "textarea" },
-        { key: "order", label: "Order", type: "number" },
-      ]}
-    />
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add testimonial
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New testimonial" : "Edit testimonial"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Client name</span>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Company</span>
+            <input
+              value={form.company_name}
+              onChange={(e) => setForm({ ...form, company_name: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Designation</span>
+            <input
+              value={form.designation}
+              onChange={(e) => setForm({ ...form, designation: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Rating (1–5)</span>
+            <input
+              type="number"
+              min="1"
+              max="5"
+              value={form.rating}
+              onChange={(e) => setForm({ ...form, rating: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Feedback</span>
+            <textarea
+              rows={3}
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field admin-field--row">
+            <input
+              type="checkbox"
+              checked={form.is_visible}
+              onChange={(e) => setForm({ ...form, is_visible: e.target.checked })}
+            />
+            <span>Visible on site</span>
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input
+              type="number"
+              value={form.order}
+              onChange={(e) => setForm({ ...form, order: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Logo</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+            />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((t) => (
+          <div className="admin-list__row" key={t.id}>
+            <div className="admin-list__info">
+              <strong>{t.name}</strong>
+              <span>
+                {t.company_name || ""}
+                {t.is_visible ? "" : " · Hidden"}
+              </span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(t)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(t.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No testimonials yet.</p>}
+      </div>
+    </div>
   );
 }
-
 // ── Careers ──────────────────────────────────────────────────────
 
 const emptyCareer = {
@@ -1544,5 +1720,1133 @@ function WhyFeaturesPanel() {
         { key: "order", label: "Order", type: "number" },
       ]}
     />
+  );
+}
+
+// ── Powerhouse ("Everything You Need, Built Right In") ─────────────
+
+function PowerhousePanel() {
+  return (
+    <div className="admin-panel">
+      <PowerhouseCardsPanel />
+      <PowerhouseTrioPanel />
+    </div>
+  );
+}
+
+// Form 1 — Box 1 (Fast Project Kickoffs) + Box 2 (Integrated Tech Stack)
+function PowerhouseCardsPanel() {
+  const [form, setForm] = useState({
+    card1Title: "Fast Project Kickoffs",
+    card1Description:
+      "Save weeks of setup. We spin up a production-ready boilerplate so your idea starts shipping from day one.",
+    card2Title: "Integrated Tech Stack",
+    card2Description:
+      "Every tool you need — no extra cost, no hassle. Battle-tested integrations, ready out of the box.",
+    stackItems: "PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm((f) => ({
+          card1Title: d.settings?.powerhouseCard1Title || f.card1Title,
+          card1Description: d.settings?.powerhouseCard1Description || f.card1Description,
+          card2Title: d.settings?.powerhouseCard2Title || f.card2Title,
+          card2Description: d.settings?.powerhouseCard2Description || f.card2Description,
+          stackItems: d.settings?.powerhouseStackItems || f.stackItems,
+        }));
+      })
+      .catch(() => { })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+    try {
+      await apiFetch("/settings/powerhouse-cards", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) return <p className="admin-panel__status">Loading…</p>;
+
+  return (
+    <div className="card admin-panel">
+      <h3>Powerhouse — Box 1 &amp; Box 2</h3>
+      {status && <p className="admin-panel__status">{status}</p>}
+
+      <label className="admin-field">
+        <span>Box 1 title (Fast Project Kickoffs)</span>
+        <input value={form.card1Title} onChange={(e) => setForm({ ...form, card1Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 1 description</span>
+        <textarea rows={2} value={form.card1Description} onChange={(e) => setForm({ ...form, card1Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 2 title (Integrated Tech Stack)</span>
+        <input value={form.card2Title} onChange={(e) => setForm({ ...form, card2Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 2 description</span>
+        <textarea rows={2} value={form.card2Description} onChange={(e) => setForm({ ...form, card2Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 2 tech stack items (comma separated)</span>
+        <input value={form.stackItems} onChange={(e) => setForm({ ...form, stackItems: e.target.value })} placeholder="PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native" />
+      </label>
+
+      <button className="btn btn--gold btn--sm" onClick={save}>
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+// Form 2 — Box 3 (Pick Your Stack), Box 4 (Structured Page Builder), Box 5 (SEO-Ready & Blazing Fast)
+function PowerhouseTrioPanel() {
+  const [form, setForm] = useState({
+    box3Title: "Pick Your Stack",
+    box3Description: "Choose the frameworks and integrations that fit your product — nothing forced, nothing locked in.",
+    box4Title: "Structured Page Builder",
+    box4Description: "Every page follows a clean header–content–footer architecture, easy to extend as you grow.",
+    box5Title: "SEO-Ready & Blazing Fast",
+    box5Description: "Built for speed and top scores on Core Web Vitals — no extra optimization work needed.",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm((f) => ({
+          box3Title: d.settings?.powerhouseBox3Title || f.box3Title,
+          box3Description: d.settings?.powerhouseBox3Description || f.box3Description,
+          box4Title: d.settings?.powerhouseBox4Title || f.box4Title,
+          box4Description: d.settings?.powerhouseBox4Description || f.box4Description,
+          box5Title: d.settings?.powerhouseBox5Title || f.box5Title,
+          box5Description: d.settings?.powerhouseBox5Description || f.box5Description,
+        }));
+      })
+      .catch(() => { })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+    try {
+      await apiFetch("/settings/powerhouse-trio", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) return <p className="admin-panel__status">Loading…</p>;
+
+  return (
+    <div className="card admin-panel">
+      <h3>Powerhouse — Box 3, 4 &amp; 5</h3>
+      {status && <p className="admin-panel__status">{status}</p>}
+
+      <label className="admin-field">
+        <span>Box 3 title (Pick Your Stack)</span>
+        <input value={form.box3Title} onChange={(e) => setForm({ ...form, box3Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 3 description</span>
+        <textarea rows={2} value={form.box3Description} onChange={(e) => setForm({ ...form, box3Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 4 title (Structured Page Builder)</span>
+        <input value={form.box4Title} onChange={(e) => setForm({ ...form, box4Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 4 description</span>
+        <textarea rows={2} value={form.box4Description} onChange={(e) => setForm({ ...form, box4Description: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 5 title (SEO-Ready &amp; Blazing Fast)</span>
+        <input value={form.box5Title} onChange={(e) => setForm({ ...form, box5Title: e.target.value })} />
+      </label>
+
+      <label className="admin-field">
+        <span>Box 5 description</span>
+        <textarea rows={2} value={form.box5Description} onChange={(e) => setForm({ ...form, box5Description: e.target.value })} />
+      </label>
+
+      <button className="btn btn--gold btn--sm" onClick={save}>
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+// ── Contact (Email, Phone, Address, GST Number) ─────────────────────
+
+function ContactPanel() {
+  const [form, setForm] = useState({
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    gstNumber: "",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm((f) => ({
+          email: d.settings?.email || f.email,
+          phone: d.settings?.phone || f.phone,
+          addressLine1: d.settings?.addressLine1 || f.addressLine1,
+          addressLine2: d.settings?.addressLine2 || f.addressLine2,
+          gstNumber: d.settings?.gstNumber || f.gstNumber,
+        }));
+      })
+      .catch(() => {
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      await apiFetch("/settings/contact", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) {
+    return <p className="admin-panel__status">Loading…</p>;
+  }
+
+  return (
+    <div className="card admin-panel">
+      <h3>Contact details</h3>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      <label className="admin-field">
+        <span>Email</span>
+
+        <input
+          type="email"
+          value={form.email}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              email: e.target.value,
+            })
+          }
+          placeholder="hello@phronix.io"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Phone number</span>
+
+        <input
+          value={form.phone}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              phone: e.target.value,
+            })
+          }
+          placeholder="+91 90000 00000"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Address — line 1</span>
+
+        <input
+          value={form.addressLine1}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              addressLine1: e.target.value,
+            })
+          }
+          placeholder="4th Floor, Prism Business Park"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Address — line 2</span>
+
+        <input
+          value={form.addressLine2}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              addressLine2: e.target.value,
+            })
+          }
+          placeholder="College Road, Nashik, Maharashtra 422005"
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>GST Number</span>
+
+        <input
+          value={form.gstNumber}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              gstNumber: e.target.value,
+            })
+          }
+          placeholder="27ABCDE1234F1Z5"
+        />
+      </label>
+
+      <button
+        className="btn btn--gold btn--sm"
+        onClick={save}
+      >
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+
+// ── About Phronix (heading + description + 3 point cards) ───────────
+
+function AboutPanel() {
+  return (
+    <div className="admin-panel">
+      <AboutIntroPanel />
+      <AboutPointsPanel />
+    </div>
+  );
+}
+
+function AboutIntroPanel() {
+  const [form, setForm] = useState({
+    title: "A small studio, deliberately.",
+    description:
+      "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+  });
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    apiFetch("/settings")
+      .then((d) => {
+        setForm({
+          title: d.settings?.aboutTitle || "A small studio, deliberately.",
+          description:
+            d.settings?.aboutDescription ||
+            "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+        });
+      })
+      .catch(() => {
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      await apiFetch("/settings/about-intro", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      setStatus("Saved.");
+    } catch (err) {
+      setStatus(err.message || "Backend not connected yet.");
+    }
+  }
+
+  if (loading) {
+    return <p className="admin-panel__status">Loading…</p>;
+  }
+
+  return (
+    <div className="card admin-panel">
+      <h3>"About Phronix" — heading &amp; intro</h3>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      <label className="admin-field">
+        <span>Title</span>
+
+        <input
+          value={form.title}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              title: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <label className="admin-field">
+        <span>Description</span>
+
+        <textarea
+          rows={3}
+          value={form.description}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              description: e.target.value,
+            })
+          }
+        />
+      </label>
+
+      <button
+        className="btn btn--gold btn--sm"
+        onClick={save}
+      >
+        <Upload size={16} />
+        Save
+      </button>
+    </div>
+  );
+}
+
+const emptyAboutPoint = {
+  eyebrow: "",
+  title: "",
+  description: "",
+  order: 0,
+};
+
+function AboutPointsPanel() {
+  return (
+    <GenericPanel
+      basePath="/about-points"
+      listKey="points"
+      emptyItem={emptyAboutPoint}
+      addLabel="Add point"
+      emptyLabel="No points yet."
+      formTitle="point"
+      rowLabel={(p) => p.title}
+      rowSub={(p) => p.eyebrow || ""}
+      fields={[
+        { key: "eyebrow", label: "Label (e.g. PHX / 01)", type: "text" },
+        { key: "title", label: "Title", type: "text", required: true },
+        { key: "description", label: "Description", type: "textarea", required: true },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
+  );
+}
+
+// ── Project Requests ─────────────────────────────────────────────
+function ProjectRequestsPanel() {
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+  const [managingId, setManagingId] = useState(null);
+  const [savingId, setSavingId] = useState(null);
+
+  async function load() {
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const data = await apiFetch("/project-requests");
+      setRequests(data.requests || []);
+    } catch (err) {
+      console.error("Project requests load error:", err);
+      setStatus(err.message || "Failed to load project requests.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  function formatDate(date) {
+    if (!date) return "—";
+
+    const parsed = new Date(date);
+
+    if (Number.isNaN(parsed.getTime())) {
+      return date;
+    }
+
+    return parsed.toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  function getMeetingState(request) {
+  // Manual/final statuses always take priority.
+  if (request.status === "completed") {
+    return {
+      label: "Completed",
+      className: "completed",
+    };
+  }
+
+  if (request.status === "client_no_show") {
+    return {
+      label: "Client No-Show",
+      className: "no-show",
+    };
+  }
+
+  if (request.status === "admin_no_show") {
+    return {
+      label: "Admin No-Show",
+      className: "no-show",
+    };
+  }
+
+  if (request.status === "cancelled") {
+    return {
+      label: "Cancelled",
+      className: "cancelled",
+    };
+  }
+
+  // No scheduled date/time.
+  if (!request.selected_date || !request.selected_time) {
+    return {
+      label: "Needs Scheduling",
+      className: "pending",
+    };
+  }
+
+  // Convert "10:00 AM" / "2:30 PM" into 24-hour time.
+  const match = request.selected_time.match(
+    /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i
+  );
+
+  if (!match) {
+    return {
+      label: "Scheduled",
+      className: "upcoming",
+    };
+  }
+
+  let hour = Number(match[1]);
+  const minute = match[2];
+  const period = match[3].toUpperCase();
+
+  if (period === "PM" && hour !== 12) {
+    hour += 12;
+  }
+
+  if (period === "AM" && hour === 12) {
+    hour = 0;
+  }
+
+  // Google Calendar is using Asia/Kolkata.
+  const meetingDate = new Date(
+    `${request.selected_date}T${String(hour).padStart(2, "0")}:${minute}:00+05:30`
+  );
+
+  if (Number.isNaN(meetingDate.getTime())) {
+    return {
+      label: "Scheduled",
+      className: "upcoming",
+    };
+  }
+
+  const now = new Date();
+
+  // Meeting duration is 30 minutes.
+  const meetingEnd = new Date(
+    meetingDate.getTime() + 30 * 60 * 1000
+  );
+
+  // Currently happening.
+  if (now >= meetingDate && now < meetingEnd) {
+    return {
+      label: "Live Now",
+      className: "live",
+    };
+  }
+
+  // Meeting time has passed but admin hasn't marked
+  // the outcome yet.
+  if (now >= meetingEnd) {
+    return {
+      label: "Past — Needs Review",
+      className: "past",
+    };
+  }
+
+  // Starts within the next 30 minutes.
+  const minutesUntil =
+    (meetingDate.getTime() - now.getTime()) / (60 * 1000);
+
+  if (minutesUntil <= 30) {
+    return {
+      label: "Starting Soon",
+      className: "soon",
+    };
+  }
+
+  return {
+    label: "Upcoming",
+    className: "upcoming",
+  };
+}
+
+  async function updateStatus(id, newStatus) {
+    setSavingId(id);
+    setStatus("");
+
+    try {
+      await apiFetch(`/project-requests/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: newStatus,
+        }),
+      });
+
+      setManagingId(null);
+
+      await load();
+    } catch (err) {
+      setStatus(err.message || "Failed to update request.");
+    } finally {
+      setSavingId(null);
+    }
+  }
+
+  async function rescheduleRequest(id, selectedDate, selectedTime) {
+    console.log("RESCHEDULE CLICKED:", {
+  id,
+  selectedDate,
+  selectedTime,
+});
+  if (!selectedDate || !selectedTime) {
+    setStatus("Please select a date and time.");
+    return;
+  }
+
+  setSavingId(id);
+  setStatus("");
+
+  try {
+    await apiFetch(`/project-requests/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        selectedDate,
+        selectedTime,
+        status: "scheduled",
+      }),
+    });
+
+    setManagingId(null);
+
+    await load();
+
+    setStatus("Meeting successfully rescheduled.");
+  } catch (err) {
+    setStatus(
+      err.message || "Failed to reschedule meeting."
+    );
+  } finally {
+    setSavingId(null);
+  }
+}
+
+  return (
+    <div className="admin-panel">
+
+      <div className="admin-panel__toolbar">
+        <div>
+          <h3>Project Requests</h3>
+
+          <p className="admin-panel__status">
+            Discovery calls and project enquiries submitted
+            through the website.
+          </p>
+        </div>
+
+        <button
+          className="btn btn--outline btn--sm"
+          onClick={load}
+          disabled={loading}
+        >
+          <CalendarDays size={16} />
+
+          {loading ? "Loading…" : "Refresh"}
+        </button>
+      </div>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      {loading && !requests.length ? (
+        <p className="admin-panel__status">
+          Loading project requests…
+        </p>
+      ) : (
+        <div className="admin-list">
+
+          {requests.map((request) => {
+            const meetingState = getMeetingState(request);
+
+            return (
+              <div
+                className="admin-list__row"
+                key={request.id}
+              >
+
+                <div className="admin-list__info">
+
+                  <strong>
+                    {request.name}
+                  </strong>
+
+                  <span>
+                    {request.company_name || "No company"} ·{" "}
+                    {request.project_type || "Project enquiry"}
+                  </span>
+
+                  <span>
+                    {request.email}
+                    {request.role
+                      ? ` · ${request.role}`
+                      : ""}
+                  </span>
+
+                  <span>
+                    {request.venture_stage
+                      ? `${request.venture_stage} · `
+                      : ""}
+
+                    {formatDate(request.selected_date)}
+
+                    {request.selected_time
+                      ? ` · ${request.selected_time}`
+                      : ""}
+                  </span>
+
+                  <span>
+                    Status:{" "}
+                    <strong>
+                      {request.status || "scheduled"}
+                    </strong>
+                  </span>
+
+                </div>
+
+                <div className="admin-list__actions">
+
+                  <span
+                    className={`request-status request-status--${meetingState.className}`}
+                  >
+                    {meetingState.label}
+                  </span>
+
+                  {request.google_meet_url && (
+                    <a
+                      href={request.google_meet_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn--gold btn--sm"
+                    >
+                      <ExternalLink size={14} />
+                      Join Meet
+                    </a>
+                  )}
+
+                  <button
+                    className="btn btn--outline btn--sm"
+                    onClick={() =>
+                      setManagingId(
+                        managingId === request.id
+                          ? null
+                          : request.id
+                      )
+                    }
+                  >
+                    Manage
+                  </button>
+
+                </div>
+
+                {managingId === request.id && (
+                  <div className="request-management">
+
+                    <strong>
+                      Manage Meeting
+                    </strong>
+
+                    <div className="request-reschedule">
+                      <strong>Reschedule Meeting</strong>
+
+                      <div className="request-reschedule__fields">
+                        <label>
+                          Date
+                          <input
+                            type="date"
+                            value={request.selected_date || ""}
+                            onChange={(e) => {
+                              setRequests((current) =>
+                                current.map((item) =>
+                                  item.id === request.id
+                                    ? {
+                                      ...item,
+                                      selected_date: e.target.value,
+                                    }
+                                    : item
+                                )
+                              );
+                            }}
+                          />
+                        </label>
+
+                        <label>
+                          Time
+                          <input
+                            type="text"
+                            placeholder="10:00 AM"
+                            value={request.selected_time || ""}
+                            onChange={(e) => {
+                              setRequests((current) =>
+                                current.map((item) =>
+                                  item.id === request.id
+                                    ? {
+                                      ...item,
+                                      selected_time: e.target.value,
+                                    }
+                                    : item
+                                )
+                              );
+                            }}
+                          />
+                        </label>
+
+                        <button
+                          className="btn btn--gold btn--sm"
+                          disabled={savingId === request.id}
+                          onClick={() =>
+                            rescheduleRequest(
+                              request.id,
+                              request.selected_date,
+                              request.selected_time
+                            )
+                          }
+                        >
+                          {savingId === request.id
+                            ? "Rescheduling…"
+                            : "Reschedule"}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="request-management__actions">
+
+                      <button
+                        className="btn btn--outline btn--sm"
+                        disabled={savingId === request.id}
+                        onClick={() =>
+                          updateStatus(
+                            request.id,
+                            "completed"
+                          )
+                        }
+                      >
+                        ✓ Completed
+                      </button>
+
+                      <button
+                        className="btn btn--outline btn--sm"
+                        disabled={savingId === request.id}
+                        onClick={() =>
+                          updateStatus(
+                            request.id,
+                            "client_no_show"
+                          )
+                        }
+                      >
+                        Client No-Show
+                      </button>
+
+                      <button
+                        className="btn btn--outline btn--sm"
+                        disabled={savingId === request.id}
+                        onClick={() =>
+                          updateStatus(
+                            request.id,
+                            "admin_no_show"
+                          )
+                        }
+                      >
+                        Admin No-Show
+                      </button>
+
+                      <button
+                        className="btn btn--outline btn--sm"
+                        disabled={savingId === request.id}
+                        onClick={() =>
+                          updateStatus(
+                            request.id,
+                            "cancelled"
+                          )
+                        }
+                      >
+                        Cancelled
+                      </button>
+
+                    </div>
+
+                  </div>
+                )}
+
+              </div>
+            );
+          })}
+
+          {requests.length === 0 && (
+            <p className="admin-panel__status">
+              No project requests yet.
+            </p>
+          )}
+
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+function convertTimeTo24Hour(time) {
+  if (!time) return "";
+
+  const match = time.match(
+    /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i
+  );
+
+  if (!match) return time;
+
+  let hour = Number(match[1]);
+  const minute = match[2];
+  const period = match[3].toUpperCase();
+
+  if (period === "PM" && hour !== 12) {
+    hour += 12;
+  }
+
+  if (period === "AM" && hour === 12) {
+    hour = 0;
+  }
+
+  return `${String(hour).padStart(2, "0")}:${minute}`;
+}
+
+// ── Clients ──────────────────────────────────────────────────────
+
+const emptyClient = {
+  name: "",
+  website_url: "",
+  description: "",
+  is_visible: true,
+  order: 0,
+};
+function ClientsPanel() {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyClient);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+  function load() {
+    apiFetch("/clients")
+      .then((d) => setItems(d.clients || []))
+      .catch((err) => {
+        console.error("Clients load error:", err);
+        setStatus(err.message);
+      });
+  }
+  useEffect(load, []);
+  function startNew() {
+    setForm(emptyClient);
+    setFile(null);
+    setEditing("new");
+  }
+function startEdit(c) {
+    setForm({
+      name: c.name,
+      website_url: c.website_url || "",
+      description: c.description || "",
+      is_visible: c.is_visible,
+      order: c.order,
+    });
+    setFile(null);
+    setEditing(c.id);
+  }
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("logo", file);
+
+      if (editing === "new") {
+        await apiFetch("/clients", { method: "POST", body });
+      } else {
+        await apiFetch(`/clients/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this client?")) return;
+    try {
+      await apiFetch(`/clients/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add client
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New client" : "Edit client"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Name</span>
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          </label>
+
+          <label className="admin-field">
+            <span>Website URL</span>
+            <input value={form.website_url} onChange={(e) => setForm({ ...form, website_url: e.target.value })} />
+          </label>
+
+          <label className="admin-field">
+            <span>Description</span>
+            <textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          </label>
+
+          <label className="admin-field admin-field--row">
+            <input type="checkbox" checked={form.is_visible} onChange={(e) => setForm({ ...form, is_visible: e.target.checked })} />
+            <span>Visible on site</span>
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: e.target.value })} />
+          </label>
+
+          <label className="admin-field">
+            <span>Logo</span>
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((c) => (
+          <div className="admin-list__row" key={c.id}>
+            <div className="admin-list__info">
+              <strong>{c.name}</strong>
+              <span>{c.website_url || ""}{c.is_visible ? "" : " · Hidden"}</span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(c)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(c.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No clients yet.</p>}
+      </div>
+    </div>
   );
 }
