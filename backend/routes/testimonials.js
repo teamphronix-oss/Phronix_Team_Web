@@ -15,7 +15,7 @@ export default makeContentRouter({
   singleKey: "testimonial",
   arrayFields: [],
   imageFields: [
-    { formField: "clientPhoto", urlField: "client_photo_url", publicIdField: "client_photo_public_id", folder: "testimonials/clients" },
-    { formField: "companyLogo", urlField: "company_logo_url", publicIdField: "company_logo_public_id", folder: "testimonials/companies" },
+    { formField: "photo", urlField: "photo_url", publicIdField: "cloudinary_public_id", folder: "testimonials" },
   ],
+  publishColumn: "is_visible",
 });

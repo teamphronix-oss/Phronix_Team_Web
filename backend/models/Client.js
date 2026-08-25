@@ -1,6 +1,6 @@
 import { makeModel } from "./contentModel.js";
 
-const model = makeModel("clients");
+const model = makeModel("clients", { publishColumn: "is_visible" });
 
 export const listClients = (opts) => model.list(opts);
 export const getClientById = (id) => model.getById(id);

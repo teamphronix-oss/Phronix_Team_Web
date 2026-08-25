@@ -21,6 +21,7 @@ export function makeContentRouter({
   arrayFields = [],
   imageFields = [],
   hasPublish = true,
+  publishColumn = "is_published",
 }) {
   const router = Router();
   const multerFields = imageFields.map((f) => ({ name: f.formField, maxCount: 1 }));
@@ -37,8 +38,8 @@ export function makeContentRouter({
     }
     if (row.order !== undefined) row.order = Number(row.order) || 0;
     if (row.rating !== undefined) row.rating = Number(row.rating) || undefined;
-    if (hasPublish && row.is_published !== undefined) {
-      row.is_published = row.is_published === "true" || row.is_published === true;
+    if (hasPublish && row[publishColumn] !== undefined) {
+      row[publishColumn] = row[publishColumn] === "true" || row[publishColumn] === true;
     }
     // Never let the client set the Cloudinary public_id columns directly —
     // those are only ever set by the upload branch below.

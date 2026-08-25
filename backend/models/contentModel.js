@@ -6,7 +6,7 @@ import { supabase } from "../config/supabase.js";
 // created_at/updated_at, so the query logic doesn't need repeating per file.
 // Resource-specific field handling (arrays, image fields) lives in the route
 // layer, not here — this module only talks to Supabase.
-export function makeModel(table, { orderColumn = "order", hasPublish = true } = {}) {
+export function makeModel(table, { orderColumn = "order", hasPublish = true, publishColumn = "is_published" } = {}) {
   return {
     async list({ onlyPublished = false } = {}) {
       let query = supabase
@@ -14,7 +14,7 @@ export function makeModel(table, { orderColumn = "order", hasPublish = true } = 
         .select("*")
         .order(orderColumn, { ascending: true })
         .order("created_at", { ascending: false });
-      if (hasPublish && onlyPublished) query = query.eq("is_published", true);
+      if (hasPublish && onlyPublished) query = query.eq(publishColumn, true);
       const { data, error } = await query;
       if (error) throw error;
       return data;
