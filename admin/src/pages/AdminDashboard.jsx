@@ -51,6 +51,7 @@ const TABS = [
   { id: "projectRequests", label: "Project Requests" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
+  { id: "clients", label: "Clients" },
   { id: "careers", label: "Careers" },
   { id: "downloads", label: "Client Project" },
   { id: "youtube", label: "YouTube" },
@@ -105,6 +106,7 @@ export default function AdminDashboard() {
         {tab === "projectRequests" && <ProjectRequestsPanel />}
         {tab === "services" && <ServicesPanel />}
         {tab === "testimonials" && <TestimonialsPanel />}
+        {tab === "clients" && <ClientsPanel />}
         {tab === "careers" && <CareersPanel />}
         {tab === "downloads" && <DownloadsPanel />}
         {tab === "youtube" && <YoutubePanel />}
@@ -1221,42 +1223,216 @@ function ServicesPanel() {
 
 // ── Testimonials ─────────────────────────────────────────────────
 
+// ── Testimonials ─────────────────────────────────────────────────
+// Pehle GenericPanel (JSON-only) use ho raha tha, isliye:
+//   1) Logo file upload nahi ho sakta tha (sirf text URL field tha)
+//   2) Field names table se match nahi karte the (clientName vs name, etc.)
+// Ab ClientsPanel jaisa hi custom component hai — FormData + file upload.
+
 const emptyTestimonial = {
-  clientName: "",
-  company: "",
-  logo: "",
-  projectCompleted: "",
+  name: "",
+  company_name: "",
   designation: "",
   rating: 5,
-  feedback: "",
+  message: "",
+  is_visible: true,
   order: 0,
 };
 
 function TestimonialsPanel() {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyTestimonial);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch("/testimonials")
+      .then((d) => setItems(d.testimonials || []))
+      .catch((err) => {
+        console.error("Testimonials load error:", err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function startNew() {
+    setForm(emptyTestimonial);
+    setFile(null);
+    setEditing("new");
+  }
+
+  function startEdit(t) {
+    setForm({
+      name: t.name || "",
+      company_name: t.company_name || "",
+      designation: t.designation || "",
+      rating: t.rating || 5,
+      message: t.message || "",
+      is_visible: t.is_visible,
+      order: t.order,
+    });
+    setFile(null);
+    setEditing(t.id);
+  }
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("photo", file);
+
+      if (editing === "new") {
+        await apiFetch("/testimonials", { method: "POST", body });
+      } else {
+        await apiFetch(`/testimonials/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this testimonial?")) return;
+    try {
+      await apiFetch(`/testimonials/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   return (
-    <GenericPanel
-      basePath="/testimonials"
-      listKey="testimonials"
-      emptyItem={emptyTestimonial}
-      addLabel="Add testimonial"
-      emptyLabel="No testimonials yet."
-      formTitle="testimonial"
-      rowLabel={(t) => t.client_name}
-      rowSub={(t) => t.company || ""}
-      fields={[
-        { key: "clientName", label: "Client name", type: "text", required: true },
-        { key: "company", label: "Company", type: "text" },
-        { key: "logo", label: "Logo URL", type: "text" },
-        { key: "projectCompleted", label: "Project completed", type: "text" },
-        { key: "designation", label: "Designation", type: "text" },
-        { key: "rating", label: "Rating (1–5)", type: "number" },
-        { key: "feedback", label: "Feedback", type: "textarea" },
-        { key: "order", label: "Order", type: "number" },
-      ]}
-    />
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add testimonial
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New testimonial" : "Edit testimonial"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Client name</span>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Company</span>
+            <input
+              value={form.company_name}
+              onChange={(e) => setForm({ ...form, company_name: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Designation</span>
+            <input
+              value={form.designation}
+              onChange={(e) => setForm({ ...form, designation: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Rating (1–5)</span>
+            <input
+              type="number"
+              min="1"
+              max="5"
+              value={form.rating}
+              onChange={(e) => setForm({ ...form, rating: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Feedback</span>
+            <textarea
+              rows={3}
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field admin-field--row">
+            <input
+              type="checkbox"
+              checked={form.is_visible}
+              onChange={(e) => setForm({ ...form, is_visible: e.target.checked })}
+            />
+            <span>Visible on site</span>
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input
+              type="number"
+              value={form.order}
+              onChange={(e) => setForm({ ...form, order: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Logo</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+            />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((t) => (
+          <div className="admin-list__row" key={t.id}>
+            <div className="admin-list__info">
+              <strong>{t.name}</strong>
+              <span>
+                {t.company_name || ""}
+                {t.is_visible ? "" : " · Hidden"}
+              </span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(t)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(t.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No testimonials yet.</p>}
+      </div>
+    </div>
   );
 }
-
 // ── Careers ──────────────────────────────────────────────────────
 
 const emptyCareer = {
@@ -2543,4 +2719,155 @@ function convertTimeTo24Hour(time) {
   }
 
   return `${String(hour).padStart(2, "0")}:${minute}`;
+}
+
+// ── Clients ──────────────────────────────────────────────────────
+
+const emptyClient = {
+  name: "",
+  website_url: "",
+  description: "",
+  is_visible: true,
+  order: 0,
+};
+function ClientsPanel() {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyClient);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+  function load() {
+    apiFetch("/clients")
+      .then((d) => setItems(d.clients || []))
+      .catch((err) => {
+        console.error("Clients load error:", err);
+        setStatus(err.message);
+      });
+  }
+  useEffect(load, []);
+  function startNew() {
+    setForm(emptyClient);
+    setFile(null);
+    setEditing("new");
+  }
+function startEdit(c) {
+    setForm({
+      name: c.name,
+      website_url: c.website_url || "",
+      description: c.description || "",
+      is_visible: c.is_visible,
+      order: c.order,
+    });
+    setFile(null);
+    setEditing(c.id);
+  }
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("logo", file);
+
+      if (editing === "new") {
+        await apiFetch("/clients", { method: "POST", body });
+      } else {
+        await apiFetch(`/clients/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this client?")) return;
+    try {
+      await apiFetch(`/clients/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add client
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New client" : "Edit client"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Name</span>
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          </label>
+
+          <label className="admin-field">
+            <span>Website URL</span>
+            <input value={form.website_url} onChange={(e) => setForm({ ...form, website_url: e.target.value })} />
+          </label>
+
+          <label className="admin-field">
+            <span>Description</span>
+            <textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          </label>
+
+          <label className="admin-field admin-field--row">
+            <input type="checkbox" checked={form.is_visible} onChange={(e) => setForm({ ...form, is_visible: e.target.checked })} />
+            <span>Visible on site</span>
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: e.target.value })} />
+          </label>
+
+          <label className="admin-field">
+            <span>Logo</span>
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((c) => (
+          <div className="admin-list__row" key={c.id}>
+            <div className="admin-list__info">
+              <strong>{c.name}</strong>
+              <span>{c.website_url || ""}{c.is_visible ? "" : " · Hidden"}</span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(c)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(c.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No clients yet.</p>}
+      </div>
+    </div>
+  );
 }
