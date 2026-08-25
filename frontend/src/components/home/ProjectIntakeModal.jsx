@@ -22,6 +22,26 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [meeting, setMeeting] = useState(null);
+
+  const resetForm = () => {
+    setStep(1);
+
+    setFormData({
+      name: "",
+      email: "",
+      role: "Founder",
+      companyName: "",
+      type: "AI & Agents",
+      stage: "Early Startup",
+      selectedDayIndex: 0,
+      selectedSlot: "03:30 PM",
+    });
+
+    setErrors({});
+    setIsSubmitting(false);
+  };
 
   // Dynamic next 5 business days
   const availableDays = useMemo(() => {
@@ -53,6 +73,7 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === "Escape" && isOpen) {
+        resetForm();
         onClose();
       }
     }
@@ -81,6 +102,7 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
       setErrors((prev) => ({ ...prev, [field]: null }));
     }
   };
+
 
   const handleNextStep1 = () => {
     const errs = {};
@@ -112,8 +134,54 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
     setStep(3);
   };
 
-  const handleConfirmSchedule = () => {
-    setStep(4);
+  const handleConfirmSchedule = async () => {
+    if (isSubmitting) return;
+
+    const activeDay = availableDays[formData.selectedDayIndex];
+
+    if (!activeDay) {
+      setErrors({ schedule: "Please select a valid date." });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrors({});
+
+    try {
+      const response = await fetch("http://localhost:5000/api/project-requests", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          role: formData.role,
+          companyName: formData.companyName.trim(),
+          projectType: formData.type,
+          ventureStage: formData.stage,
+          selectedDate: activeDay.dateStr,
+          selectedTime: formData.selectedSlot,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to submit your request.");
+      }
+
+      setMeeting(data.meeting);
+      setStep(4);
+    } catch (error) {
+      console.error("Project request submission failed:", error);
+
+      setErrors({
+        submit: error.message || "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -125,7 +193,10 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
     <div
       className={`intake-backdrop ${isOpen ? "is-open" : ""}`}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          resetForm();
+          onClose();
+        }
       }}
       aria-modal="true"
       role="dialog"
@@ -164,7 +235,10 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
           <button
             type="button"
             className="intake-modal__close"
-            onClick={onClose}
+            onClick={() => {
+              resetForm();
+              onClose();
+            }}
             aria-label="Close"
           >
             <X size={16} />
@@ -316,6 +390,11 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
                   ))}
                 </div>
               </div>
+              {errors.submit && (
+                <div className="intake-error-msg">
+                  {errors.submit}
+                </div>
+              )}
             </>
           )}
 
@@ -344,18 +423,56 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
               </div>
 
               <div style={{ display: "flex", gap: "8px", marginTop: "8px", flexWrap: "wrap", justifyContent: "center" }}>
-                <a
-                  href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=Phronix+Discovery+Call+with+${encodeURIComponent(formData.companyName || "Venture")}&details=30-min+Strategy+and+Scoping+Call&location=Google+Meet`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="intake-action-btn intake-action-btn--primary"
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "8px",
+                    marginTop: "8px",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                  }}
                 >
-                  <CalendarCheck size={15} /> Add to Google Calendar
-                </a>
+                  {meeting?.meetUrl && (
+                    <a
+                      href={meeting.meetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="intake-action-btn intake-action-btn--primary"
+                    >
+                      Join Google Meet
+                    </a>
+                  )}
+
+                  {meeting?.calendarUrl && (
+                    <a
+                      href={meeting.calendarUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="intake-action-btn intake-action-btn--ghost"
+                    >
+                      <CalendarCheck size={15} />
+                      View Calendar Event
+                    </a>
+                  )}
+
+                  <button
+                    type="button"
+                    className="intake-action-btn intake-action-btn--ghost"
+                    onClick={() => {
+                      resetForm();
+                      onClose();
+                    }}
+                  >
+                    Done
+                  </button>
+                </div>
                 <button
                   type="button"
                   className="intake-action-btn intake-action-btn--ghost"
-                  onClick={onClose}
+                  onClick={() => {
+                    resetForm();
+                    onClose();
+                  }}
                 >
                   Done
                 </button>
@@ -410,8 +527,15 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
                 type="button"
                 className="intake-action-btn intake-action-btn--primary"
                 onClick={handleConfirmSchedule}
+                disabled={isSubmitting}
               >
-                Confirm Call <Check size={14} />
+                {isSubmitting ? (
+                  "Submitting..."
+                ) : (
+                  <>
+                    Confirm Call <Check size={14} />
+                  </>
+                )}
               </button>
             )}
           </div>
