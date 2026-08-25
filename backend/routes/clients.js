@@ -15,6 +15,7 @@ export default makeContentRouter({
   singleKey: "client",
   arrayFields: [],
   imageFields: [
-    { formField: "logo", urlField: "logo_url", publicIdField: "logo_public_id", folder: "clients" },
+    { formField: "logo", urlField: "logo_url", publicIdField: "cloudinary_public_id", folder: "clients" },
   ],
+  publishColumn: "is_visible",
 });
