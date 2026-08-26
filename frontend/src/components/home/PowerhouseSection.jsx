@@ -1,106 +1,174 @@
-import { ArrowUpRight, Database, Cloud, Boxes, Server, Workflow, Smartphone, Type } from "lucide-react";
+import {
+  Bot,
+  Layers3,
+  Share2,
+  TrendingUp,
+  Palette,
+  BarChart3,
+  CircleCheck,
+} from "lucide-react";
+
 import SectionHeading from "../../components/SectionHeading";
 import "../../styles/home/powerhouse.css";
-import "../../styles/home/feature-trio.css";
 
 export default function PowerhouseSection() {
+  const features = [
+    {
+      icon: Bot,
+      title: "AI & Automation",
+      description:
+        "Intelligent systems that work so you can focus on growth.",
+      items: [
+        "AI Agents & Assistants",
+        "Workflow Automation",
+        "Chatbots & Voice AI",
+        "Internal Tools",
+      ],
+      className: "cyan",
+    },
+    {
+      icon: Layers3,
+      title: "Digital Products",
+      description:
+        "Powerful digital products built for performance and scale.",
+      items: [
+        "Websites & Web Apps",
+        "Landing Pages",
+        "Mobile Apps",
+        "Dashboards & Platforms",
+      ],
+      className: "blue",
+    },
+    {
+      icon: Share2,
+      title: "Social & Content",
+      description:
+        "Engage your audience with content that converts and builds trust.",
+      items: [
+        "Social Media Management",
+        "Content Strategy",
+        "Reels & Short-Form Content",
+        "Community Growth",
+      ],
+      className: "pink",
+    },
+    {
+      icon: TrendingUp,
+      title: "Marketing & Growth",
+      description:
+        "Data-driven marketing strategies that bring leads and scale revenue.",
+      items: [
+        "SEO & Visibility",
+        "Paid Campaigns",
+        "Lead Generation",
+        "Analytics & Optimization",
+      ],
+      className: "green",
+    },
+    {
+      icon: Palette,
+      title: "Brand & Creative",
+      description:
+        "Memorable brands and creative that make your business stand out.",
+      items: [
+        "Brand Identity",
+        "UI/UX Design",
+        "Creative & Motion",
+        "Pitch Decks & Presentations",
+      ],
+      className: "purple",
+    },
+    {
+      icon: BarChart3,
+      title: "Data & Intelligence",
+      description:
+        "Turn your data into valuable insights and smarter decisions.",
+      items: [
+        "Analytics & Reporting",
+        "Business Dashboards",
+        "Predictive Insights",
+        "Data Automation",
+      ],
+      className: "orange",
+    },
+  ];
+
   return (
-    <>
-      <section className="section section--space features-powerhouse">
-        <div className="container">
-          <SectionHeading
-            eyebrow="All-in-One Powerhouse"
-            title="Everything You Need, Built Right In"
-            description="From first commit to production infra — the whole stack comes ready, so you skip the setup and start shipping."
-          />
-          <div className="features-powerhouse__grid">
-            <div className="features-powerhouse__card">
-              <h3>Fast Project Kickoffs</h3>
-              <p>Save weeks of setup. We spin up a production-ready boilerplate so your idea starts shipping from day one.</p>
-              <div className="fp-mock">
-                <div className="fp-mock__bar"><span /><span /><span /></div>
-                <div className="fp-mock__body">
-                  <div className="fp-mock__thumb fp-mock__thumb--a">
-                    <span>Landing Page</span>
+    <section className="section section--space features-powerhouse">
+      <div className="container">
+
+        <SectionHeading
+          eyebrow="What We Do"
+         title={
+            <>
+              More Than Just Software.
+              <br />
+              We <span className="powerhouse-gradient">Build, Automate & Grow</span>
+              <br />
+              <span className="powerhouse-gradient">Digital Businesses.</span>
+            </>
+          }
+          description="From AI agents to social growth — everything you need to launch, scale and dominate online."
+        />
+
+        <div className="features-powerhouse__grid">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+
+            return (
+              <div
+                className={`features-powerhouse__card features-powerhouse__card--${feature.className}`}
+                key={index}
+              >
+                <div className="powerhouse-card__top">
+                  <div className="powerhouse-card__icon">
+                    <Icon size={30} strokeWidth={1.8} />
                   </div>
-                  <div className="fp-mock__thumb fp-mock__thumb--b">
-                    <span>Admin Dashboard</span>
+
+                  <div className="powerhouse-card__heading">
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
                   </div>
                 </div>
-                <span className="fp-mock__download" aria-hidden="true">
-                  <ArrowUpRight size={18} />
-                </span>
-              </div>
-            </div>
 
-            <div className="features-powerhouse__card">
-              <h3>Integrated Tech Stack</h3>
-              <p>Every tool you need — no extra cost, no hassle. Battle-tested integrations, ready out of the box.</p>
-              <div className="fp-stack-grid">
-                <div className="fp-stack-item"><Database size={22} /><span>PostgreSQL</span></div>
-                <div className="fp-stack-item"><Cloud size={22} /><span>AWS</span></div>
-                <div className="fp-stack-item"><Boxes size={22} /><span>Docker</span></div>
-                <div className="fp-stack-item"><Server size={22} /><span>Node.js</span></div>
-                <div className="fp-stack-item"><Workflow size={22} /><span>CI / CD</span></div>
-                <div className="fp-stack-item"><Smartphone size={22} /><span>React Native</span></div>
+                <div className="powerhouse-card__line" />
+
+                <div className="powerhouse-card__items">
+                  {feature.items.map((item, itemIndex) => (
+                    <div className="powerhouse-card__item" key={itemIndex}>
+                      <CircleCheck size={15} strokeWidth={2} />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            );
+          })}
+        </div>
+
+        <div className="powerhouse-stats">
+          <div className="powerhouse-stat">
+            <strong>50+</strong>
+            <span>Projects Delivered</span>
           </div>
 
-          {/* ── NEW: 3-box row (BrightHub-style) below the 2 cards ── */}
-          <div className="feature-trio__grid">
+          <div className="powerhouse-stat">
+            <strong>30+</strong>
+            <span>Happy Clients</span>
+          </div>
 
-            {/* Col 1 — Pick Your Stack */}
-            <div className="feature-trio__col">
-              <h3>Pick Your Stack</h3>
-              <p>Choose the frameworks and integrations that fit your product — nothing forced, nothing locked in.</p>
-              <div className="feature-trio__visual">
-                <div className="ft-font-mock">
-                  <span className="ft-font-mock__badge">
-                    <Type size={18} />
-                  </span>
-                  <div className="ft-font-mock__line ft-font-mock__line--sm">React · Next.js · Node</div>
-                  <div className="ft-font-mock__line ft-font-mock__line--md" style={{ marginTop: 10 }}>PostgreSQL · Supabase</div>
-                  <div className="ft-font-mock__line ft-font-mock__line--lg" style={{ marginTop: 10 }}>Your Stack, Your Rules</div>
-                </div>
-              </div>
-            </div>
+          <div className="powerhouse-stat">
+            <strong>98%</strong>
+            <span>Project Success</span>
+          </div>
 
-            {/* Col 2 — Structured Page Builder */}
-            <div className="feature-trio__col">
-              <h3>Structured Page Builder</h3>
-              <p>Every page follows a clean header–content–footer architecture, easy to extend as you grow.</p>
-              <div className="feature-trio__visual">
-                <div className="ft-builder-mock">
-                  <div className="ft-builder-mock__block ft-builder-mock__block--header">Header</div>
-                  <div className="ft-builder-mock__block ft-builder-mock__block--content">Content Block</div>
-                  <div className="ft-builder-mock__block ft-builder-mock__block--footer">Footer</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Col 3 — SEO-Ready & Blazing Fast */}
-            <div className="feature-trio__col">
-              <h3>SEO-Ready &amp; Blazing Fast</h3>
-              <p>Built for speed and top scores on Core Web Vitals — no extra optimization work needed.</p>
-              <div className="feature-trio__visual">
-                <div className="ft-gauge-mock">
-                  <div className="ft-gauge-mock__bar"><span /></div>
-                  <div className="ft-gauge-mock__score">
-                    <span className="ft-gauge-mock__grade">A</span>
-                    <div>
-                      <strong>&gt;90%</strong>
-                      <span>Performance Score</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          <div className="powerhouse-stat">
+            <strong>24/7</strong>
+            <span>Support & Care</span>
           </div>
         </div>
-      </section>
-      
-    </>
+
+      </div>
+    </section>
   );
 }

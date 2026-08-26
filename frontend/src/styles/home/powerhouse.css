@@ -1,194 +1,557 @@
-/* ─────────────────────────────────────────────────────────────
-   Phronix Powerhouse Features Section
-   Dark Obsidian Glassmorphism · Cyan/Teal Arctic Theme
-   ───────────────────────────────────────────────────────────── */
+/* =========================================================
+   PHRONIX POWERHOUSE / SERVICES SECTION
+   ========================================================= */
+
+.features-powerhouse {
+  width: 100%;
+}
 
 .features-powerhouse .container {
   max-width: 1200px;
 }
 
-.features-powerhouse__grid {
-  margin-top: 44px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.features-powerhouse .section-heading {
+  max-width: 850px;
+  margin-left: 0;
+  margin-right: auto;
+  text-align: left;
 }
 
+.features-powerhouse .section-heading__eyebrow,
+.features-powerhouse .eyebrow {
+  color: #20d9dc;
+  letter-spacing: 0.18em;
+}
+
+.powerhouse-gradient {
+  background: linear-gradient(
+    90deg,
+    #18d9dc 0%,
+    #13cfe0 30%,
+    #229eea 65%,
+    #6b63e8 100%
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =========================================================
+   3 x 2 GRID
+   ========================================================= */
+
+.features-powerhouse__grid {
+  margin-top: 34px;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
 .features-powerhouse__card {
+  position: relative;
+
+  min-height: 265px;
+
+  padding: 24px 26px;
+
   border-radius: 20px;
-  padding: 34px 30px;
-  background: linear-gradient(165deg, rgba(8, 18, 34, 0.94) 0%, rgba(4, 10, 20, 0.98) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.16);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.75),
-              0 0 20px rgba(14, 165, 233, 0.04);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s ease,
-              box-shadow 0.25s ease;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(8, 22, 39, 0.96) 0%,
+      rgba(3, 12, 25, 0.98) 100%
+    );
+
+  border: 1px solid rgba(87, 155, 201, 0.18);
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .features-powerhouse__card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(56, 189, 248, 0.38);
-  box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.85),
-              0 0 35px rgba(14, 165, 233, 0.14);
+  transform: translateY(-4px);
+
+  border-color: rgba(65, 190, 235, 0.4);
+
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.4),
+    0 0 28px rgba(14, 165, 233, 0.08);
 }
 
-.features-powerhouse__card h3 {
-  font-size: 21px;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
+/* =========================================================
+   CARD TOP
+   ========================================================= */
 
-.features-powerhouse__card p {
-  margin-top: 10px;
-  color: #94a3b8;
-  font-size: 13.5px;
-  line-height: 1.6;
-  max-width: 44ch;
-}
-
-/* ── Left card — browser mock with hover download pill ─────── */
-.fp-mock {
-  position: relative;
-  margin-top: 24px;
-  border-radius: 12px;
-  overflow: visible;
-  background: rgba(4, 9, 18, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.fp-mock__bar {
+.powerhouse-card__top {
   display: flex;
-  gap: 6px;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  align-items: flex-start;
+  gap: 18px;
 }
 
-.fp-mock__bar span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.fp-mock__bar span:nth-child(1) { background: #ef4444; }
-.fp-mock__bar span:nth-child(2) { background: #f59e0b; }
-.fp-mock__bar span:nth-child(3) { background: #10b981; }
+/* =========================================================
+   ICON BOX
+   ========================================================= */
 
-.fp-mock__body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 16px;
-}
+.powerhouse-card__icon {
+  flex: 0 0 72px;
 
-.fp-mock__thumb {
-  border-radius: 8px;
-  padding: 30px 14px;
-  font-size: 12.5px;
-  font-weight: 600;
+  width: 72px;
+  height: 72px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+
+  border-radius: 16px;
+
+  border: 1px solid currentColor;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.025);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.fp-mock__thumb--a {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(56, 189, 248, 0.05) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  color: #38bdf8;
+.features-powerhouse__card:hover .powerhouse-card__icon {
+  transform: scale(1.04);
 }
 
-.fp-mock__thumb--b {
-  background: linear-gradient(135deg, rgba(45, 212, 191, 0.15) 0%, rgba(45, 212, 191, 0.05) 100%);
-  border: 1px solid rgba(45, 212, 191, 0.25);
-  color: #2dd4bf;
+/* =========================================================
+   EXACT ACCENT COLORS
+   ========================================================= */
+
+/* AI & Automation - Cyan */
+.features-powerhouse__card--cyan {
+  --accent: #20d9dc;
 }
 
-.fp-mock__download {
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: rgba(8, 18, 34, 0.9);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: #38bdf8;
-  box-shadow: 0 0 16px rgba(14, 165, 233, 0.2);
-  transition: all 0.2s ease;
+.features-powerhouse__card--cyan .powerhouse-card__icon {
+  color: #20d9dc;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20, 184, 166, 0.25),
+      rgba(6, 182, 212, 0.08)
+    );
+
+  box-shadow:
+    0 0 25px rgba(32, 217, 220, 0.08);
 }
 
-.features-powerhouse__card:hover .fp-mock__download {
-  background: #38bdf8;
-  color: #030712;
-  transform: scale(1.08);
+/* Digital Products - Blue */
+.features-powerhouse__card--blue {
+  --accent: #38a9ff;
 }
 
-/* ── Right card — tech stack icon grid ─────────────────────── */
-.fp-stack-grid {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.features-powerhouse__card--blue .powerhouse-card__icon {
+  color: #38a9ff;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(14, 165, 233, 0.3),
+      rgba(37, 99, 235, 0.1)
+    );
+
+  box-shadow:
+    0 0 25px rgba(56, 169, 255, 0.08);
 }
 
-.fp-stack-item {
+/* Social & Content - Pink */
+.features-powerhouse__card--pink {
+  --accent: #f05ca8;
+}
+
+.features-powerhouse__card--pink .powerhouse-card__icon {
+  color: #f05ca8;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(236, 72, 153, 0.3),
+      rgba(190, 24, 93, 0.1)
+    );
+
+  box-shadow:
+    0 0 25px rgba(240, 92, 168, 0.08);
+}
+
+/* Marketing & Growth - Green */
+.features-powerhouse__card--green {
+  --accent: #32d4a0;
+}
+
+.features-powerhouse__card--green .powerhouse-card__icon {
+  color: #32d4a0;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(16, 185, 129, 0.3),
+      rgba(5, 150, 105, 0.1)
+    );
+
+  box-shadow:
+    0 0 25px rgba(50, 212, 160, 0.08);
+}
+
+/* Brand & Creative - Purple */
+.features-powerhouse__card--purple {
+  --accent: #b967ff;
+}
+
+.features-powerhouse__card--purple .powerhouse-card__icon {
+  color: #b967ff;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(168, 85, 247, 0.3),
+      rgba(109, 40, 217, 0.1)
+    );
+
+  box-shadow:
+    0 0 25px rgba(185, 103, 255, 0.08);
+}
+
+/* Data & Intelligence - Orange */
+.features-powerhouse__card--orange {
+  --accent: #f7ad32;
+}
+
+.features-powerhouse__card--orange .powerhouse-card__icon {
+  color: #f7ad32;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(245, 158, 11, 0.3),
+      rgba(180, 83, 9, 0.1)
+    );
+
+  box-shadow:
+    0 0 25px rgba(247, 173, 50, 0.08);
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.powerhouse-card__heading {
+  padding-top: 2px;
+}
+
+.powerhouse-card__heading h3 {
+  margin: 0;
+
+  color: #f5f7fb;
+
+  font-size: 19px;
+
+  line-height: 1.3;
+
+  font-weight: 600;
+
+  letter-spacing: -0.02em;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.powerhouse-card__heading p {
+  margin: 7px 0 0;
+
+  color: #b3bfce;
+
+  font-size: 13px;
+
+  line-height: 1.55;
+
+  max-width: 240px;
+}
+
+/* =========================================================
+   ACCENT LINE
+   ========================================================= */
+
+.powerhouse-card__line {
+  width: 100%;
+
+  height: 1px;
+
+  margin: 18px 0 14px;
+
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    color-mix(
+      in srgb,
+      var(--accent) 15%,
+      transparent
+    ),
+    transparent
+  );
+}
+
+/* =========================================================
+   ITEMS
+   ========================================================= */
+
+.powerhouse-card__items {
   display: flex;
+
   flex-direction: column;
+
+  gap: 7px;
+}
+
+.powerhouse-card__item {
+  display: flex;
+
   align-items: center;
-  gap: 8px;
-  padding: 18px 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  gap: 9px;
+
   color: #cbd5e1;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  font-size: 12.5px;
+
+  line-height: 1.4;
 }
 
-.fp-stack-item svg {
-  color: #38bdf8;
-  transition: transform 0.2s ease;
+/* SAME COLOR AS ICON */
+.powerhouse-card__item svg {
+  flex-shrink: 0;
+
+  color: var(--accent);
+
+  filter:
+    drop-shadow(
+      0 0 4px
+      color-mix(
+        in srgb,
+        var(--accent) 35%,
+        transparent
+      )
+    );
 }
 
-.fp-stack-item:hover {
-  border-color: rgba(56, 189, 248, 0.35);
-  background: rgba(14, 165, 233, 0.1);
-  color: #ffffff;
-  transform: translateY(-2px);
+.powerhouse-card__item span {
+  color: #cbd5e1;
 }
 
-.fp-stack-item:hover svg {
-  transform: scale(1.1);
+/* =========================================================
+   STATS BAR
+   ========================================================= */
+
+.powerhouse-stats {
+  margin-top: 16px;
+
+  min-height: 88px;
+
+  padding: 20px 28px;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  align-items: center;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(8, 24, 42, 0.92),
+      rgba(4, 13, 26, 0.97)
+    );
+
+  border: 1px solid rgba(56, 189, 248, 0.14);
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.25);
 }
 
-.fp-stack-item span {
-  font-size: 11.5px;
-  font-weight: 500;
+.powerhouse-stat {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  min-height: 48px;
+}
+
+.powerhouse-stat:not(:last-child)::after {
+  content: "";
+
+  position: absolute;
+
+  right: 0;
+
+  width: 1px;
+
+  height: 42px;
+
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.powerhouse-stat strong {
+  font-size: 25px;
+
+  font-weight: 600;
+
+  letter-spacing: -0.03em;
+}
+
+/* Stats individual colors */
+
+.powerhouse-stat:nth-child(1) strong {
+  color: #20d9dc;
+}
+
+.powerhouse-stat:nth-child(2) strong {
+  color: #c084fc;
+}
+
+.powerhouse-stat:nth-child(3) strong {
+  color: #38a9ff;
+}
+
+.powerhouse-stat:nth-child(4) strong {
+  color: #f7ad32;
+}
+
+.powerhouse-stat span {
   color: #94a3b8;
-  transition: color 0.2s ease;
+
+  font-size: 11.5px;
+
+  white-space: nowrap;
 }
 
-.fp-stack-item:hover span {
-  color: #f1f5f9;
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .features-powerhouse__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .powerhouse-stats {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 15px;
+  }
+
+  .powerhouse-stat:nth-child(2)::after {
+    display: none;
+  }
 }
 
-@media (max-width: 900px) {
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
   .features-powerhouse__grid {
     grid-template-columns: 1fr;
+
+    gap: 12px;
   }
-  .fp-stack-grid {
-    grid-template-columns: repeat(3, 1fr);
+
+  .features-powerhouse__card {
+    min-height: auto;
+
+    padding: 22px;
+  }
+
+  .powerhouse-card__icon {
+    width: 62px;
+    height: 62px;
+
+    flex-basis: 62px;
+  }
+
+  .powerhouse-card__heading h3 {
+    font-size: 18px;
+  }
+
+  .powerhouse-card__heading p {
+    font-size: 12.5px;
+  }
+
+  .powerhouse-stats {
+    grid-template-columns: 1fr 1fr;
+
+    padding: 18px;
+  }
+
+  .powerhouse-stat {
+    justify-content: flex-start;
   }
 }
 
-@media (max-width: 540px) {
-  .fp-stack-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .powerhouse-card__top {
+    gap: 13px;
+  }
+
+  .powerhouse-card__icon {
+    width: 56px;
+    height: 56px;
+
+    flex-basis: 56px;
+  }
+
+  .powerhouse-stat {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 2px;
+  }
+
+  .powerhouse-stat strong {
+    font-size: 22px;
+  }
+
+  .powerhouse-stat span {
+    font-size: 10.5px;
   }
 }
