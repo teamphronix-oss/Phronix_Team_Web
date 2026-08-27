@@ -895,7 +895,7 @@
     position: fixed;
     top: 88px;
     right: 18px;
-    width: min(190px, calc(100vw - 28px));
+    width: min(160px, calc(100vw - 28px));
     z-index: 500;
     display: flex;
     flex-direction: column;
@@ -917,8 +917,10 @@
     transform: translate3d(0, 72px, 0);
     pointer-events: none;
 
-    /* Deep navy/blue theme — deliberately opaque to hide content behind it. */
-    background: #050b16;
+    /* Fully transparent glassy background — matches the navbar's blur style */
+    background: rgba(5, 11, 22, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(56, 189, 248, 0.16);
     border-radius: 12px;
     box-shadow:
@@ -961,8 +963,8 @@
     gap: 12px;
     padding: 13px 14px;
 
-    /* Opaque face — scrolling content stays underneath the dock. */
-    background: #07111f;
+    /* Transparent — content behind clearly shows through the blur */
+    background: rgba(7, 17, 31, 0.2);
     border: 0;
     color: #f4f8ff;
     font-family: var(--font-mono);
