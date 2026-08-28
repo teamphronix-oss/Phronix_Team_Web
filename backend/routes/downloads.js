@@ -1,6 +1,4 @@
 import { Router } from "express";
-import path from "path";
-import fs from "fs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import rateLimit from "express-rate-limit";
@@ -14,6 +12,7 @@ import {
   listDownloadables,
   updateDownloadableMeta,
   deleteDownloadable,
+  createDownloadable,
 } from "../models/DownloadableProject.js";
 
 const router = Router();
@@ -25,15 +24,11 @@ const requestLimiter = rateLimit({
 
 const TTL = Number(process.env.DOWNLOAD_LINK_TTL_SECONDS || 120);
 
-// Strips filename/password_hash before anything public-facing sees a row —
-// those must never leave the server.
 function toPublic(row) {
   const { filename, password_hash, ...rest } = row;
   return { ...rest, requiresPassword: !!password_hash };
 }
 
-// Public catalog listing (name/description/image/version — no file path,
-// no password hash). ?all=true from a signed-in admin also returns drafts.
 router.get("/", softAdmin, async (req, res, next) => {
   try {
     const onlyPublished = !(req.admin && req.query.all === "true");
@@ -44,10 +39,45 @@ router.get("/", softAdmin, async (req, res, next) => {
   }
 });
 
-// Admin metadata edit — description, image, order, is_published. The
-// protected zip itself and its password are managed via
-// scripts/seedDownloads.js + hashPassword.js, not this endpoint, since the
-// real file has to be placed on disk to match whatever `filename` points to.
+router.post("/", requireAdmin, upload.single("image"), async (req, res, next) => {
+  try {
+    const { slug, name, description, version, filename, order, requiresAuth, password } = req.body;
+
+    if (!slug || !name || !filename) {
+      return res.status(400).json({ message: "Slug, name, and the GitHub download link are required." });
+    }
+
+    const row = {
+      slug,
+      name,
+      description: description || "",
+      version: version || null,
+      filename,
+      order: Number(order) || 0,
+      requires_auth: requiresAuth === "true" || requiresAuth === true,
+      is_published: true,
+    };
+
+    if (password) {
+      row.password_hash = await bcrypt.hash(password, 10);
+    }
+
+    if (req.file) {
+      const { url, publicId } = await uploadBuffer(req.file.buffer, "downloads");
+      row.image_url = url;
+      row.image_public_id = publicId;
+    }
+
+    const created = await createDownloadable(row);
+    res.status(201).json({ download: toPublic(created) });
+  } catch (err) {
+    if (err.code === "23505") {
+      return res.status(409).json({ message: "That slug is already in use." });
+    }
+    next(err);
+  }
+});
+
 router.put("/:id", requireAdmin, upload.single("image"), async (req, res, next) => {
   try {
     const existing = await findDownloadableById(req.params.id);
@@ -58,6 +88,16 @@ router.put("/:id", requireAdmin, upload.single("image"), async (req, res, next) 
     if (req.body.order !== undefined) row.order = Number(req.body.order) || 0;
     if (req.body.is_published !== undefined) {
       row.is_published = req.body.is_published === "true" || req.body.is_published === true;
+    }
+    if (req.body.version !== undefined) row.version = req.body.version;
+    if (req.body.filename !== undefined && req.body.filename !== "") {
+      row.filename = req.body.filename;
+    }
+    if (req.body.requiresAuth !== undefined) {
+      row.requires_auth = req.body.requiresAuth === "true" || req.body.requiresAuth === true;
+    }
+    if (req.body.password) {
+      row.password_hash = await bcrypt.hash(req.body.password, 10);
     }
     if (req.file) {
       const { url, publicId } = await uploadBuffer(req.file.buffer, "downloads");
@@ -116,17 +156,11 @@ router.get("/serve/:token", async (req, res, next) => {
     const project = await findDownloadableBySlug(payload.slug);
     if (!project) return res.status(404).json({ message: "Project not found." });
 
-    const baseDir = path.resolve(process.env.PROTECTED_FILES_DIR);
-    const filePath = path.resolve(baseDir, project.filename);
-
-    if (!filePath.startsWith(baseDir)) {
-      return res.status(400).json({ message: "Invalid file reference." });
-    }
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ message: "File not available." });
+    if (!project.filename) {
+      return res.status(404).json({ message: "Download link not configured yet." });
     }
 
-    res.download(filePath, `${project.slug}-${project.version || "latest"}.zip`);
+    return res.redirect(project.filename);
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       return res.status(410).json({ message: "This download link has expired. Please request a new one." });

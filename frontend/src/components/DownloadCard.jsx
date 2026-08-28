@@ -43,18 +43,18 @@ export default function DownloadCard({ project }) {
       </div>
       <p>{project.description}</p>
 
-      {project.requiresAuth && (
-        <div className="field">
-          <label htmlFor={`pw-${project.id}`}>Project password (if provided)</label>
-          <input
-            id={`pw-${project.id}`}
-            type="password"
-            placeholder="Leave blank if none was given to you"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-      )}
+     {user && project.requiresAuth && (
+  <div className="field">
+    <label htmlFor={`pw-${project.id}`}>Project password (if provided)</label>
+    <input
+      id={`pw-${project.id}`}
+      type="password"
+      placeholder="Leave blank if none was given to you"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+  </div>
+)}
 
       {error && <p className="field-error">{error}</p>}
 

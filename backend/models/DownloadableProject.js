@@ -42,6 +42,17 @@ export async function upsertDownloadable(item) {
   return data;
 }
 
+// Full insert for admin-created downloads (unlike upsertDownloadable, which
+// only touches slug/name/version/filename/password_hash/requires_auth —
+// this also sets description, order, is_published, and the Cloudinary
+// image fields in one go, since it's used by the new admin "create" flow).
+export async function createDownloadable(row) {
+  const { data, error } = await supabase.from(TABLE).insert(row).select().single();
+  if (error) throw error;
+  return data;
+}
+
+
 // Admin-panel metadata edits (description, image, order, published state).
 // filename/password_hash are intentionally NOT editable here — those are
 // set only via scripts/seedDownloads.js + hashPassword.js, since the actual
@@ -65,4 +76,5 @@ export default {
   upsertDownloadable,
   updateDownloadableMeta,
   deleteDownloadable,
+  createDownloadable,
 };

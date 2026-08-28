@@ -107,6 +107,19 @@ app.use(
   })
 );
 
+// cookie-session doesn't implement regenerate()/save() that newer Passport
+// versions call internally during login — this shim adds harmless no-op
+// versions so passport.session() works without switching to express-session.
+app.use((req, res, next) => {
+  if (req.session && !req.session.regenerate) {
+    req.session.regenerate = (cb) => cb();
+  }
+  if (req.session && !req.session.save) {
+    req.session.save = (cb) => cb();
+  }
+  next();
+});
+
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());

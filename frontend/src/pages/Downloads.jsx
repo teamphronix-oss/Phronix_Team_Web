@@ -1,11 +1,36 @@
+import { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
 import DownloadCard from "../components/DownloadCard";
-import downloadableProjects from "../data/downloads";
 import { useAuth } from "../context/AuthContext";
+import siteConfig from "../data/siteConfig";
+
+const API = siteConfig.apiBaseUrl;
+const API_ORIGIN = API.replace(/\/api$/, "");
 
 export default function Downloads() {
   const { user, loginWithGoogle } = useAuth();
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API}/downloads`)
+      .then((res) => res.json())
+      .then((data) => {
+        const mapped = (data.downloads || []).map((d) => ({
+          ...d,
+          requiresAuth: d.requires_auth ?? d.requiresPassword ?? true,
+          image: d.image_url
+            ? d.image_url.startsWith("http")
+              ? d.image_url
+              : `${API_ORIGIN}${d.image_url}`
+            : "",
+        }));
+        setProjects(mapped);
+      })
+      .catch((err) => console.error("Failed to load downloads:", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="page-head-section section">
@@ -27,10 +52,14 @@ export default function Downloads() {
         )}
 
         <div className="grid grid--3">
-          {downloadableProjects.map((p) => (
+          {projects.map((p) => (
             <DownloadCard key={p.id} project={p} />
           ))}
         </div>
+
+        {!loading && projects.length === 0 && (
+          <p className="empty-state">No downloadable projects available yet.</p>
+        )}
       </div>
     </div>
   );
