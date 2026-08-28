@@ -57,7 +57,7 @@ const TABS = [
   { id: "youtube", label: "YouTube" },
   { id: "ongoing", label: "Ongoing Projects" },
   { id: "why", label: "Why Phronix" },
-  { id: "powerhouse", label: "Powerhouse" },
+  // { id: "powerhouse", label: "Powerhouse" },
   { id: "about", label: "About Phronix" },
   { id: "contact", label: "Contact" },
 ];
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
         {tab === "youtube" && <YoutubePanel />}
         {tab === "ongoing" && <OngoingPanel />}
         {tab === "why" && <WhyPanel />}
-        {tab === "powerhouse" && <PowerhousePanel />}
+        {/* {tab === "powerhouse" && <PowerhousePanel />} */}
         {tab === "about" && <AboutPanel />}
         {tab === "contact" && <ContactPanel />}
       </div>

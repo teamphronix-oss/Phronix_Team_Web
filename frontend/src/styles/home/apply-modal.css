@@ -1,0 +1,190 @@
+/* ── Application modal ──────────────────────────────────────── */
+.apply-modal {
+  background: linear-gradient(165deg, rgba(8, 17, 30, 0.98) 0%, rgba(4, 8, 16, 0.99) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  color: #f4f8ff;
+}
+
+.apply-modal .modal__close {
+  background: rgba(56, 189, 248, 0.08);
+  color: #f4f8ff;
+}
+.apply-modal .modal__close:hover {
+  background: rgba(56, 189, 248, 0.16);
+}
+
+.apply-modal__eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #38bdf8;
+}
+
+.apply-modal__title {
+  margin-top: 6px;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+/* ── Success state ─────────────────────────────────────────── */
+.apply-modal__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 18px 4px 6px;
+}
+
+.apply-modal__success-icon {
+  color: #2dd4bf;
+  margin-bottom: 6px;
+  animation: apply-success-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes apply-success-pop {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.apply-modal__success h3 { font-size: 19px; color: #fff; }
+.apply-modal__success p { color: rgba(244, 248, 255, 0.65); font-size: 14px; max-width: 34ch; }
+.apply-modal__success .btn { margin-top: 14px; }
+
+/* ── Form ──────────────────────────────────────────────────── */
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.apply-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.apply-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.apply-form__field > span:first-child {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 248, 255, 0.55);
+}
+
+.apply-form__field input,
+.apply-form__field textarea {
+  width: 100%;
+  padding: 11px 13px;
+  border-radius: 9px;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  background: rgba(4, 10, 20, 0.6);
+  color: #f4f8ff;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.apply-form__field input::placeholder,
+.apply-form__field textarea::placeholder {
+  color: rgba(244, 248, 255, 0.32);
+}
+
+.apply-form__field input:focus,
+.apply-form__field textarea:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(4, 10, 20, 0.85);
+}
+
+/* ── Resume dropzone ──────────────────────────────────────── */
+.apply-form__dropzone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 9px;
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  background: rgba(4, 10, 20, 0.45);
+  color: rgba(244, 248, 255, 0.55);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.apply-form__dropzone:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  color: rgba(244, 248, 255, 0.8);
+}
+
+.apply-form__dropzone--filled {
+  border-style: solid;
+  border-color: rgba(45, 212, 191, 0.5);
+  background: rgba(45, 212, 191, 0.06);
+  color: #f4f8ff;
+}
+
+.apply-form__filename {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.apply-form__hint {
+  font-size: 11.5px;
+  color: rgba(244, 248, 255, 0.35);
+}
+
+.apply-form__error {
+  font-size: 12px;
+  color: #fb7185;
+}
+
+.apply-form__error--form {
+  margin-top: -4px;
+}
+
+/* ── Submit button ────────────────────────────────────────── */
+.apply-form__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.apply-form__submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.apply-form__spinner {
+  animation: apply-spin 0.8s linear infinite;
+}
+
+@keyframes apply-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 560px) {
+  .apply-form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apply-modal__success-icon,
+  .apply-form__spinner {
+    animation: none;
+  }
+}

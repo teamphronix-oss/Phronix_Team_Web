@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { ArrowUp } from "lucide-react";
+import { useLenis } from "./SmoothScroll";
 
 const RADIUS = 24;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~150.796
@@ -8,6 +9,7 @@ export default function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);
   const circleRef = useRef(null);
   const isVisibleRef = useRef(false);
+  const lenisRef = useLenis();
 
   useEffect(() => {
     let rafId = null;
@@ -46,10 +48,15 @@ export default function ScrollToTopButton() {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    const lenis = lenisRef?.current;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.2 });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (

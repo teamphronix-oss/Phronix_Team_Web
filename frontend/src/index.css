@@ -58,10 +58,14 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* Scroll easing is handled by Lenis (see SmoothScroll.jsx) instead of the
+   CSS scroll-behavior property — running both at once causes anchor-link
+   jumps to stutter as they fight over the scroll position. Lenis itself
+   is skipped entirely for prefers-reduced-motion users, so html stays
+   "auto" for them automatically. */
+html { scroll-behavior: auto; }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
