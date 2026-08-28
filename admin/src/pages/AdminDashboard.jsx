@@ -1417,17 +1417,14 @@ function TestimonialsPanel() {
 
 const emptyCareer = {
   title: "",
-  slug: "",
   department: "",
   location: "",
-  employment_type: "Full-time",
+  type: "",
   experience: "",
   description: "",
   responsibilities: "",
   requirements: "",
-  skills: "",
-  application_email: "",
-  is_open: true,
+  open: true,
   order: 0,
 };
 
@@ -1441,20 +1438,17 @@ function CareersPanel() {
       emptyLabel="No open roles yet."
       formTitle="role"
       rowLabel={(c) => c.title}
-      rowSub={(c) => `${c.department || ""}${c.is_open ? "" : " · Closed"}`}
+      rowSub={(c) => `${c.department || ""}${c.open ? "" : " · Closed"}`}
       fields={[
         { key: "title", label: "Title", type: "text", required: true },
-        { key: "slug", label: "Slug (unique, used in the URL)", type: "text", required: true },
         { key: "department", label: "Department", type: "text" },
         { key: "location", label: "Location", type: "text" },
-        { key: "employment_type", label: "Employment type", type: "text", placeholder: "Full-time / Internship" },
-        { key: "experience", label: "Experience required", type: "text", placeholder: "Fresher / 2+ years" },
+        { key: "type", label: "Type", type: "text", placeholder: "Full-time / Internship" },
+        { key: "experience", label: "Experience", type: "text" },
         { key: "description", label: "Description", type: "textarea" },
         { key: "responsibilities", label: "Responsibilities (one per line)", type: "lines" },
         { key: "requirements", label: "Requirements (one per line)", type: "lines" },
-        { key: "skills", label: "Skills (comma separated)", type: "csv" },
-        { key: "application_email", label: "Application email (optional)", type: "text" },
-        { key: "is_open", label: "Role is open", type: "checkbox" },
+        { key: "open", label: "Role is open", type: "checkbox" },
         { key: "order", label: "Order", type: "number" },
       ]}
     />
@@ -1462,13 +1456,6 @@ function CareersPanel() {
 }
 
 // ── Downloads ────────────────────────────────────────────────────
-
-// ── Downloads (GitHub-hosted ZIP releases) ──────────────────────────
-// "filename" field ab ek local server path nahi hai — ye poora GitHub
-// Releases URL store karta hai (jaise
-// https://github.com/user/repo/releases/download/v1.0.0/project.zip).
-// Visitor Google se sign in karta hai, phir password/code daalta hai,
-// tabhi backend is link pe redirect karta hai (dekho backend/routes/downloads.js).
 
 const emptyDownload = {
   slug: "",
@@ -1479,244 +1466,42 @@ const emptyDownload = {
   requiresAuth: true,
   password: "",
   order: 0,
-  is_visible: true, // maps to is_published on the server response
 };
 
 function DownloadsPanel() {
-  const [items, setItems] = useState([]);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyDownload);
-  const [file, setFile] = useState(null);
-  const [status, setStatus] = useState("");
-
-  function load() {
-    apiFetch("/downloads?all=true")
-      .then((d) => setItems(d.downloads || []))
-      .catch((err) => {
-        console.error("Downloads load error:", err);
-        setStatus(err.message);
-      });
-  }
-
-  useEffect(load, []);
-
-  function startNew() {
-    setForm(emptyDownload);
-    setFile(null);
-    setEditing("new");
-  }
-
-  function startEdit(d) {
-    setForm({
-      slug: d.slug || "",
-      name: d.name || "",
-      description: d.description || "",
-      version: d.version || "",
-      filename: "", // link not returned to client for security; leave blank unless changing
-      requiresAuth: d.requires_auth ?? true,
-      password: "",
-      order: d.order,
-      is_visible: d.is_published,
-    });
-    setFile(null);
-    setEditing(d.id);
-  }
-
-  async function save() {
-    setStatus("Saving…");
-
-    try {
-      if (editing === "new") {
-        const body = new FormData();
-        body.append("slug", form.slug);
-        body.append("name", form.name);
-        body.append("description", form.description);
-        body.append("version", form.version);
-        body.append("filename", form.filename);
-        body.append("order", form.order);
-        body.append("requiresAuth", form.requiresAuth);
-        if (form.password) body.append("password", form.password);
-        if (file) body.append("image", file);
-
-        await apiFetch("/downloads", { method: "POST", body });
-      } else {
-        const body = new FormData();
-        body.append("description", form.description);
-        body.append("order", form.order);
-        body.append("is_published", form.is_visible);
-        body.append("version", form.version);
-        body.append("requiresAuth", form.requiresAuth);
-        if (form.filename) body.append("filename", form.filename);
-        if (form.password) body.append("password", form.password);
-        if (file) body.append("image", file);
-
-        await apiFetch(`/downloads/${editing}`, { method: "PUT", body });
-      }
-
-      setEditing(null);
-      setStatus("");
-      load();
-    } catch (err) {
-      setStatus(err.message);
-    }
-  }
-
-  async function remove(id) {
-    if (!confirm("Delete this download?")) return;
-    try {
-      await apiFetch(`/downloads/${id}`, { method: "DELETE" });
-      load();
-    } catch (err) {
-      alert(err.message);
-    }
-  }
-
   return (
-    <div className="admin-panel">
-      <div className="admin-panel__toolbar">
-        <button className="btn btn--gold btn--sm" onClick={startNew}>
-          <Plus size={16} />
-          Add download
-        </button>
-      </div>
-
-      {editing && (
-        <div className="card admin-form">
-          <div className="admin-form__head">
-            <h3>{editing === "new" ? "New download" : "Edit download"}</h3>
-            <button className="admin-form__close" onClick={() => setEditing(null)}>
-              <X size={18} />
-            </button>
-          </div>
-
-          {status && <p className="admin-panel__status">{status}</p>}
-
-          <label className="admin-field">
-            <span>Slug (unique, used in the URL){editing !== "new" ? " — not editable" : ""}</span>
-            <input
-              value={form.slug}
-              onChange={(e) => setForm({ ...form, slug: e.target.value })}
-              disabled={editing !== "new"}
-              required={editing === "new"}
-            />
-          </label>
-
-          <label className="admin-field">
-            <span>Name{editing !== "new" ? " — not editable" : ""}</span>
-            <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              disabled={editing !== "new"}
-              required={editing === "new"}
-            />
-          </label>
-
-          <label className="admin-field">
-            <span>Description</span>
-            <textarea
-              rows={3}
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-            />
-          </label>
-
-          <label className="admin-field">
-            <span>Version</span>
-            <input
-              value={form.version}
-              placeholder="v1.0.0"
-              onChange={(e) => setForm({ ...form, version: e.target.value })}
-            />
-          </label>
-
-          <label className="admin-field">
-            <span>GitHub download link (full URL to the release ZIP)</span>
-            <input
-              value={form.filename}
-              placeholder="https://github.com/user/repo/releases/download/v1.0.0/project.zip"
-              onChange={(e) => setForm({ ...form, filename: e.target.value })}
-              required={editing === "new"}
-            />
-            {editing !== "new" && (
-              <small style={{ opacity: 0.7 }}>Leave blank to keep the current link unchanged.</small>
-            )}
-          </label>
-
-          <label className="admin-field admin-field--row">
-            <input
-              type="checkbox"
-              checked={form.requiresAuth}
-              onChange={(e) => setForm({ ...form, requiresAuth: e.target.checked })}
-            />
-            <span>Require visitor sign-in to download</span>
-          </label>
-
-          <label className="admin-field">
-            <span>Password / access code (leave blank to keep unchanged, or for no password)</span>
-            <input
-              type="text"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-            />
-          </label>
-
-          {editing !== "new" && (
-            <label className="admin-field admin-field--row">
-              <input
-                type="checkbox"
-                checked={form.is_visible}
-                onChange={(e) => setForm({ ...form, is_visible: e.target.checked })}
-              />
-              <span>Published (visible on site)</span>
-            </label>
-          )}
-
-          <label className="admin-field">
-            <span>Order</span>
-            <input
-              type="number"
-              value={form.order}
-              onChange={(e) => setForm({ ...form, order: e.target.value })}
-            />
-          </label>
-
-          <label className="admin-field">
-            <span>Image</span>
-            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-          </label>
-
-          <button className="btn btn--gold btn--block" onClick={save}>
-            Save
-          </button>
-        </div>
-      )}
-
-      <div className="admin-list">
-        {items.map((d) => (
-          <div className="admin-list__row" key={d.id}>
-            <div className="admin-list__info">
-              <strong>{d.name}</strong>
-              <span>
-                {d.version || ""}
-                {d.requiresPassword ? " · Password protected" : ""}
-                {d.is_published ? "" : " · Hidden"}
-              </span>
-            </div>
-            <div className="admin-list__actions">
-              <button className="btn btn--outline btn--sm" onClick={() => startEdit(d)}>
-                <Pencil size={14} />
-              </button>
-              <button className="btn btn--outline btn--sm" onClick={() => remove(d.id)}>
-                <Trash2 size={14} />
-              </button>
-            </div>
-          </div>
-        ))}
-        {items.length === 0 && <p className="admin-panel__status">No downloadable projects yet.</p>}
-      </div>
-    </div>
+    <GenericPanel
+      basePath="/downloads"
+      listKey="downloads"
+      emptyItem={emptyDownload}
+      addLabel="Add download"
+      emptyLabel="No downloadable projects yet."
+      formTitle="download"
+      rowLabel={(d) => d.name}
+      rowSub={(d) => `${d.version || ""}${d.hasPassword ? " · Password protected" : ""}`}
+      fields={[
+        { key: "slug", label: "Slug (unique, used in the URL)", type: "text", required: true },
+        { key: "name", label: "Name", type: "text", required: true },
+        { key: "description", label: "Description", type: "textarea" },
+        { key: "version", label: "Version", type: "text", placeholder: "v1.0.0" },
+        {
+          key: "filename",
+          label: "Filename on server (inside PROTECTED_FILES_DIR)",
+          type: "text",
+          placeholder: "project-v1.0.0.zip",
+        },
+        { key: "requiresAuth", label: "Require visitor sign-in to download", type: "checkbox" },
+        {
+          key: "password",
+          label: "Password (leave blank to keep the current one / no password)",
+          type: "password",
+        },
+        { key: "order", label: "Order", type: "number" },
+      ]}
+    />
   );
 }
+
 // ── YouTube ──────────────────────────────────────────────────────
 
 const emptyVideo = {
@@ -1764,7 +1549,7 @@ function OngoingPanel() {
   return (
     <GenericPanel
       basePath="/ongoing-projects"
-      listKey="ongoingProjects"
+      listKey="items"
       emptyItem={emptyOngoing}
       addLabel="Add ongoing project"
       emptyLabel="No ongoing projects yet."
@@ -1798,14 +1583,9 @@ function OngoingPanel() {
 // ── Why Phronix (intro text + feature cards) ───────────────────────
 
 function WhyPanel() {
-  return (
-    <div className="admin-panel">
-      <WhyIntroPanel />
-      <WhyFeaturesPanel />
-    </div>
-  );
+  return <WhyFeaturesPanel />;
 }
-
+/*
 function WhyIntroPanel() {
   const [form, setForm] = useState({
     title: "Built Right, Built to Last.",
@@ -1900,7 +1680,7 @@ function WhyIntroPanel() {
     </div>
   );
 }
-
+*/
 const emptyWhyFeature = {
   title: "",
   description: "",
