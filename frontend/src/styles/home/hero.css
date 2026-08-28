@@ -1007,7 +1007,7 @@
 
 @media (max-width: 760px) {
   .hero--particle {
-    min-height: 860px;
+    min-height: 870px;
     height: auto;
     max-height: none;
     overflow: hidden;
@@ -1039,9 +1039,11 @@
    * Reserve real vertical space for the phoenix.
    * The canvas itself is still absolute, but the copy is no longer
    * allowed to sit on top of it.
+   * (Increased from 254px -> 340px so the paragraph clears the
+   * bird's tail/feet completely instead of overlapping it.)
    */
   .hero--particle .hero__lede {
-    margin-top: 254px;
+    margin-top: 355px;
     max-width: 36ch;
     font-size: clamp(13px, 3.5vw, 14.5px);
     line-height: 1.55;
@@ -1090,7 +1092,7 @@
 /* Smaller phones: reduce the reserved bird space slightly. */
 @media (max-width: 390px) {
   .hero--particle {
-    min-height: 880px;
+    min-height: 900px;
   }
 
   .hero--particle .hero__content {
@@ -1102,8 +1104,9 @@
     font-size: clamp(39px, 13.2vw, 54px);
   }
 
+  /* Reduced to match the smaller gap above. */
   .hero--particle .hero__lede {
-    margin-top: 224px;
+    margin-top: 315px;
     max-width: 33ch;
     font-size: 13px;
     line-height: 1.52;
@@ -1127,7 +1130,7 @@
 /* Short phones: preserve the sequence without creating a huge blank page. */
 @media (max-height: 720px) and (max-width: 760px) {
   .hero--particle {
-    min-height: 860px;
+    min-height: 880px;
   }
 
   .hero--particle .hero__content {
@@ -1135,7 +1138,8 @@
     padding-bottom: 76px;
   }
 
+  /* Reduced to keep the same clearance on short screens. */
   .hero--particle .hero__lede {
-    margin-top: 205px;
+    margin-top: 285px;
   }
 }
