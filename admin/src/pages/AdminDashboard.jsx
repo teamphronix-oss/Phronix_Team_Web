@@ -57,7 +57,7 @@ const TABS = [
   { id: "youtube", label: "YouTube" },
   { id: "ongoing", label: "Ongoing Projects" },
   { id: "why", label: "Why Phronix" },
-  { id: "powerhouse", label: "Powerhouse" },
+  // { id: "powerhouse", label: "Powerhouse" },
   { id: "about", label: "About Phronix" },
   { id: "contact", label: "Contact" },
 ];
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
         {tab === "youtube" && <YoutubePanel />}
         {tab === "ongoing" && <OngoingPanel />}
         {tab === "why" && <WhyPanel />}
-        {tab === "powerhouse" && <PowerhousePanel />}
+        {/* {tab === "powerhouse" && <PowerhousePanel />} */}
         {tab === "about" && <AboutPanel />}
         {tab === "contact" && <ContactPanel />}
       </div>
@@ -335,7 +335,6 @@ const emptyProject = {
   technologies: "",
   githubUrl: "",
   demoUrl: "",
-  ongoing: false,
   order: 0,
 };
 
@@ -374,7 +373,6 @@ function ProjectsPanel() {
       technologies: (p.technologies || []).join(", "),
       githubUrl: p.github_url || "",
       demoUrl: p.demo_url || "",
-      ongoing: p.ongoing,
       order: p.order,
     });
 
@@ -544,7 +542,7 @@ function ProjectsPanel() {
           </label>
 
           <label className="admin-field">
-            <span>Demo URL</span>
+            <span>YouTube URL</span>
 
             <input
               value={form.demoUrl}
@@ -555,21 +553,6 @@ function ProjectsPanel() {
                 })
               }
             />
-          </label>
-
-          <label className="admin-field admin-field--row">
-            <input
-              type="checkbox"
-              checked={form.ongoing}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  ongoing: e.target.checked,
-                })
-              }
-            />
-
-            <span>Ongoing project</span>
           </label>
 
           <label className="admin-field">
@@ -635,16 +618,13 @@ function ProjectsPanel() {
               }}
             />
 
-            <div className="admin-list__info">
-              <strong>{p.name}</strong>
+           <div className="admin-list__info">
+  <strong>{p.name}</strong>
 
-              <span>
-                {p.category}
-                {p.ongoing
-                  ? " · Ongoing"
-                  : ""}
-              </span>
-            </div>
+  <span>
+    {p.category}
+  </span>
+</div>
 
             <div className="admin-list__actions">
 
@@ -1740,7 +1720,8 @@ function WhyFeaturesPanel() {
 
 // ── Powerhouse ("Everything You Need, Built Right In") ─────────────
 
-function PowerhousePanel() {
+/*
+ function PowerhousePanel() {
   return (
     <div className="admin-panel">
       <PowerhouseCardsPanel />
@@ -1919,6 +1900,7 @@ function PowerhouseTrioPanel() {
     </div>
   );
 }
+*/
 
 // ── Contact (Email, Phone, Address, GST Number) ─────────────────────
 
