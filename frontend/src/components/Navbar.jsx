@@ -10,6 +10,7 @@ import {
   Linkedin,
 } from "lucide-react";
 import siteConfig from "../data/siteConfig";
+import useSiteLogo from "../hooks/useSiteLogo";
 import phronixLogo from "../assets/Gemini_Generated_Image_mflsmnmflsmnmfls.png";
 
 const links = [
@@ -38,6 +39,7 @@ const links = [
 ];
 
 export default function Navbar() {
+  const logoUrl = useSiteLogo();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [desktopDropdown, setDesktopDropdown] = useState(null);
@@ -129,7 +131,7 @@ export default function Navbar() {
           }
         >
           <img
-            src={phronixLogo}
+            src={logoUrl || phronixLogo}
             alt="Phronix"
             className="navbar__mark navbar__mark--img"
           />

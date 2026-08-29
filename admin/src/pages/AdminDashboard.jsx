@@ -167,11 +167,7 @@ function LogoPanel() {
     }
   }
 
-  const currentUrl =
-    preview ||
-    (settings.logoUrl
-      ? `${API.replace(/\/api$/, "")}${settings.logoUrl}`
-      : "");
+  const currentUrl = preview || settings.logoUrl || "";
 
   return (
     <div className="card admin-panel">
