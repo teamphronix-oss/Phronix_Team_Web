@@ -91,3 +91,11 @@ export async function deleteProjectRequest(id) {
 
   return request;
 }
+export async function deleteAllProjectRequests() {
+  const { error } = await supabase
+    .from("project_requests")
+    .delete()
+    .not("id", "is", null);
+
+  if (error) throw error;
+}
