@@ -79,3 +79,15 @@ export async function updateProjectRequest(id, data) {
 
   return request;
 }
+export async function deleteProjectRequest(id) {
+  const { data: request, error } = await supabase
+    .from("project_requests")
+    .delete()
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  return request;
+}
