@@ -1,7 +1,12 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
-import { createContactMessage } from "../models/ContactMessage.js";
+import {
+  createContactMessage,
+  listContactMessages,
+} from "../models/ContactMessage.js";
+
+import requireAdmin from "../middleware/requireAdmin.js";
 import { sendMail } from "../config/resend.js";
 
 const router = Router();
@@ -30,16 +35,43 @@ const validators = [
     .matches(/^[+\d][\d\s-]{7,15}$/)
     .withMessage("Phone number looks invalid."),
 
-  body("subject")
+  body("projectType")
     .trim()
     .notEmpty()
-    .withMessage("Subject is required."),
+    .withMessage("Project type is required."),
+
+  body("budget")
+    .trim()
+    .notEmpty()
+    .withMessage("Budget range is required."),
+
+  body("timeline")
+    .trim()
+    .notEmpty()
+    .withMessage("Timeline is required."),
+
+body("contactMethod")
+  .trim()
+  .notEmpty()
+  .withMessage("Preferred contact method is required."),
 
   body("message")
     .trim()
     .isLength({ min: 10 })
     .withMessage("Message is too short."),
 ];
+router.get("/", requireAdmin, async (req, res, next) => {
+  try {
+    const messages = await listContactMessages();
+
+    res.json({
+      messages,
+    });
+  } catch (err) {
+    console.error("Contact messages load error:", err);
+    next(err);
+  }
+});
 
 router.post("/", contactLimiter, validators, async (req, res, next) => {
   try {
@@ -52,30 +84,51 @@ router.post("/", contactLimiter, validators, async (req, res, next) => {
       });
     }
 
-    const { name, email, phone, subject, message } = req.body;
+    const {
+      name,
+      email,
+      phone,
+      projectType,
+      budget,
+      timeline,
+      contactMethod,
+      message,
+      attachmentName,
+    } = req.body;
 
     const saved = await createContactMessage({
       name,
       email,
       phone,
-      subject,
+      projectType,
+      budget,
+      timeline,
+      contactMethod,
       message,
+      attachmentName,
     });
-
-    if (
-      process.env.RESEND_API_KEY &&
-      process.env.CONTACT_TO_EMAIL
-    ) {
-      await sendMail({
-        to: process.env.CONTACT_TO_EMAIL,
-        subject: `New enquiry: ${subject}`,
-        text: `From: ${name} <${email}>
+ if (
+  process.env.RESEND_API_KEY &&
+  process.env.CONTACT_TO_EMAIL
+) {
+  await sendMail({
+    to: process.env.CONTACT_TO_EMAIL,
+    subject: `New contact enquiry from ${name}`,
+    text: `Name: ${name}
+Email: ${email}
 Phone: ${phone || "—"}
+Project Type: ${projectType}
+Budget Range: ${budget}
+Timeline: ${timeline}
+Preferred Contact Method: ${contactMethod}
 
-${message}`,
-        replyTo: email,
-      });
-    }
+Message:
+${message}
+
+Attachment: ${attachmentName || "None"}`,
+    replyTo: email,
+  });
+}
 
     res.status(201).json({
       ok: true,

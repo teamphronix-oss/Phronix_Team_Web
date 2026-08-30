@@ -49,6 +49,7 @@ const TABS = [
   { id: "projects", label: "Student Project" },
   { id: "team", label: "Team" },
   { id: "projectRequests", label: "Project Requests" },
+  { id: "contactMessages", label: "Contact Messages" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
   { id: "clients", label: "Clients" },
@@ -104,6 +105,7 @@ export default function AdminDashboard() {
         {tab === "projects" && <ProjectsPanel />}
         {tab === "team" && <TeamPanel />}
         {tab === "projectRequests" && <ProjectRequestsPanel />}
+        {tab === "contactMessages" && <ContactMessagesPanel />}
         {tab === "services" && <ServicesPanel />}
         {tab === "testimonials" && <TestimonialsPanel />}
         {tab === "clients" && <ClientsPanel />}
@@ -2904,6 +2906,192 @@ function startEdit(c) {
         ))}
         {items.length === 0 && <p className="admin-panel__status">No clients yet.</p>}
       </div>
+    </div>
+  );
+}
+// ── Contact Messages ──────────────────────────────────────────────
+function ContactMessagesPanel() {
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+
+  async function load() {
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const data = await apiFetch("/contact");
+
+      setMessages(data.messages || []);
+    } catch (err) {
+      console.error("Contact messages load error:", err);
+
+      setStatus(
+        err.message || "Failed to load contact messages."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  function formatDate(date) {
+    if (!date) return "—";
+
+    const parsed = new Date(date);
+
+    if (Number.isNaN(parsed.getTime())) {
+      return date;
+    }
+
+    return parsed.toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
+  return (
+    <div className="admin-panel">
+
+      <div className="admin-panel__toolbar">
+        <div>
+          <h3>Contact Messages</h3>
+
+          <p className="admin-panel__status">
+            Messages submitted through the website contact form.
+          </p>
+        </div>
+
+        <button
+          className="btn btn--outline btn--sm"
+          onClick={load}
+          disabled={loading}
+        >
+          {loading ? "Loading…" : "Refresh"}
+        </button>
+      </div>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      {loading && !messages.length ? (
+        <p className="admin-panel__status">
+          Loading contact messages…
+        </p>
+      ) : (
+        <div className="admin-list">
+
+          {messages.map((message) => (
+            <div
+              className="admin-list__row contact-message-row"
+              key={message.id}
+            >
+
+              <div className="admin-list__info">
+
+                <strong>
+                  {message.name || "Unknown"}
+                </strong>
+
+                <span>
+                  {message.email || "No email"}
+                </span>
+
+                {message.phone && (
+                  <span>
+                    Phone: {message.phone}
+                  </span>
+                )}
+
+                <span>
+                  Project:{" "}
+                  {message.project_type ||
+                    message.subject ||
+                    "General enquiry"}
+                </span>
+
+                {message.budget_range && (
+                  <span>
+                    Budget: {message.budget_range}
+                  </span>
+                )}
+
+                {message.timeline && (
+                  <span>
+                    Timeline: {message.timeline}
+                  </span>
+                )}
+
+                {message.preferred_contact_method && (
+                  <span>
+                    Contact via:{" "}
+                    {message.preferred_contact_method}
+                  </span>
+                )}
+
+                <span>
+                  Received: {formatDate(message.created_at)}
+                </span>
+
+                <div className="contact-message__body">
+                  <strong>Message</strong>
+
+                  <p>
+                    {message.message || "No message provided."}
+                  </p>
+                </div>
+
+                {message.attachment_url && (
+                  <span>
+                    Attachment:{" "}
+                    {message.attachment_url}
+                  </span>
+                )}
+
+              </div>
+
+              <div className="admin-list__actions">
+
+                {message.email && (
+                  <a
+                    href={`mailto:${message.email}`}
+                    className="btn btn--outline btn--sm"
+                  >
+                    Email
+                  </a>
+                )}
+
+                {message.phone && (
+                  <a
+                    href={`tel:${message.phone}`}
+                    className="btn btn--outline btn--sm"
+                  >
+                    Call
+                  </a>
+                )}
+
+              </div>
+
+            </div>
+          ))}
+
+          {messages.length === 0 && (
+            <p className="admin-panel__status">
+              No contact messages yet.
+            </p>
+          )}
+
+        </div>
+      )}
     </div>
   );
 }
