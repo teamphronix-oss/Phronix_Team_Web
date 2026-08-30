@@ -466,16 +466,6 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
                     Done
                   </button>
                 </div>
-                <button
-                  type="button"
-                  className="intake-action-btn intake-action-btn--ghost"
-                  onClick={() => {
-                    resetForm();
-                    onClose();
-                  }}
-                >
-                  Done
-                </button>
               </div>
             </div>
           )}
