@@ -15,18 +15,18 @@ export async function createContactMessage({
 }) {
   const { data, error } = await supabase
     .from(TABLE)
-  .insert({
-  name,
-  email,
-  phone: phone || null,
-  subject: projectType || "General enquiry",
-  project_type: projectType || null,
-  budget_range: budget || null,
-  timeline: timeline || null,
-  preferred_contact_method: contactMethod || null,
-  message,
-  attachment_url: attachmentName || null,
-})
+    .insert({
+      name,
+      email,
+      phone: phone || null,
+      subject: projectType || "General enquiry",
+      project_type: projectType || null,
+      budget_range: budget || null,
+      timeline: timeline || null,
+      preferred_contact_method: contactMethod || null,
+      message,
+      attachment_url: attachmentName || null,
+    })
     .select()
     .single();
 
@@ -34,6 +34,7 @@ export async function createContactMessage({
 
   return data;
 }
+
 export async function listContactMessages() {
   const { data, error } = await supabase
     .from(TABLE)
@@ -42,10 +43,30 @@ export async function listContactMessages() {
 
   if (error) throw error;
 
-  return data;
+  return data || [];
+}
+
+export async function deleteContactMessage(id) {
+  const { error } = await supabase
+    .from(TABLE)
+    .delete()
+    .eq("id", id);
+
+  if (error) throw error;
+}
+
+export async function deleteAllContactMessages() {
+  const { error } = await supabase
+    .from(TABLE)
+    .delete()
+    .not("id", "is", null);
+
+  if (error) throw error;
 }
 
 export default {
   createContactMessage,
-   listContactMessages,
+  listContactMessages,
+  deleteContactMessage,
+  deleteAllContactMessages,
 };

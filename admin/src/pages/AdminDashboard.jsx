@@ -9,6 +9,8 @@ import {
   Trash2,
   CalendarDays,
   ExternalLink,
+  Mail,
+  Phone,
 } from "lucide-react";
 
 import SectionHeading from "../components/SectionHeading";
@@ -2911,7 +2913,7 @@ function startEdit(c) {
 }
 // ── Contact Messages ──────────────────────────────────────────────
 function ContactMessagesPanel() {
-  const [messages, setMessages] = useState([]);
+  const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
 
@@ -2922,13 +2924,12 @@ function ContactMessagesPanel() {
     try {
       const data = await apiFetch("/contact");
 
-      setMessages(data.messages || []);
-    } catch (err) {
-      console.error("Contact messages load error:", err);
+      console.log("CONTACT DATA:", data);
 
-      setStatus(
-        err.message || "Failed to load contact messages."
-      );
+      setLeads(data.messages || []);
+    } catch (err) {
+      console.error("Contact enquiries load error:", err);
+      setStatus(err.message || "Failed to load enquiries.");
     } finally {
       setLoading(false);
     }
@@ -2956,25 +2957,93 @@ function ContactMessagesPanel() {
     });
   }
 
-  return (
-    <div className="admin-panel">
+  function getMessage(message) {
+    return message;
+  }
 
+  async function deleteLead(id) {
+    if (!window.confirm("Delete this enquiry permanently?")) {
+      return;
+    }
+
+    try {
+      await apiFetch(`/contact/${id}`, {
+        method: "DELETE",
+      });
+
+      setLeads((current) =>
+        current.filter((lead) => lead.id !== id)
+      );
+
+      setStatus("Enquiry deleted.");
+    } catch (err) {
+      alert(err.message || "Failed to delete enquiry.");
+    }
+  }
+
+  async function deleteAll() {
+    if (!leads.length) return;
+
+    if (
+      !window.confirm(
+        `Delete ALL ${leads.length} enquiries permanently?\n\nThis cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await apiFetch("/contact", {
+        method: "DELETE",
+      });
+
+      setLeads([]);
+      setStatus("All enquiries deleted.");
+    } catch (err) {
+      alert(err.message || "Failed to delete enquiries.");
+    }
+  }
+  if (loading) {
+    return (
+      <div className="admin-panel">
+        <p className="admin-panel__status">
+          Loading enquiries…
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="admin-panel contact-enquiries">
+
+      {/* HEADER */}
       <div className="admin-panel__toolbar">
         <div>
-          <h3>Contact Messages</h3>
+          <h3>Contact Enquiries</h3>
 
           <p className="admin-panel__status">
             Messages submitted through the website contact form.
           </p>
         </div>
 
-        <button
-          className="btn btn--outline btn--sm"
-          onClick={load}
-          disabled={loading}
-        >
-          {loading ? "Loading…" : "Refresh"}
-        </button>
+        <div className="contact-enquiries__toolbar-actions">
+          <button
+            className="btn btn--outline btn--sm"
+            onClick={load}
+          >
+            Refresh
+          </button>
+
+          {leads.length > 0 && (
+            <button
+              className="btn btn--outline btn--sm contact-enquiries__delete-all"
+              onClick={deleteAll}
+            >
+              <Trash2 size={15} />
+              Delete All
+            </button>
+          )}
+        </div>
       </div>
 
       {status && (
@@ -2983,115 +3052,143 @@ function ContactMessagesPanel() {
         </p>
       )}
 
-      {loading && !messages.length ? (
-        <p className="admin-panel__status">
-          Loading contact messages…
-        </p>
+      {/* EMPTY */}
+      {!leads.length ? (
+        <div className="contact-enquiries__empty">
+          <h3>No enquiries yet</h3>
+
+          <p>
+            New enquiries submitted through the website
+            will appear here.
+          </p>
+        </div>
       ) : (
-        <div className="admin-list">
+        <div className="contact-enquiries__list">
 
-          {messages.map((message) => (
-            <div
-              className="admin-list__row contact-message-row"
-              key={message.id}
-            >
+          {leads.map((lead) => {
+            const message = getMessage(lead);
 
-              <div className="admin-list__info">
+            return (
+              <div
+                className="contact-enquiry-card"
+                key={lead.id}
+              >
 
-                <strong>
-                  {message.name || "Unknown"}
-                </strong>
+                {/* CUSTOMER INFORMATION */}
+                <div className="contact-enquiry-card__summary">
 
-                <span>
-                  {message.email || "No email"}
-                </span>
+                  <div className="contact-enquiry-card__main">
 
-                {message.phone && (
-                  <span>
-                    Phone: {message.phone}
-                  </span>
-                )}
+                    <div className="contact-enquiry-card__title-row">
+                      <h4>
+                        {message.name || "Unknown"}
+                      </h4>
+                    </div>
 
-                <span>
-                  Project:{" "}
-                  {message.project_type ||
-                    message.subject ||
-                    "General enquiry"}
-                </span>
+                    <div className="contact-enquiry-card__email">
+                      {message.email || "No email"}
+                    </div>
 
-                {message.budget_range && (
-                  <span>
-                    Budget: {message.budget_range}
-                  </span>
-                )}
+                    {message.phone && (
+                      <div className="contact-enquiry-card__meta">
+                        Phone: {message.phone}
+                      </div>
+                    )}
 
-                {message.timeline && (
-                  <span>
-                    Timeline: {message.timeline}
-                  </span>
-                )}
+                    <div className="contact-enquiry-card__meta">
+                      Project:{" "}
+                      {message.project_type ||
+                        message.subject ||
+                        "General enquiry"}
+                    </div>
 
-                {message.preferred_contact_method && (
-                  <span>
-                    Contact via:{" "}
-                    {message.preferred_contact_method}
-                  </span>
-                )}
+                    <div className="contact-enquiry-card__meta">
+                      Budget:{" "}
+                      {message.budget_range || "—"}
+                    </div>
 
-                <span>
-                  Received: {formatDate(message.created_at)}
-                </span>
+                    <div className="contact-enquiry-card__meta">
+                      Timeline:{" "}
+                      {message.timeline || "—"}
+                    </div>
 
-                <div className="contact-message__body">
+                    {message.preferred_contact_method && (
+                      <div className="contact-enquiry-card__meta">
+                        Contact via:{" "}
+                        {message.preferred_contact_method}
+                      </div>
+                    )}
+
+                    <div className="contact-enquiry-card__meta">
+                      Received:{" "}
+                      {formatDate(message.created_at)}
+                    </div>
+
+                  </div>
+
+                  {/* ACTIONS */}
+                  <div className="contact-enquiry-card__actions">
+
+                    {message.email && (
+                      <a
+                        href={`mailto:${message.email}`}
+                        className="btn btn--outline btn--sm"
+                        title="Email customer"
+                      >
+                        <Mail size={15} />
+                        Email
+                      </a>
+                    )}
+
+                    {message.phone && (
+                      <a
+                        href={`tel:${message.phone}`}
+                        className="btn btn--outline btn--sm"
+                        title="Call customer"
+                      >
+                        <Phone size={15} />
+                        Call
+                      </a>
+                    )}
+
+                    <button
+                      className="btn btn--outline btn--sm contact-enquiry-delete"
+                      onClick={() => deleteLead(lead.id)}
+                      title="Delete enquiry"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+
+                  </div>
+
+                </div>
+
+                {/* MESSAGE */}
+                <div className="contact-enquiry-message">
+
                   <strong>Message</strong>
 
                   <p>
-                    {message.message || "No message provided."}
+                    {message.message ||
+                      "No message provided."}
                   </p>
+
+                  {message.attachment_url && (
+                    <p>
+                      <strong>Attachment:</strong>{" "}
+                      {message.attachment_url}
+                    </p>
+                  )}
+
                 </div>
 
-                {message.attachment_url && (
-                  <span>
-                    Attachment:{" "}
-                    {message.attachment_url}
-                  </span>
-                )}
-
               </div>
-
-              <div className="admin-list__actions">
-
-                {message.email && (
-                  <a
-                    href={`mailto:${message.email}`}
-                    className="btn btn--outline btn--sm"
-                  >
-                    Email
-                  </a>
-                )}
-
-                {message.phone && (
-                  <a
-                    href={`tel:${message.phone}`}
-                    className="btn btn--outline btn--sm"
-                  >
-                    Call
-                  </a>
-                )}
-
-              </div>
-
-            </div>
-          ))}
-
-          {messages.length === 0 && (
-            <p className="admin-panel__status">
-              No contact messages yet.
-            </p>
-          )}
+            );
+          })}
 
         </div>
       )}
+
     </div>
   );
 }

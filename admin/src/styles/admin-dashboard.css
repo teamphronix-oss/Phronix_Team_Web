@@ -336,3 +336,340 @@
     width: 100%;
   }
 }
+
+/* =========================================================
+   PHRONIX - CONTACT ENQUIRIES
+   Clean, simple admin UI
+   ========================================================= */
+
+.contact-enquiries {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 0 60px;
+  box-sizing: border-box;
+}
+
+/* ---------- HEADER ---------- */
+
+.contact-enquiries .admin-panel__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.contact-enquiries .admin-panel__toolbar h3 {
+  margin: 0 0 5px;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.contact-enquiries .admin-panel__toolbar .admin-panel__status {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.65;
+}
+
+.contact-enquiries__toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ---------- DELETE ALL ---------- */
+
+.contact-enquiries__delete-all {
+  color: #ff8f8f !important;
+  border-color: rgba(255, 100, 100, 0.35) !important;
+}
+
+.contact-enquiries__delete-all:hover {
+  border-color: rgba(255, 100, 100, 0.65) !important;
+  background: rgba(255, 80, 80, 0.08) !important;
+}
+
+/* ---------- REMOVE OLD CRM STATS ---------- */
+
+.contact-enquiries__stats {
+  display: none !important;
+}
+
+/* ---------- LIST ---------- */
+
+.contact-enquiries__list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+
+/* ---------- ENQUIRY CARD ---------- */
+
+.contact-enquiry-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 14px;
+  background: rgba(10, 15, 27, 0.72);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.contact-enquiry-card:hover {
+  border-color: rgba(34, 211, 238, 0.28);
+  background: rgba(12, 19, 32, 0.9);
+}
+
+/* ---------- TOP SECTION ---------- */
+
+.contact-enquiry-card__summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  width: 100%;
+}
+
+.contact-enquiry-card__main {
+  min-width: 0;
+  flex: 1;
+}
+
+/* ---------- NAME ---------- */
+
+.contact-enquiry-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.contact-enquiry-card__title-row h4 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+/* Hide old CRM status/priority badges if they still exist */
+.contact-enquiry-badge,
+.contact-enquiry-priority {
+  display: none !important;
+}
+
+/* ---------- EMAIL ---------- */
+
+.contact-enquiry-card__email {
+  margin-bottom: 17px;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ---------- CUSTOMER DETAILS ---------- */
+
+.contact-enquiry-card__meta {
+  display: inline-block;
+  margin: 0 22px 9px 0;
+  color: #a8b2c1;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.contact-enquiry-card__meta::first-letter {
+  color: #cbd5e1;
+}
+
+/* ---------- ACTIONS ---------- */
+
+.contact-enquiry-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.contact-enquiry-card__actions .btn {
+  min-height: 38px;
+  padding: 8px 13px;
+  border-radius: 9px;
+  white-space: nowrap;
+}
+
+/* Delete icon button */
+.contact-enquiry-delete {
+  width: 38px;
+  min-width: 38px;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-enquiry-delete:hover {
+  color: #ff8f8f !important;
+  border-color: rgba(255, 100, 100, 0.5) !important;
+  background: rgba(255, 80, 80, 0.08) !important;
+}
+
+/* ---------- MESSAGE ---------- */
+
+.contact-enquiry-message {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(148, 163, 184, 0.09);
+}
+
+.contact-enquiry-message > strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #f1f5f9;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.contact-enquiry-message p {
+  margin: 0;
+  color: #aeb8c8;
+  font-size: 14px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.contact-enquiry-message p + p {
+  margin-top: 12px;
+}
+
+.contact-enquiry-message p strong {
+  color: #dce3ed;
+}
+
+/* ---------- EMPTY STATE ---------- */
+
+.contact-enquiries__empty {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 55px 30px;
+  text-align: center;
+  border: 1px dashed rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  background: rgba(10, 15, 27, 0.45);
+}
+
+.contact-enquiries__empty h3 {
+  margin: 0 0 8px;
+  color: #f8fafc;
+  font-size: 18px;
+}
+
+.contact-enquiries__empty p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* ---------- STATUS MESSAGE ---------- */
+
+.contact-enquiries > .admin-panel__status {
+  margin: 0 0 18px;
+}
+
+/* ---------- BUTTON CONSISTENCY ---------- */
+
+.contact-enquiries .btn {
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 800px) {
+  .contact-enquiries {
+    padding-bottom: 40px;
+  }
+
+  .contact-enquiries .admin-panel__toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .contact-enquiries__toolbar-actions {
+    width: 100%;
+  }
+
+  .contact-enquiries__toolbar-actions .btn {
+    flex: 1;
+  }
+
+  .contact-enquiry-card__summary {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .contact-enquiry-card__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 520px) {
+  .contact-enquiry-card {
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .contact-enquiry-card__title-row h4 {
+    font-size: 16px;
+  }
+
+  .contact-enquiry-card__meta {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 7px;
+  }
+
+  .contact-enquiry-card__actions {
+    flex-wrap: wrap;
+  }
+
+  .contact-enquiry-card__actions .btn {
+    flex: 1;
+  }
+
+  .contact-enquiry-delete {
+    flex: 0 0 38px !important;
+  }
+
+  .contact-enquiry-message {
+    padding: 15px;
+  }
+
+  .contact-enquiries__toolbar-actions {
+    flex-wrap: wrap;
+  }
+
+  .contact-enquiries__toolbar-actions .btn {
+    flex: 1 1 auto;
+  }
+}
