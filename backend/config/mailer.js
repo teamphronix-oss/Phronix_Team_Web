@@ -10,6 +10,34 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+// ─────────────────────────────────────────────
+// GENERIC EMAIL SENDER
+// Used by Contact + future emails
+// ─────────────────────────────────────────────
+
+export async function sendMail({
+  to,
+  subject,
+  text,
+  html,
+  replyTo,
+}) {
+  return transporter.sendMail({
+    from: `"Phronix" <${process.env.SMTP_USER}>`,
+    to,
+    subject,
+    text,
+    ...(html ? { html } : {}),
+    ...(replyTo ? { replyTo } : {}),
+  });
+}
+
+
+// ─────────────────────────────────────────────
+// PROJECT REQUEST CONFIRMATION
+// ─────────────────────────────────────────────
+
 export async function sendProjectConfirmation({
   name,
   email,

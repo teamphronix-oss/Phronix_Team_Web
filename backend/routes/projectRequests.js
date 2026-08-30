@@ -6,6 +6,8 @@ import {
   createProjectRequest,
   listProjectRequests,
   updateProjectRequest,
+  deleteProjectRequest,
+  deleteAllProjectRequests,
 } from "../models/ProjectRequest.js";
 
 import requireAdmin from "../middleware/requireAdmin.js";
@@ -189,6 +191,34 @@ router.patch("/:id", requireAdmin, async (req, res, next) => {
       err
     );
 
+    next(err);
+  }
+});
+router.delete("/", requireAdmin, async (req, res, next) => {
+  try {
+    await deleteAllProjectRequests();
+
+    res.json({
+      ok: true,
+      message: "All project requests deleted.",
+    });
+  } catch (err) {
+    console.error("All project requests deletion failed:", err);
+    next(err);
+  }
+});
+router.delete("/:id", requireAdmin, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const request = await deleteProjectRequest(id);
+
+    res.json({
+      ok: true,
+      request,
+    });
+  } catch (err) {
+    console.error("Project request deletion failed:", err);
     next(err);
   }
 });

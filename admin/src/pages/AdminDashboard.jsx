@@ -9,6 +9,8 @@ import {
   Trash2,
   CalendarDays,
   ExternalLink,
+  Mail,
+  Phone,
 } from "lucide-react";
 
 import SectionHeading from "../components/SectionHeading";
@@ -49,6 +51,7 @@ const TABS = [
   { id: "projects", label: "Student Project" },
   { id: "team", label: "Team" },
   { id: "projectRequests", label: "Project Requests" },
+  { id: "contactMessages", label: "Contact Messages" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
   { id: "clients", label: "Clients" },
@@ -104,6 +107,7 @@ export default function AdminDashboard() {
         {tab === "projects" && <ProjectsPanel />}
         {tab === "team" && <TeamPanel />}
         {tab === "projectRequests" && <ProjectRequestsPanel />}
+        {tab === "contactMessages" && <ContactMessagesPanel />}
         {tab === "services" && <ServicesPanel />}
         {tab === "testimonials" && <TestimonialsPanel />}
         {tab === "clients" && <ClientsPanel />}
@@ -2399,6 +2403,59 @@ function ProjectRequestsPanel() {
   }
 }
 
+async function deleteRequest(id) {
+  if (!confirm("Delete this project request? This cannot be undone.")) {
+    return;
+  }
+
+  setSavingId(id);
+  setStatus("");
+
+  try {
+    await apiFetch(`/project-requests/${id}`, {
+      method: "DELETE",
+    });
+
+    setManagingId(null);
+    await load();
+
+    setStatus("Project request deleted.");
+  } catch (err) {
+    setStatus(err.message || "Failed to delete project request.");
+  } finally {
+    setSavingId(null);
+  }
+}
+async function deleteAllRequests() {
+  if (
+    !confirm(
+      "Delete ALL project requests? This cannot be undone."
+    )
+  ) {
+    return;
+  }
+
+  setSavingId("all");
+  setStatus("");
+
+  try {
+    await apiFetch("/project-requests", {
+      method: "DELETE",
+    });
+
+    setManagingId(null);
+    await load();
+
+    setStatus("All project requests deleted.");
+  } catch (err) {
+    setStatus(
+      err.message || "Failed to delete all project requests."
+    );
+  } finally {
+    setSavingId(null);
+  }
+}
+
   return (
     <div className="admin-panel">
 
@@ -2421,6 +2478,14 @@ function ProjectRequestsPanel() {
 
           {loading ? "Loading…" : "Refresh"}
         </button>
+        <button
+  className="btn btn--outline btn--sm"
+  onClick={deleteAllRequests}
+  disabled={savingId === "all" || loading || !requests.length}
+>
+  <Trash2 size={14} />
+  {savingId === "all" ? "Deleting..." : "Delete All"}
+</button>
       </div>
 
       {status && (
@@ -2516,6 +2581,14 @@ function ProjectRequestsPanel() {
                   >
                     Manage
                   </button>
+                  <button
+  className="btn btn--outline btn--sm"
+  disabled={savingId === request.id}
+  onClick={() => deleteRequest(request.id)}
+>
+  <Trash2 size={14} />
+  Delete
+</button>
 
                 </div>
 
@@ -2835,6 +2908,287 @@ function startEdit(c) {
         ))}
         {items.length === 0 && <p className="admin-panel__status">No clients yet.</p>}
       </div>
+    </div>
+  );
+}
+// ── Contact Messages ──────────────────────────────────────────────
+function ContactMessagesPanel() {
+  const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+
+  async function load() {
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const data = await apiFetch("/contact");
+
+      console.log("CONTACT DATA:", data);
+
+      setLeads(data.messages || []);
+    } catch (err) {
+      console.error("Contact enquiries load error:", err);
+      setStatus(err.message || "Failed to load enquiries.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  function formatDate(date) {
+    if (!date) return "—";
+
+    const parsed = new Date(date);
+
+    if (Number.isNaN(parsed.getTime())) {
+      return date;
+    }
+
+    return parsed.toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
+  function getMessage(message) {
+    return message;
+  }
+
+  async function deleteLead(id) {
+    if (!window.confirm("Delete this enquiry permanently?")) {
+      return;
+    }
+
+    try {
+      await apiFetch(`/contact/${id}`, {
+        method: "DELETE",
+      });
+
+      setLeads((current) =>
+        current.filter((lead) => lead.id !== id)
+      );
+
+      setStatus("Enquiry deleted.");
+    } catch (err) {
+      alert(err.message || "Failed to delete enquiry.");
+    }
+  }
+
+  async function deleteAll() {
+    if (!leads.length) return;
+
+    if (
+      !window.confirm(
+        `Delete ALL ${leads.length} enquiries permanently?\n\nThis cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await apiFetch("/contact", {
+        method: "DELETE",
+      });
+
+      setLeads([]);
+      setStatus("All enquiries deleted.");
+    } catch (err) {
+      alert(err.message || "Failed to delete enquiries.");
+    }
+  }
+  if (loading) {
+    return (
+      <div className="admin-panel">
+        <p className="admin-panel__status">
+          Loading enquiries…
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="admin-panel contact-enquiries">
+
+      {/* HEADER */}
+      <div className="admin-panel__toolbar">
+        <div>
+          <h3>Contact Enquiries</h3>
+
+          <p className="admin-panel__status">
+            Messages submitted through the website contact form.
+          </p>
+        </div>
+
+        <div className="contact-enquiries__toolbar-actions">
+          <button
+            className="btn btn--outline btn--sm"
+            onClick={load}
+          >
+            Refresh
+          </button>
+
+          {leads.length > 0 && (
+            <button
+              className="btn btn--outline btn--sm contact-enquiries__delete-all"
+              onClick={deleteAll}
+            >
+              <Trash2 size={15} />
+              Delete All
+            </button>
+          )}
+        </div>
+      </div>
+
+      {status && (
+        <p className="admin-panel__status">
+          {status}
+        </p>
+      )}
+
+      {/* EMPTY */}
+      {!leads.length ? (
+        <div className="contact-enquiries__empty">
+          <h3>No enquiries yet</h3>
+
+          <p>
+            New enquiries submitted through the website
+            will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="contact-enquiries__list">
+
+          {leads.map((lead) => {
+            const message = getMessage(lead);
+
+            return (
+              <div
+                className="contact-enquiry-card"
+                key={lead.id}
+              >
+
+                {/* CUSTOMER INFORMATION */}
+                <div className="contact-enquiry-card__summary">
+
+                  <div className="contact-enquiry-card__main">
+
+                    <div className="contact-enquiry-card__title-row">
+                      <h4>
+                        {message.name || "Unknown"}
+                      </h4>
+                    </div>
+
+                    <div className="contact-enquiry-card__email">
+                      {message.email || "No email"}
+                    </div>
+
+                    {message.phone && (
+                      <div className="contact-enquiry-card__meta">
+                        Phone: {message.phone}
+                      </div>
+                    )}
+
+                    <div className="contact-enquiry-card__meta">
+                      Project:{" "}
+                      {message.project_type ||
+                        message.subject ||
+                        "General enquiry"}
+                    </div>
+
+                    <div className="contact-enquiry-card__meta">
+                      Budget:{" "}
+                      {message.budget_range || "—"}
+                    </div>
+
+                    <div className="contact-enquiry-card__meta">
+                      Timeline:{" "}
+                      {message.timeline || "—"}
+                    </div>
+
+                    {message.preferred_contact_method && (
+                      <div className="contact-enquiry-card__meta">
+                        Contact via:{" "}
+                        {message.preferred_contact_method}
+                      </div>
+                    )}
+
+                    <div className="contact-enquiry-card__meta">
+                      Received:{" "}
+                      {formatDate(message.created_at)}
+                    </div>
+
+                  </div>
+
+                  {/* ACTIONS */}
+                  <div className="contact-enquiry-card__actions">
+
+                    {message.email && (
+                      <a
+                        href={`mailto:${message.email}`}
+                        className="btn btn--outline btn--sm"
+                        title="Email customer"
+                      >
+                        <Mail size={15} />
+                        Email
+                      </a>
+                    )}
+
+                    {message.phone && (
+                      <a
+                        href={`tel:${message.phone}`}
+                        className="btn btn--outline btn--sm"
+                        title="Call customer"
+                      >
+                        <Phone size={15} />
+                        Call
+                      </a>
+                    )}
+
+                    <button
+                      className="btn btn--outline btn--sm contact-enquiry-delete"
+                      onClick={() => deleteLead(lead.id)}
+                      title="Delete enquiry"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+
+                  </div>
+
+                </div>
+
+                {/* MESSAGE */}
+                <div className="contact-enquiry-message">
+
+                  <strong>Message</strong>
+
+                  <p>
+                    {message.message ||
+                      "No message provided."}
+                  </p>
+
+                  {message.attachment_url && (
+                    <p>
+                      <strong>Attachment:</strong>{" "}
+                      {message.attachment_url}
+                    </p>
+                  )}
+
+                </div>
+
+              </div>
+            );
+          })}
+
+        </div>
+      )}
+
     </div>
   );
 }

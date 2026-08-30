@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Mail,
@@ -122,6 +122,8 @@ export default function Contact() {
   const [status, setStatus] = useState("idle");
   const [serverMessage, setServerMessage] = useState("");
   const [file, setFile] = useState(null);
+  const [siteSettings, setSiteSettings] = useState(null);
+const [settingsLoading, setSettingsLoading] = useState(true);
 
   function update(field, value) {
     setForm((current) => ({
@@ -136,6 +138,27 @@ export default function Contact() {
       }));
     }
   }
+  useEffect(() => {
+  async function fetchSiteSettings() {
+    try {
+      const res = await fetch(`${siteConfig.apiBaseUrl}/settings`);
+
+      if (!res.ok) {
+        throw new Error("Failed to load site settings.");
+      }
+
+      const data = await res.json();
+
+      setSiteSettings(data.settings);
+    } catch (error) {
+      console.error("Failed to load site settings:", error);
+    } finally {
+      setSettingsLoading(false);
+    }
+  }
+
+  fetchSiteSettings();
+}, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -240,10 +263,10 @@ export default function Contact() {
                 title="Email Us"
               >
                 <a
-                  href={`mailto:${siteConfig.email}`}
+                  href={`mailto:${siteSettings?.email || siteConfig.email}`}
                   className="contact-modern__main-link"
                 >
-                  {siteConfig.email}
+                  {siteSettings?.email || siteConfig.email}
                 </a>
 
                 <small>
@@ -256,10 +279,10 @@ export default function Contact() {
                 title="Call / WhatsApp"
               >
                 <a
-                  href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+                  href={`tel:${(siteSettings?.phone || siteConfig.phone).replace(/\s/g, "")}`}
                   className="contact-modern__main-link"
                 >
-                  {siteConfig.phone}
+                  {siteSettings?.phone || siteConfig.phone}
                 </a>
 
                 <small>
@@ -272,9 +295,9 @@ export default function Contact() {
                 title="Our Office"
               >
                 <span className="contact-modern__address">
-                  {siteConfig.address.line1}
+                  {siteSettings?.addressLine1 || siteConfig.address.line1}
                   <br />
-                  {siteConfig.address.line2}
+                  {siteSettings?.addressLine2 || siteConfig.address.line2}
                 </span>
 
                 <small>
@@ -282,14 +305,16 @@ export default function Contact() {
                 </small>
               </ContactCard>
 
-              <ContactCard
-                icon={FileBadge}
-                title="GSTIN"
-              >
-                <span className="contact-modern__main-link">
-                  {siteConfig.gstNumber}
-                </span>
-              </ContactCard>
+              {siteSettings?.gstNumber && (
+  <ContactCard
+    icon={FileBadge}
+    title="GSTIN"
+  >
+    <span className="contact-modern__main-link">
+      {siteSettings.gstNumber}
+    </span>
+  </ContactCard>
+)}
 
             </div>
 
