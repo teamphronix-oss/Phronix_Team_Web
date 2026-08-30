@@ -2399,6 +2399,59 @@ function ProjectRequestsPanel() {
   }
 }
 
+async function deleteRequest(id) {
+  if (!confirm("Delete this project request? This cannot be undone.")) {
+    return;
+  }
+
+  setSavingId(id);
+  setStatus("");
+
+  try {
+    await apiFetch(`/project-requests/${id}`, {
+      method: "DELETE",
+    });
+
+    setManagingId(null);
+    await load();
+
+    setStatus("Project request deleted.");
+  } catch (err) {
+    setStatus(err.message || "Failed to delete project request.");
+  } finally {
+    setSavingId(null);
+  }
+}
+async function deleteAllRequests() {
+  if (
+    !confirm(
+      "Delete ALL project requests? This cannot be undone."
+    )
+  ) {
+    return;
+  }
+
+  setSavingId("all");
+  setStatus("");
+
+  try {
+    await apiFetch("/project-requests", {
+      method: "DELETE",
+    });
+
+    setManagingId(null);
+    await load();
+
+    setStatus("All project requests deleted.");
+  } catch (err) {
+    setStatus(
+      err.message || "Failed to delete all project requests."
+    );
+  } finally {
+    setSavingId(null);
+  }
+}
+
   return (
     <div className="admin-panel">
 
@@ -2421,6 +2474,14 @@ function ProjectRequestsPanel() {
 
           {loading ? "Loading…" : "Refresh"}
         </button>
+        <button
+  className="btn btn--outline btn--sm"
+  onClick={deleteAllRequests}
+  disabled={savingId === "all" || loading || !requests.length}
+>
+  <Trash2 size={14} />
+  {savingId === "all" ? "Deleting..." : "Delete All"}
+</button>
       </div>
 
       {status && (
@@ -2516,6 +2577,14 @@ function ProjectRequestsPanel() {
                   >
                     Manage
                   </button>
+                  <button
+  className="btn btn--outline btn--sm"
+  disabled={savingId === request.id}
+  onClick={() => deleteRequest(request.id)}
+>
+  <Trash2 size={14} />
+  Delete
+</button>
 
                 </div>
 
