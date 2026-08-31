@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
+import SmoothScroll from "./components/SmoothScroll";
 import ScrollToTop from "./components/ScrollToTop";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import Footer from "./components/Footer";
@@ -26,33 +27,35 @@ import { AuthProvider } from "./context/AuthContext";
 export default function App() {
   return (
     <AuthProvider>
-      <CursorTrailBlobs />
-      <CustomCursor />
-      <PageLoader />
-      <ScrollToTop />
+      <SmoothScroll>
+        <CursorTrailBlobs />
+        <CustomCursor />
+        <PageLoader />
+        <ScrollToTop />
 
-      <Navbar />
+        <Navbar />
 
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/downloads" element={<Downloads />} />
-          <Route path="/clients" element={<Clients />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/ongoing-projects" element={<OngoingProjects />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/careers" element={<Careers />} />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/downloads" element={<Downloads />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/ongoing-projects" element={<OngoingProjects />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/careers" element={<Careers />} />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
 
-      <Footer />
-      <ScrollToTopButton />
-      <WhatsAppButton />
+        <Footer />
+        <ScrollToTopButton />
+        <WhatsAppButton />
+      </SmoothScroll>
     </AuthProvider>
   );
 }

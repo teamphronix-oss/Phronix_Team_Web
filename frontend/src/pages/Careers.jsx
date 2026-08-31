@@ -3,7 +3,7 @@ import { Sparkles, Users, Rocket, GraduationCap } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
 import JobCard from "../components/JobCard";
 import siteConfig from "../data/siteConfig";
-
+import JobApplyButton from "../components/home/JobApplyButton";
 const values = [
   {
     icon: Sparkles,
@@ -93,18 +93,6 @@ export default function Careers() {
           </div>
         )}
 
-        <div className="card careers__cta">
-          <div>
-            <h3>Don't see the right role?</h3>
-            <p>We're always happy to hear from people who'd be a good fit. Send us your resume and a note about what you'd like to work on.</p>
-          </div>
-          <a
-            href={`mailto:${siteConfig.careersEmail || siteConfig.email}?subject=${encodeURIComponent("Open Application")}`}
-            className="btn btn--gold"
-          >
-            Send Open Application
-          </a>
-        </div>
       </div>
     </div>
   );

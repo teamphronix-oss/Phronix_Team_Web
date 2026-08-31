@@ -627,3 +627,8 @@ input, textarea, select {
     0 0 0 2px rgba(121, 206, 245, 0.15),
     0 0 22px rgba(48, 173, 231, 0.28);
 }
+
+/* Keep this modal above the custom cursor overlay (z-index: 9999) */
+.modal-overlay:has(.apply-modal) {
+  z-index: 10000;
+}
