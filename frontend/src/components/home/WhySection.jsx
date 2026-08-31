@@ -1,7 +1,26 @@
-import { Layers, Gauge, ShieldCheck, Code2, GitBranch, Headphones } from "lucide-react";
+import * as Icons from "lucide-react";
+import { useEffect, useState } from "react";
+import siteConfig from "../../data/siteConfig";
 import "../../styles/home/why.css";
 
 export default function WhySection() {
+  const [features, setFeatures] = useState([]);
+
+  useEffect(() => {
+    fetch(`${siteConfig.apiBaseUrl}/why-features`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to load why features: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setFeatures(data.features || []);
+      })
+      .catch((err) => {
+        console.error("Failed to load Why Phronix features:", err);
+      });
+  }, []);
   return (
     <>
       <section className="section why">
@@ -20,49 +39,21 @@ export default function WhySection() {
           </div>
 
           <div className="why__features">
-            <div className="why-feature">
-              <div className="why-feature__icon">
-                <Layers size={20} strokeWidth={1.8} />
-              </div>
-              <h4>Modular Architecture</h4>
-              <p>Clean, composable systems that scale without a rewrite.</p>
-            </div>
-            <div className="why-feature">
-              <div className="why-feature__icon">
-                <Gauge size={20} strokeWidth={1.8} />
-              </div>
-              <h4>Performance First</h4>
-              <p>Optimized for Core Web Vitals and real-world speed.</p>
-            </div>
-            <div className="why-feature">
-              <div className="why-feature__icon">
-                <ShieldCheck size={20} strokeWidth={1.8} />
-              </div>
-              <h4>Secure by Default</h4>
-              <p>Security best practices baked into every build.</p>
-            </div>
-            <div className="why-feature">
-              <div className="why-feature__icon">
-                <Code2 size={20} strokeWidth={1.8} />
-              </div>
-              <h4>Clean, Typed Code</h4>
-              <p>Documented, maintainable codebases that are easy to extend.</p>
-            </div>
-            <div className="why-feature">
-              <div className="why-feature__icon">
-                <GitBranch size={20} strokeWidth={1.8} />
-              </div>
-              <h4>Full Ownership</h4>
-              <p>You get the complete source — no lock-in, ever.</p>
-            </div>
-            <div className="why-feature">
-              <div className="why-feature__icon">
-                <Headphones size={20} strokeWidth={1.8} />
-              </div>
-              <h4>Real Support</h4>
-              <p>Direct access to the engineers who actually built it.</p>
-            </div>
-          </div>
+  {features.map((feature) => {
+    const Icon = Icons[feature.icon] || Icons.Sparkles;
+
+    return (
+      <div className="why-feature" key={feature.id}>
+        <div className="why-feature__icon">
+          <Icon size={20} strokeWidth={1.8} />
+        </div>
+
+        <h4>{feature.title}</h4>
+        <p>{feature.description}</p>
+      </div>
+    );
+  })}
+</div>
         </div>
       </section>
 

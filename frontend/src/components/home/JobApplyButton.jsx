@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { X, Upload, FileText, CheckCircle2, Loader2 } from "lucide-react";
 import "../../styles/home/apply-modal.css";
-
+import { createPortal } from "react-dom";
 /**
  * Drop-in replacement for the old `mailto:` "Apply Now" link.
  *
@@ -26,9 +26,11 @@ export default function JobApplyButton({ jobTitle, className = "" }) {
         Apply Now
       </button>
 
-      {isOpen && (
-        <ApplyModal jobTitle={jobTitle} onClose={() => setIsOpen(false)} />
-      )}
+           {isOpen &&
+        createPortal(
+          <ApplyModal jobTitle={jobTitle} onClose={() => setIsOpen(false)} />,
+          document.body
+        )}
     </>
   );
 }

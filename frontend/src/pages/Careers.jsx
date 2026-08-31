@@ -93,13 +93,6 @@ export default function Careers() {
           </div>
         )}
 
-        <div className="card careers__cta">
-          <div>
-            <h3>Don't see the right role?</h3>
-            <p>We're always happy to hear from people who'd be a good fit. Send us your resume and a note about what you'd like to work on.</p>
-          </div>
-          <JobApplyButton jobTitle="Open Application" className="btn--gold" />
-        </div>
       </div>
     </div>
   );

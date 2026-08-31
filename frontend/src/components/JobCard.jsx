@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Briefcase, MapPin, Clock, ChevronDown } from "lucide-react";
 import siteConfig from "../data/siteConfig";
+import JobApplyButton from "./home/JobApplyButton";
 
 export default function JobCard({ job }) {
   const [expanded, setExpanded] = useState(false);
@@ -67,15 +68,16 @@ export default function JobCard({ job }) {
         </div>
       )}
 
-      {job.open ? (
-        <a href={applyHref} className="btn btn--gold btn--sm job-card__cta">
-          Apply Now
-        </a>
-      ) : (
-        <span className="btn btn--outline btn--sm job-card__cta job-card__cta--disabled">
-          Position Closed
-        </span>
-      )}
+     {job.open ? (
+  <JobApplyButton
+    jobTitle={job.title}
+    className="btn--gold btn--sm job-card__cta"
+  />
+) : (
+  <span className="btn btn--outline btn--sm job-card__cta job-card__cta--disabled">
+    Position Closed
+  </span>
+)}
     </div>
   );
 }
