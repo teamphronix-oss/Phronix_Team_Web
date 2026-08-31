@@ -323,7 +323,7 @@ const emptyProject = {
   technologies: "",
   githubUrl: "",
   demoUrl: "",
-  ongoing: false,
+  // ongoing: false,
   order: 0,
 };
 
@@ -545,7 +545,7 @@ function ProjectsPanel() {
             />
           </label>
 
-          <label className="admin-field admin-field--row">
+          {/* <label className="admin-field admin-field--row">
             <input
               type="checkbox"
               checked={form.ongoing}
@@ -558,7 +558,7 @@ function ProjectsPanel() {
             />
 
             <span>Ongoing project</span>
-          </label>
+          </label> */}
 
           <label className="admin-field">
             <span>Order</span>
@@ -1337,41 +1337,166 @@ function DownloadsPanel() {
   );
 }
 
-// ── YouTube ──────────────────────────────────────────────────────
-
 const emptyVideo = {
   title: "",
-  thumbnail: "",
   url: "",
   order: 0,
 };
 
 function YoutubePanel() {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyVideo);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch("/youtube")
+      .then((d) => setItems(d.videos || []))
+      .catch((err) => {
+        console.error("YouTube videos load error:", err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function startNew() {
+    setForm(emptyVideo);
+    setFile(null);
+    setEditing("new");
+  }
+
+  function startEdit(v) {
+    setForm({
+      title: v.title || "",
+      url: v.url || "",
+      order: v.order || 0,
+    });
+    setFile(null);
+    setEditing(v.id);
+  }
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("thumbnail", file);
+
+      if (editing === "new") {
+        await apiFetch("/youtube", { method: "POST", body });
+      } else {
+        await apiFetch(`/youtube/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this video?")) return;
+    try {
+      await apiFetch(`/youtube/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   return (
-    <GenericPanel
-      basePath="/youtube"
-      listKey="videos"
-      emptyItem={emptyVideo}
-      addLabel="Add video"
-      emptyLabel="No videos yet."
-      formTitle="video"
-      rowLabel={(v) => v.title}
-      rowSub={(v) => v.url || ""}
-      fields={[
-        { key: "title", label: "Title", type: "text", required: true },
-        { key: "thumbnail", label: "Thumbnail URL", type: "text" },
-        { key: "url", label: "YouTube URL", type: "text", required: true },
-        { key: "order", label: "Order", type: "number" },
-      ]}
-    />
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add video
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New video" : "Edit video"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Title</span>
+            <input
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>YouTube URL</span>
+            <input
+              value={form.url}
+              onChange={(e) => setForm({ ...form, url: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input
+              type="number"
+              value={form.order}
+              onChange={(e) => setForm({ ...form, order: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Thumbnail image</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+            />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((v) => (
+          <div className="admin-list__row" key={v.id}>
+            <div className="admin-list__info">
+              <strong>{v.title}</strong>
+              <span>{v.url || ""}</span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(v)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(v.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No videos yet.</p>}
+      </div>
+    </div>
   );
 }
-
 // ── Ongoing Projects ─────────────────────────────────────────────
 
 const emptyOngoing = {
   name: "",
-  image: "",
   description: "",
   status: "Planning",
   technologies: "",
@@ -1381,39 +1506,194 @@ const emptyOngoing = {
 };
 
 function OngoingPanel() {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptyOngoing);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch("/ongoing-projects")
+      .then((d) => setItems(d.ongoingProjects || d.items || []))
+      .catch((err) => {
+        console.error("Ongoing projects load error:", err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function startNew() {
+    setForm(emptyOngoing);
+    setFile(null);
+    setEditing("new");
+  }
+
+  function startEdit(o) {
+    setForm({
+      name: o.name || "",
+      description: o.description || "",
+      status: o.status || "Planning",
+      technologies: (o.technologies || []).join(", "),
+      startDate: o.start_date || o.startDate || "",
+      expectedCompletion: o.expected_completion || o.expectedCompletion || "",
+      order: o.order || 0,
+    });
+    setFile(null);
+    setEditing(o.id);
+  }
+
+  async function save() {
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("image", file);
+
+      if (editing === "new") {
+        await apiFetch("/ongoing-projects", { method: "POST", body });
+      } else {
+        await apiFetch(`/ongoing-projects/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this ongoing project?")) return;
+    try {
+      await apiFetch(`/ongoing-projects/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   return (
-    <GenericPanel
-      basePath="/ongoing-projects"
-      listKey="items"
-      emptyItem={emptyOngoing}
-      addLabel="Add ongoing project"
-      emptyLabel="No ongoing projects yet."
-      formTitle="ongoing project"
-      rowLabel={(o) => o.name}
-      rowSub={(o) => o.status || ""}
-      fields={[
-        { key: "name", label: "Name", type: "text", required: true },
-        {
-          key: "image",
-          label: "Image URL",
-          type: "text",
-          placeholder: "/assets/placeholder-project.svg",
-        },
-        { key: "description", label: "Description", type: "textarea", required: true },
-        {
-          key: "status",
-          label: "Status (Planning / In Development / Testing / Near Completion)",
-          type: "text",
-        },
-        { key: "technologies", label: "Technologies (comma separated)", type: "csv" },
-        { key: "startDate", label: "Start date", type: "text", placeholder: "2026-03-01" },
-        { key: "expectedCompletion", label: "Expected completion", type: "text", placeholder: "2026-09-30" },
-        { key: "order", label: "Order", type: "number" },
-      ]}
-    />
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add ongoing project
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New ongoing project" : "Edit ongoing project"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Name</span>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Description</span>
+            <textarea
+              rows={3}
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Status (Planning / In Development / Testing / Near Completion)</span>
+            <input
+              value={form.status}
+              onChange={(e) => setForm({ ...form, status: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Technologies (comma separated)</span>
+            <input
+              value={form.technologies}
+              onChange={(e) => setForm({ ...form, technologies: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Start date</span>
+            <input
+              value={form.startDate}
+              onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+              placeholder="2026-03-01"
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Expected completion</span>
+            <input
+              value={form.expectedCompletion}
+              onChange={(e) => setForm({ ...form, expectedCompletion: e.target.value })}
+              placeholder="2026-09-30"
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input
+              type="number"
+              value={form.order}
+              onChange={(e) => setForm({ ...form, order: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Image</span>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+            />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((o) => (
+          <div className="admin-list__row" key={o.id}>
+            <div className="admin-list__info">
+              <strong>{o.name}</strong>
+              <span>{o.status || ""}</span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(o)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(o.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No ongoing projects yet.</p>}
+      </div>
+    </div>
   );
 }
-
 
 // ── Why Phronix (intro text + feature cards) ───────────────────────
 
