@@ -24,6 +24,7 @@ import careerRoutes from "./routes/careers.js";
 import youtubeVideoRoutes from "./routes/youtubeVideos.js";
 import ongoingProjectRoutes from "./routes/ongoingProjects.js";
 import whyFeatureRoutes from "./routes/whyFeatures.js";
+import aboutPointRoutes from "./routes/aboutPoints.js";
 import clientRoutes from "./routes/clients.js";
 import feedbackRoutes from "./routes/feedback.js";
 
@@ -177,6 +178,9 @@ app.use("/api/youtube-videos", youtubeVideoRoutes);
 app.use("/api/ongoing-projects", ongoingProjectRoutes);
 
 app.use("/api/why-features", whyFeatureRoutes);
+
+app.use("/api/about-points", aboutPointRoutes);
+
 
 app.use("/api/clients", clientRoutes);
 

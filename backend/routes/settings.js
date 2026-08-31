@@ -32,6 +32,8 @@ router.get("/", async (req, res, next) => {
         whyTitle: row.why_title || "",
         whyDescription: row.why_description || "",
 
+        aboutTitle: row.about_title || "",
+        aboutDescription: row.about_description || "",
         // Contact details
         email: row.email || "",
         phone: row.phone || "",
@@ -127,6 +129,27 @@ router.put("/contact", requireAdmin, async (req, res, next) => {
   }
 });
 
+// ─────────────────────────────────────────────
+// UPDATE ABOUT INTRO
+// ─────────────────────────────────────────────
+
+router.put("/about-intro", requireAdmin, async (req, res, next) => {
+  try {
+    const row = await updateSettings({
+      about_title: req.body.title,
+      about_description: req.body.description,
+    });
+
+    res.json({
+      settings: {
+        aboutTitle: row.about_title,
+        aboutDescription: row.about_description,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ─────────────────────────────────────────────
 // UPDATE GENERAL SETTINGS

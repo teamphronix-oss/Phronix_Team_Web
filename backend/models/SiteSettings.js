@@ -77,6 +77,14 @@ export async function updateSettings(data) {
     updates.why_description = data.why_description;
   }
 
+  if (data.about_title !== undefined) {
+    updates.about_title = data.about_title;
+  }
+
+  if (data.about_description !== undefined) {
+    updates.about_description = data.about_description;
+  }
+
   // Contact details
   if (data.email !== undefined) {
     updates.email = data.email;
