@@ -14,5 +14,7 @@ export default makeContentRouter({
   responseKey: "videos",
   singleKey: "video",
   arrayFields: [],
-  imageFields: [],
+  imageFields: [
+    { formField: "thumbnail", urlField: "thumbnail_url", publicIdField: "thumbnail_public_id", folder: "youtube" },
+  ],
 });
