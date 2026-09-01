@@ -1,6 +1,8 @@
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "../SectionHeading";
+import siteConfig from "../../data/siteConfig";
 import sweeterJoy from "../../assets/projects/sweeter-joy.png";
 import sweeterJoy1 from "../../assets/projects/sweeter-joy1.png";
 import sweeterJoy2 from "../../assets/projects/sweeter-joy2.png";
@@ -55,9 +57,66 @@ const featuredProjects = [
 ];
 
 export default function ProjectsSection() {
+  const [statNumber, setStatNumber] = useState("40+");
+  const [displayCount, setDisplayCount] = useState(1);
+  const sectionRef = useRef(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    fetch(`${siteConfig.apiBaseUrl}/settings`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.settings?.statNumber) setStatNumber(data.settings.statNumber);
+      })
+      .catch((err) => console.error("Failed to load stat number:", err));
+  }, []);
+
+  const targetNumber = parseInt(statNumber, 10) || 0;
+  const suffix = statNumber.replace(/[0-9]/g, "");
+
+  useEffect(() => {
+    if (!sectionRef.current || targetNumber <= 1) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated.current) {
+            hasAnimated.current = true;
+
+            const duration = 1600;
+            const startTime = performance.now();
+
+            const tick = (now) => {
+              const elapsed = now - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              const current = Math.round(1 + eased * (targetNumber - 1));
+
+              setDisplayCount(current);
+
+              if (progress < 1) {
+                requestAnimationFrame(tick);
+              }
+            };
+
+            requestAnimationFrame(tick);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [targetNumber]);
+
   return (
-    <section className="section projects-section">
+    <section className="section projects-section" ref={sectionRef}>
       <div className="container">
+        <div className="pe-stat">
+          <span className="pe-stat__number">{displayCount}{suffix}</span>
+        </div>
+
         <SectionHeading
           eyebrow="Featured Work"
           title="Digital products engineered for scale"
