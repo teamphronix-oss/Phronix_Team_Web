@@ -7,7 +7,6 @@ import YouTubeCard from "../components/YouTubeCard";
 import Seam from "../components/Seam";
 
 import { projects as staticProjects } from "../data/projects";
-import youtubeVideos from "../data/youtube";
 import siteConfig from "../data/siteConfig";
 
 const API = siteConfig.apiBaseUrl;
@@ -70,6 +69,7 @@ export default function Projects() {
 
   const [apiProjects, setApiProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [youtubeVideos, setYoutubeVideos] = useState([]);
 
   // ─────────────────────────────────────────────
   // Load projects added from Admin Dashboard
@@ -113,6 +113,37 @@ export default function Projects() {
     };
   }, []);
 
+  useEffect(() => {
+  let mounted = true;
+
+  async function loadYoutubeVideos() {
+    try {
+      const res = await fetch(`${API}/youtube-videos`);
+
+      if (!res.ok) {
+        throw new Error("Failed to load YouTube videos.");
+      }
+
+      const data = await res.json();
+
+      if (mounted) {
+        setYoutubeVideos(data.videos || []);
+      }
+    } catch (error) {
+      console.error("YouTube videos API error:", error);
+
+      if (mounted) {
+        setYoutubeVideos([]);
+      }
+    }
+  }
+
+  loadYoutubeVideos();
+
+  return () => {
+    mounted = false;
+  };
+}, []);
   // ─────────────────────────────────────────────
   // Combine static + Admin projects
   // ─────────────────────────────────────────────

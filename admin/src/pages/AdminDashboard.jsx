@@ -1532,7 +1532,7 @@ function YoutubePanel() {
   const [status, setStatus] = useState("");
 
   function load() {
-    apiFetch("/youtube")
+    apiFetch("/youtube-videos")
       .then((d) => setItems(d.videos || []))
       .catch((err) => {
         console.error("YouTube videos load error:", err);
@@ -1567,9 +1567,9 @@ function YoutubePanel() {
       if (file) body.append("thumbnail", file);
 
       if (editing === "new") {
-        await apiFetch("/youtube", { method: "POST", body });
+        await apiFetch("/youtube-videos", { method: "POST", body });
       } else {
-        await apiFetch(`/youtube/${editing}`, { method: "PUT", body });
+        await apiFetch(`/youtube-videos/${editing}`, { method: "PUT", body });
       }
 
       setEditing(null);
@@ -1583,7 +1583,7 @@ function YoutubePanel() {
   async function remove(id) {
     if (!confirm("Delete this video?")) return;
     try {
-      await apiFetch(`/youtube/${id}`, { method: "DELETE" });
+      await apiFetch(`/youtube-videos/${id}`, { method: "DELETE" });
       load();
     } catch (err) {
       alert(err.message);
