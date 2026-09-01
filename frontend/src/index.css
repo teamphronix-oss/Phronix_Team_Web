@@ -114,13 +114,13 @@ button { font-family: inherit; cursor: pointer; }
   align-items: center;
   gap: 8px;
 }
-.eyebrow::before {
+/* .eyebrow::before {
   content: "";
   width: 18px;
   height: 1.5px;
   background: var(--gold);
   display: inline-block;
-}
+} */
 
 .section { padding: 96px 0; }
 .section--soft { background: var(--bg-soft); }
