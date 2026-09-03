@@ -452,11 +452,14 @@ export default function ParticlePhoenix({ onInteraction }) {
 
     const clock = new THREE.Clock();
     let raf = 0;
+    let isVisible = true;
 
     const animate = () => {
       if (disposed) return;
 
       raf = requestAnimationFrame(animate);
+
+      if (!isVisible || document.hidden) return;
 
       const dt = clock.getDelta();
       const elapsed = clock.elapsedTime;
@@ -505,9 +508,20 @@ export default function ParticlePhoenix({ onInteraction }) {
     resize();
     raf = requestAnimationFrame(animate);
 
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+        });
+      },
+      { threshold: 0 }
+    );
+    visibilityObserver.observe(mount);
+
     return () => {
       disposed = true;
 
+      visibilityObserver.disconnect();
       window.removeEventListener("click", onClick);
       window.removeEventListener("resize", resize);
 
