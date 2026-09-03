@@ -146,38 +146,3 @@
   }
 }
 
-/* ── "40+ Projects delivered" stat above the heading ────────── */
-.pe-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 0 auto 32px;
-  max-width: var(--container);
-}
-
-.pe-stat__number {
-  font-family: var(--font-display);
-  font-size: clamp(56px, 9vw, 96px);
-  font-weight: 700;
-  background: linear-gradient(120deg, #ffffff 0%, #9fd7ff 44%, #38e5d0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  line-height: 1;
-}
-
-.pe-stat__label {
-  margin-top: 12px;
-  font-family: var(--font-mono);
-  font-size: 15px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-@media (max-width: 640px) {
-  .pe-stat__number {
-    font-size: clamp(40px, 12vw, 64px);
-  }
-}

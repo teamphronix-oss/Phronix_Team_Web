@@ -1,9 +1,22 @@
 import { Headphones, Bot, Star, Search, ShieldCheck, Palette } from "lucide-react";
 import "../../styles/home/top-features.css";
+import ClientLogoMarquee from "../../components/home/ClientLogoMarquee.jsx";
+import "../../styles/home/client-marquee.css";
 
+const clientLogos = [
+  { src: `${import.meta.env.BASE_URL}assets/logos/client1.svg`, alt: "Client 1" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client2.svg`, alt: "Client 2" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client3.svg`, alt: "Client 3" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client4.svg`, alt: "Client 4" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client5.svg`, alt: "Client 5" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client6.svg`, alt: "Client 6" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client7.svg`, alt: "Client 7" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/client8.svg`, alt: "Client 8" },
+];
 export default function TopFeaturesSection() {
   return (
     <>
+    <ClientLogoMarquee logos={clientLogos} />
       <section className="section top-features">
         <div className="container">
           <div className="top-features__intro">
