@@ -64,6 +64,7 @@ const allowedOrigins = [
   'http://localhost:5174',
   "https://teamphronix-oss.github.io",
   process.env.CLIENT_URL,
+  process.env.ADMIN_URL,
 ].filter(Boolean);
 
 app.use(
