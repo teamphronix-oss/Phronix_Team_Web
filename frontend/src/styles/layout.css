@@ -215,7 +215,10 @@
     border-right: none;
     border-top: 1px solid var(--line);
   }
-  @media (max-width: 900px) {
+  /* Breakpoint raised from 900px → 1024px so tablets (e.g. Surface Pro 7
+     @ 912px) also get the mobile nav treatment instead of a squeezed
+     desktop layout. */
+  @media (max-width: 1024px) {
     .navbar__socials:not(.navbar__socials--mobile) { display: none; }
   }
   .navbar__toggle {
@@ -318,7 +321,8 @@
     background: rgba(14, 165, 233, 0.15);
   }
 
-  @media (max-width: 900px) {
+  /* Breakpoint raised from 900px → 1024px (see note above). */
+  @media (max-width: 1024px) {
     .navbar__links { display: none; }
     .navbar__toggle { display: inline-flex; }
     .navbar__mobile { display: flex; }
@@ -1096,7 +1100,10 @@
     object-fit: cover;
   }
 
-  @media (max-width: 900px) {
+  /* Breakpoint raised from 900px → 1024px to match the navbar
+     hamburger switch — the dock only makes sense next to a desktop
+     nav, so it hides for tablets too now. */
+  @media (max-width: 1024px) {
     .floating-dock {
       display: none;
     }
@@ -1617,4 +1624,29 @@ border-color: var(--line);
   font-weight: 600;
   color: #94a3b8;
   font-family: var(--font-mono);
+}
+
+/* ── Extra small mobile fix ─────────────────────────────── */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+  .section {
+    padding: 48px 0;
+  }
+  h1 { font-size: clamp(26px, 8vw, 34px); }
+  h2 { font-size: clamp(22px, 6vw, 28px); }
+}
+
+/* ── Navbar: logo/text scale down on small screens ─────────── */
+@media (max-width: 480px) {
+  .navbar__inner { height: 64px; }
+  .navbar__logo span { font-size: 16px; }
+  .navbar__mark--img { width: 30px; height: 30px; }
+}
+
+/* ── Prevent horizontal scroll on any screen ─────────────── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
 }
