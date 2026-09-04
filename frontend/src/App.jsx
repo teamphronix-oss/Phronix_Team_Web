@@ -6,6 +6,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import ChatBotWidget from "./components/ChatBotWidget";
 import PageLoader from "./components/PageLoader";
 import CustomCursor from "./components/CustomCursor";
 import CursorTrailBlobs from "./components/CursorTrailBlobs";
@@ -57,6 +58,7 @@ export default function App() {
         <Footer />
         <ScrollToTopButton />
         <WhatsAppButton />
+        <ChatBotWidget />
       </SmoothScroll>
     </AuthProvider>
   );
