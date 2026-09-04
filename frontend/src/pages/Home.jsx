@@ -7,9 +7,6 @@ import TrustedBySection from "../components/home/TrustedBySection";
 import AboutSection from "../components/home/AboutSection";
 import ServicesSection from "../components/home/ServicesSection";
 import WhySection from "../components/home/WhySection";
-import MarketingSection from "../components/home/MarketingSection";
-import CampaignDashboardSection from "../components/home/CampaignDashboardSection";
-import AIRetrofitSection from "../components/home/AIRetrofitSection";
 import ShowcaseSection from "../components/home/ShowcaseSection";
 import ProjectsSection from "../components/home/ProjectsSection";
 import PageEcosystemSection from "../components/home/PageEcosystemSection";
@@ -48,9 +45,6 @@ useEffect(() => {
       <Seam />
       <ServicesSection />
       <WhySection />
-      <MarketingSection />
-      <CampaignDashboardSection />
-      <AIRetrofitSection />
       <ShowcaseSection />
       <ProjectsSection />
       <Seam />

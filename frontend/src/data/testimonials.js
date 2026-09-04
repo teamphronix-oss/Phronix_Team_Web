@@ -81,33 +81,11 @@ export const testimonials = [
     clientName: "Karan Bhatt",
     company: "Northline Studio",
     logo: "/assets/placeholder-logo.svg",
-    projectCompleted: "Northline rebrand & launch campaign",
+    projectCompleted: "Northline portfolio site",
     designation: "Creative Director",
     rating: 5,
     feedback:
-      "They rebuilt our brand and ran the launch campaign that got it in front of people — not just a design refresh sitting on a shelf. Inbound leads nearly tripled.",
-  },
-  {
-    id: 9,
-    clientName: "Rhea Kapoor",
-    company: "Greenroot Foods",
-    logo: "/assets/placeholder-logo.svg",
-    projectCompleted: "SEO & paid growth engine",
-    designation: "Head of Marketing",
-    rating: 5,
-    feedback:
-      "The same team that built our store also runs our SEO and ad spend now. Organic traffic more than tripled and our paid campaigns finally have a ROAS we're happy with.",
-  },
-  {
-    id: 10,
-    clientName: "Vikram Chandhok",
-    company: "Anira Retail",
-    logo: "/assets/placeholder-logo.svg",
-    projectCompleted: "Brand positioning & content strategy",
-    designation: "Marketing Director",
-    rating: 4,
-    feedback:
-      "Having engineering and marketing under one roof meant no back-and-forth between agencies. They understood our funnel because they built the site it runs on.",
+      "Design sense plus solid engineering — a combination that's hard to find. They got our vision right on the first try.",
   },
 ];
 

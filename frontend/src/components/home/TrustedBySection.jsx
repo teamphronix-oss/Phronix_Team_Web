@@ -4,12 +4,9 @@ const capabilities = [
   "AI/AUTOMATION SERVICES",
   "WEBSITE BUILDING SERVICES",
   "SEO SERVICES",
-  "PAID ADS & PERFORMANCE MARKETING",
   "CONTENT-BASED SERVICES",
-  "BRANDING & POSITIONING",
   "UI/UX DESIGNING",
   "SOFTWARE DEVELOPMENT",
-  "SALES ENABLEMENT",
   "BASIC DIGITAL & TECH SUPPORT",
   "MOBILE APP DEVELOPMENT",
 ];
@@ -19,7 +16,7 @@ export default function TrustedBySection() {
     <section className="trusted-by">
       <div className="container">
         <p className="trusted-by__label">
-          Building the future with technology, marketing & AI
+          Building the future with technology, creativity & AI
         </p>
       </div>
 

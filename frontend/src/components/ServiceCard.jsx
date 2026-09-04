@@ -4,9 +4,6 @@ import { ArrowUpRight } from "lucide-react";
 
 export default function ServiceCard({ service }) {
   const Icon = Icons[service.icon] || Icons.Sparkles;
-  const description = service.description || service.shortDescription;
-  const tags = service.features || service.technologies || [];
-  const price = service.price_range || service.priceRange;
 
   return (
     <div className="card service-card service-card--minimal">
@@ -17,10 +14,10 @@ export default function ServiceCard({ service }) {
       </div>
       <div className="service-card__body">
         <h3 className="service-card__title">{service.name}</h3>
-        {description && <p className="service-card__desc">{description}</p>}
-        {tags.length > 0 && (
+        <p className="service-card__desc">{service.description}</p>
+        {service.features?.length > 0 && (
           <div className="service-card__tags">
-            {tags.map((f) => (
+            {service.features.map((f) => (
               <span className="service-card__tag" key={f}>
                 {f}
               </span>
@@ -29,10 +26,10 @@ export default function ServiceCard({ service }) {
         )}
       </div>
       <div className="service-card__footer">
-        {price && (
+        {service.price_range && (
           <div className="service-card__price-badge">
             <span className="service-card__price-label">Starting at</span>
-            <span className="service-card__price-val">{price}</span>
+            <span className="service-card__price-val">{service.price_range}</span>
           </div>
         )}
         <Link

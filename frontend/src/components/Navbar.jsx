@@ -8,38 +8,14 @@ import {
   Github,
   Youtube,
   Linkedin,
-  Code2,
-  TrendingUp,
-  Bot,
 } from "lucide-react";
 import siteConfig from "../data/siteConfig";
 import useSiteLogo from "../hooks/useSiteLogo";
 import phronixLogo from "../assets/Gemini_Generated_Image_mflsmnmflsmnmfls.png";
 
-const servicesMega = [
-  {
-    title: "Build",
-    icon: Code2,
-    to: "/services#build",
-    items: ["Web Development", "Mobile Apps", "Cloud & DevOps", "UI/UX Design"],
-  },
-  {
-    title: "Grow",
-    icon: TrendingUp,
-    to: "/services#grow",
-    items: ["SEO & Organic", "Paid Ads", "Brand & Content"],
-  },
-  {
-    title: "Automate",
-    icon: Bot,
-    to: "/services#automate",
-    items: ["AI Chatbots", "AI in Existing Software", "Workflow Automation"],
-  },
-];
-
 const links = [
   { to: "/", label: "Home" },
-  { to: "/services", label: "Services", mega: true },
+  { to: "/services", label: "Services" },
   {
     to: "/clients",
     label: "Clients",
@@ -166,67 +142,7 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <nav className="navbar__links" aria-label="Primary">
           {links.map((l) =>
-            l.mega ? (
-              <div
-                key={l.to}
-                className="navbar__dropdown"
-                onMouseEnter={() => openDropdown(l.label)}
-                onMouseLeave={scheduleCloseDropdown}
-              >
-                <NavLink
-                  to={l.to}
-                  className={({ isActive }) =>
-                    `navbar__link navbar__link--dropdown ${
-                      isActive ? "navbar__link--active" : ""
-                    }`
-                  }
-                  onClick={() => handleNavClick(l.to)}
-                >
-                  {l.label}
-                  <ChevronDown
-                    size={14}
-                    className={`navbar__dropdown-caret ${
-                      desktopDropdown === l.label
-                        ? "navbar__dropdown-caret--open"
-                        : ""
-                    }`}
-                  />
-                </NavLink>
-
-                {desktopDropdown === l.label && (
-                  <div className="navbar__mega" role="menu">
-                    {servicesMega.map((col) => {
-                      const ColIcon = col.icon;
-                      return (
-                        <div className="navbar__mega-col" key={col.title}>
-                          <NavLink
-                            to={col.to}
-                            className="navbar__mega-col-title"
-                            onClick={() => handleNavClick(col.to)}
-                          >
-                            <ColIcon size={15} strokeWidth={2} />
-                            <span>{col.title}</span>
-                          </NavLink>
-                          <ul>
-                            {col.items.map((item) => (
-                              <li key={item}>
-                                <NavLink
-                                  to={col.to}
-                                  className="navbar__mega-item"
-                                  onClick={() => handleNavClick(col.to)}
-                                >
-                                  {item}
-                                </NavLink>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ) : l.children ? (
+            l.children ? (
               <div
                 key={l.to}
                 className="navbar__dropdown"
@@ -422,55 +338,7 @@ export default function Navbar() {
         <nav className="navbar__mobile" aria-label="Mobile">
 
           {links.map((l) =>
-            l.mega ? (
-              <div key={l.to} className="navbar__mobile-group">
-                <button
-                  type="button"
-                  className="navbar__mobile-link navbar__mobile-link--dropdown"
-                  aria-expanded={mobileDropdown === l.label}
-                  onClick={() => {
-                    setMobileDropdown((cur) =>
-                      cur === l.label ? null : l.label
-                    );
-                  }}
-                >
-                  {l.label}
-                  <ChevronDown
-                    size={16}
-                    className={`navbar__dropdown-caret ${
-                      mobileDropdown === l.label
-                        ? "navbar__dropdown-caret--open"
-                        : ""
-                    }`}
-                  />
-                </button>
-
-                {mobileDropdown === l.label && (
-                  <div className="navbar__mobile-mega">
-                    {servicesMega.map((col) => {
-                      const ColIcon = col.icon;
-                      return (
-                        <div className="navbar__mobile-mega-col" key={col.title}>
-                          <span className="navbar__mobile-mega-title">
-                            <ColIcon size={14} strokeWidth={2} /> {col.title}
-                          </span>
-                          {col.items.map((item) => (
-                            <NavLink
-                              key={item}
-                              to={col.to}
-                              className="navbar__mobile-sublink"
-                              onClick={() => handleNavClick(col.to)}
-                            >
-                              {item}
-                            </NavLink>
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ) : l.children ? (
+            l.children ? (
               <div key={l.to} className="navbar__mobile-group">
                 <div
                   className="navbar__mobile-link navbar__mobile-link--dropdown"

@@ -9,7 +9,6 @@ import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
 const DEFAULT_ITEMS = [
   { id: "touch", label: "GET IN TOUCH", hasVideo: true, videoSrc: logoVideo, avatar: true },
   { id: "start", label: "Start a project", type: "link", to: "/projects", pinned: true, scrollGated: true, cta: true },
-  { id: "aibot", label: "Talk to our AI Bot", type: "action", action: "open-chatbot", pinned: true },
   { id: "us", label: "THIS IS US", hasVideo: true, videoSrc: logoVideo },
   { id: "pitch", label: "PITCHDECK", hasVideo: true, videoSrc: logoVideo },
   { id: "awwwards", label: "OUR AWWWARDS TALK", hasVideo: true, videoSrc: logoVideo },
@@ -18,7 +17,7 @@ const DEFAULT_ITEMS = [
 /* Number of items pinned at the top of the dock (always visible,
    never gated behind scroll position). Keep this in sync with how
    many leading items in DEFAULT_ITEMS carry pinned: true. */
-const PINNED_COUNT = 3;
+const PINNED_COUNT = 2;
 
 /* Selector for the hero's own "Start a project" button. The dock's
    matching pill only appears once this one has scrolled out of view,
@@ -168,12 +167,12 @@ export default function FloatingDock({
     );
 
     /*
-     * Map (offset by PINNED_COUNT since the leading rows are
+     * Map (offset by PINNED_COUNT since the first two rows are
      * always-visible pinned items, not scroll-revealed ones):
      *
-     * activeIdx 0 → items[3] → THIS IS US
-     * activeIdx 1 → items[4] → PITCHDECK
-     * activeIdx 2 → items[5] → OUR AWWWARDS TALK
+     * activeIdx 0 → items[2] → THIS IS US
+     * activeIdx 1 → items[3] → PITCHDECK
+     * activeIdx 2 → items[4] → OUR AWWWARDS TALK
      */
     setOpenId(
       items[activeIdx + PINNED_COUNT]?.id ?? null
@@ -242,13 +241,6 @@ export default function FloatingDock({
 function DockItem({ item, index, isOpen, isVisible, onToggle }) {
   const videoRef = useRef(null);
   const isLink = item.type === "link";
-  const isAction = item.type === "action";
-
-  const handleAction = () => {
-    if (item.action === "open-chatbot") {
-      window.dispatchEvent(new CustomEvent("phronix:open-chatbot"));
-    }
-  };
 
   useEffect(() => {
     if (!item.hasVideo || !videoRef.current) return;
@@ -290,18 +282,6 @@ function DockItem({ item, index, isOpen, isVisible, onToggle }) {
           </span>
           <ArrowRight size={14} />
         </Link>
-      ) : isAction ? (
-        <button
-          type="button"
-          className="floating-dock__row floating-dock__row--link"
-          onClick={handleAction}
-          tabIndex={isVisible ? 0 : -1}
-        >
-          <span className="floating-dock__row-label">
-            <span>{item.label}</span>
-          </span>
-          <ArrowRight size={14} />
-        </button>
       ) : (
         <button
           className="floating-dock__row"

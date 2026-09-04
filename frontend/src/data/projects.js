@@ -18,7 +18,6 @@ export const projectCategories = [
   "E-Commerce",
   "Dashboard",
   "AI & Automation",
-  "Marketing & Growth",
   "Open Source",
 ];
 
@@ -102,11 +101,7 @@ export const projects = [
       "Autonomous tool-calling and semantic database mutations",
       "Sub-40ms streaming voice synthesis",
       "Automated document and receipt OCR parsing"
-    ],
-    pillarDetails: {
-      build: "A FastAPI backend orchestrating multi-step agent workflows, with a Python task queue handling tool-calling and CRM writes.",
-      ai: "The core product: autonomous agents that plan, call tools, and execute multi-step tasks — plus a voice copilot layered on top with sub-40ms streaming synthesis.",
-    }
+    ]
   },
   {
     id: "ledgerlite",
@@ -187,47 +182,6 @@ export const projects = [
       "Full TypeScript type safety with Zod integration",
       "Accessible WCAG 2.1 AA compliant UI elements"
     ]
-  },
-  {
-    id: "greenroot-growth",
-    name: "Greenroot Foods — Growth Engine",
-    category: "Marketing & Growth",
-    image: sweeterJoy8,
-    description:
-      "Full-funnel SEO and paid acquisition program for a D2C food brand, rebuilding organic rankings and running always-on performance campaigns.",
-    technologies: ["Technical SEO", "Google Ads", "Meta Ads", "GA4"],
-    githubUrl: "https://github.com/phronix/greenroot-growth",
-    demoUrl: "https://greenrootfoods.demo",
-    features: [
-      "Organic traffic grew 3.1x in 6 months after a technical SEO overhaul",
-      "Paid campaigns across Google & Meta sustained a 4.6x ROAS",
-      "Content and email flows lifted repeat purchase rate by 22%"
-    ],
-    pillarDetails: {
-      build: "Rebuilt the storefront on a faster stack so Core Web Vitals stopped capping organic rankings.",
-      campaign: "Ran always-on Google & Meta acquisition campaigns with conversion tracking wired to real purchase events, sustaining a 4.6x ROAS.",
-      ai: "Product recommendation logic and email subject-line testing powered by lightweight AI scoring.",
-    }
-  },
-  {
-    id: "northline-rebrand",
-    name: "Northline Studio — Rebrand & Launch",
-    category: "Marketing & Growth",
-    image: sweeterJoy9,
-    description:
-      "Brand repositioning and launch campaign for a creative studio, spanning identity, messaging, content, and a coordinated social rollout.",
-    technologies: ["Brand Strategy", "Content Calendar", "Social Campaigns"],
-    githubUrl: "https://github.com/phronix/northline-rebrand",
-    demoUrl: "https://northlinestudio.demo",
-    features: [
-      "New positioning and identity rolled out across site, deck, and socials",
-      "Launch campaign drove a 2.8x increase in qualified inbound leads",
-      "Social following grew 40% in the first quarter post-launch"
-    ],
-    pillarDetails: {
-      build: "New marketing site built to carry the rebrand consistently across every page and breakpoint.",
-      campaign: "Coordinated launch campaign across paid social and email drove a 2.8x increase in qualified inbound leads.",
-    }
   },
   {
     id: "chocolatier-deluxe",
