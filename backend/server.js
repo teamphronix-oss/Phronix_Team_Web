@@ -66,6 +66,8 @@ const allowedOrigins = [
   "http://localhost:5175",
   'http://localhost:5174',
   "https://teamphronix-oss.github.io",
+  "https://www.phronix.in",
+  "https://phronix.in",
   process.env.CLIENT_URL,
   process.env.ADMIN_URL,
 ].filter(Boolean);
