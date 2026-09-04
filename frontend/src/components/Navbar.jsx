@@ -340,28 +340,40 @@ export default function Navbar() {
           {links.map((l) =>
             l.children ? (
               <div key={l.to} className="navbar__mobile-group">
-                <button
-                  type="button"
+                <div
                   className="navbar__mobile-link navbar__mobile-link--dropdown"
                   aria-expanded={mobileDropdown === l.label}
-                  onClick={() => {
-                    navigate(l.to);
-                    setOpen(false);
-                    setMobileDropdown((cur) =>
-                      cur === l.label ? null : l.label
-                    );
-                  }}
                 >
-                  {l.label}
-                  <ChevronDown
-                    size={16}
-                    className={`navbar__dropdown-caret ${
-                      mobileDropdown === l.label
-                        ? "navbar__dropdown-caret--open"
-                        : ""
-                    }`}
-                  />
-                </button>
+                  <NavLink
+                    to={l.to}
+                    end={l.to === "/"}
+                    className="navbar__mobile-link-text"
+                    onClick={() => handleNavClick(l.to)}
+                  >
+                    {l.label}
+                  </NavLink>
+                  <button
+                    type="button"
+                    className="navbar__mobile-dropdown-toggle"
+                    aria-label={`Toggle ${l.label} submenu`}
+                    aria-expanded={mobileDropdown === l.label}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMobileDropdown((cur) =>
+                        cur === l.label ? null : l.label
+                      );
+                    }}
+                  >
+                    <ChevronDown
+                      size={16}
+                      className={`navbar__dropdown-caret ${
+                        mobileDropdown === l.label
+                          ? "navbar__dropdown-caret--open"
+                          : ""
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 {mobileDropdown === l.label && (
                   <div className="navbar__mobile-submenu">
