@@ -28,6 +28,9 @@ import aboutPointRoutes from "./routes/aboutPoints.js";
 import clientRoutes from "./routes/clients.js";
 import feedbackRoutes from "./routes/feedback.js";
 
+import clientDownloadRoutes from "./routes/clientDownloads.js";
+import studentDownloadRoutes from "./routes/studentDownloads.js";
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -156,6 +159,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 
 app.use("/api/downloads", downloadRoutes);
+
+app.use("/api/downloads/client", clientDownloadRoutes);
+app.use("/api/downloads/student", studentDownloadRoutes);
 
 app.use("/api/admin", adminRoutes);
 

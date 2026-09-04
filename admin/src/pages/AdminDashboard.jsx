@@ -104,7 +104,7 @@ export default function AdminDashboard() {
 
         {tab === "logo" && <LogoPanel />}
         {tab === "homeStats" && <HomeStatsPanel />}
-        {tab === "projects" && <ProjectsPanel />}
+        {tab === "projects" && <StudentSecureDownloadsPanel />}
         {tab === "team" && <TeamPanel />}
         {tab === "projectRequests" && <ProjectRequestsPanel />}
         {tab === "contactMessages" && <ContactMessagesPanel />}
@@ -112,7 +112,7 @@ export default function AdminDashboard() {
         {tab === "testimonials" && <TestimonialsPanel />}
         {tab === "clients" && <ClientsPanel />}
         {tab === "careers" && <CareersPanel />}
-        {tab === "downloads" && <DownloadsPanel />}
+        {tab === "downloads" && <ClientSecureDownloadsPanel />}
         {tab === "youtube" && <YoutubePanel />}
         {tab === "ongoing" && <OngoingPanel />}
         {tab === "why" && <WhyPanel />}
@@ -1517,6 +1517,292 @@ function DownloadsPanel() {
     />
   );
 }
+// ── Secure Downloads (Client / Student) ─────────────────────────────
+// Shared component for the new token-based download system. Unlike the old
+// DownloadsPanel (GenericPanel, JSON-only), this posts FormData because it
+// supports an optional cover image, same as ClientsPanel/TestimonialsPanel.
+
+const emptySecureDownload = {
+  slug: "",
+  name: "",
+  description: "",
+  version: "",
+  releaseTag: "",
+  assetName: "",
+  requiresLogin: true,
+  category: "",
+  youtubeUrl: "",
+  order: 0,
+};
+
+// showCategory: only the Student panel passes this — Client downloads don't
+// have a category column, so we must not send that field for them.
+function SecureDownloadsPanel({ basePath, heading, showCategory = false, showYoutube = false }) {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptySecureDownload);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch(`${basePath}?all=true`)
+      .then((d) => setItems(d.downloads || []))
+      .catch((err) => {
+        console.error(`${basePath} load error:`, err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function startNew() {
+    setForm(emptySecureDownload);
+    setFile(null);
+    setEditing("new");
+  }
+
+  function startEdit(item) {
+    setForm({
+      slug: item.slug,
+      name: item.name,
+      description: item.description || "",
+      version: item.version || "",
+      // Write-only on the backend — left blank here on purpose, meaning
+      // "keep the current value" unless the admin types a new one.
+      releaseTag: "",
+      assetName: "",
+      requiresLogin: Boolean(item.requires_login),
+      category: item.category || "",
+      youtubeUrl: item.youtube_url || "",
+      order: item.order || 0,
+    });
+    setFile(null);
+    setEditing(item.id);
+  }
+
+  async function save() {
+    if (editing === "new" && (!form.releaseTag || !form.assetName)) {
+      setStatus("Release tag and asset filename are required for a new download.");
+      return;
+    }
+
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("image", file);
+
+      if (editing === "new") {
+        await apiFetch(basePath, { method: "POST", body });
+      } else {
+        await apiFetch(`${basePath}/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this download? Existing activation links for it will stop working.")) return;
+    try {
+      await apiFetch(`${basePath}/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <div>
+          <h3>{heading}</h3>
+          <p className="admin-panel__status">
+            ZIPs live in a private GitHub repo. Visitors request access, get a one-time
+            emailed link, and the link stops working after first use.
+          </p>
+        </div>
+
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add download
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New download" : "Edit download"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Slug (unique, used in the URL)</span>
+            <input
+              value={form.slug}
+              onChange={(e) => setForm({ ...form, slug: e.target.value })}
+              disabled={editing !== "new"}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Name</span>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Description</span>
+            <textarea
+              rows={3}
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Version</span>
+            <input
+              value={form.version}
+              onChange={(e) => setForm({ ...form, version: e.target.value })}
+              placeholder="v1.0.0"
+            />
+          </label>
+
+          {showCategory && (
+            <label className="admin-field">
+              <span>Category</span>
+              <input
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                placeholder="Web App / Mobile App / AI & Automation / ..."
+              />
+            </label>
+          )}
+
+          {showYoutube && (
+             <label className="admin-field">
+              <span>YouTube URL</span>
+              <input
+                value={form.youtubeUrl}
+                onChange={(e) => setForm({ ...form, youtubeUrl: e.target.value })}
+                placeholder="https://youtube.com/watch?v=..."
+              />
+            </label>
+          )}
+          
+          <label className="admin-field">
+            <span>
+              GitHub release tag{editing !== "new" ? " (leave blank to keep current)" : ""}
+            </span>
+            <input
+              value={form.releaseTag}
+              onChange={(e) => setForm({ ...form, releaseTag: e.target.value })}
+              placeholder="v1.0.0"
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>
+              ZIP asset filename in that release{editing !== "new" ? " (leave blank to keep current)" : ""}
+            </span>
+            <input
+              value={form.assetName}
+              onChange={(e) => setForm({ ...form, assetName: e.target.value })}
+              placeholder="my-project.zip"
+            />
+          </label>
+
+          <label className="admin-field admin-field--row">
+            <input
+              type="checkbox"
+              checked={form.requiresLogin}
+              onChange={(e) => setForm({ ...form, requiresLogin: e.target.checked })}
+            />
+            <span>Require visitor to be signed in to request this download</span>
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input
+              type="number"
+              value={form.order}
+              onChange={(e) => setForm({ ...form, order: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Cover image</span>
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((d) => (
+          <div className="admin-list__row" key={d.id}>
+            <div className="admin-list__info">
+              <strong>{d.name}</strong>
+              <span>
+                {d.version || ""}
+                {showCategory && d.category ? ` · ${d.category}` : ""}
+                {d.requires_login ? " · Sign-in required" : " · Email only"}
+              </span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(d)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(d.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No downloads yet.</p>}
+      </div>
+    </div>
+  );
+}
+
+function ClientSecureDownloadsPanel() {
+  return (
+    <SecureDownloadsPanel
+      basePath="/downloads/client"
+      heading="Client Project Downloads (secure, one-time link)"
+      showYoutube
+    />
+  );
+}
+
+function StudentSecureDownloadsPanel() {
+  return (
+    <SecureDownloadsPanel
+      basePath="/downloads/student"
+      heading="Student Project Downloads (secure, one-time link)"
+      showCategory
+      showYoutube
+    />
+  );
+}
+
 
 const emptyVideo = {
   title: "",
