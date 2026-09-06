@@ -10,7 +10,7 @@ import {
 } from "../models/ContactMessage.js";
 
 import requireAdmin from "../middleware/requireAdmin.js";
-import { sendMail } from "../config/mailer.js";
+import { sendMail } from "../config/resend.js";
 
 const router = Router();
 
@@ -177,6 +177,7 @@ router.post(
         try {
           await sendMail({
             to: process.env.CONTACT_TO_EMAIL,
+            from: "Phronix Contact Form <downloads@phronix.in>",
 
             subject: `New contact enquiry from ${name}`,
 
@@ -216,14 +217,14 @@ ${saved.id}`,
       // EMAIL → CUSTOMER CONFIRMATION
       // ─────────────────────────────────────────
 
-      if (process.env.SMTP_HOST && process.env.SMTP_USER) {
-        try {
-          await sendMail({
-            to: email,
+      try {
+        await sendMail({
+          to: email,
+          from: "Phronix Team <downloads@phronix.in>",
 
-            subject: "We received your enquiry — Phronix",
+          subject: "We received your enquiry — Phronix",
 
-            text: `Hi ${name},
+          text: `Hi ${name},
 
 Thank you for reaching out to Phronix.
 
@@ -241,16 +242,15 @@ If you need to provide any additional information, you can reply directly to thi
 Regards,
 Phronix Team`,
 
-            replyTo: process.env.CONTACT_TO_EMAIL,
-          });
+          replyTo: process.env.CONTACT_TO_EMAIL,
+        });
 
-          console.log("Customer confirmation email sent.");
-        } catch (emailError) {
-          console.error(
-            "Customer confirmation email failed:",
-            emailError.message
-          );
-        }
+        console.log("Customer confirmation email sent.");
+      } catch (emailError) {
+        console.error(
+          "Customer confirmation email failed:",
+          emailError.message
+        );
       }
 
       // ─────────────────────────────────────────
