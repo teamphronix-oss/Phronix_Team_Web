@@ -1,18 +1,23 @@
 import { useState } from "react";
-import { Download, Lock, Loader2, Mail, CheckCircle2 } from "lucide-react";
+import { Download, Lock, Loader2, Mail, CheckCircle2, MessageCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import siteConfig from "../data/siteConfig";
 
 const API = siteConfig.apiBaseUrl;
 
-// Requests a one-time activation link for a project. The backend emails the
-// link (never returns a direct file URL here) — the actual ZIP is only
-// reachable after the person opens that emailed link and it validates.
+// Requests a one-time activation link for a project. For most downloads the
+// backend emails the link straight to the requester. For downloads where
+// the backend responds with redirectWhatsapp:true (admin-notified/manual
+// review projects), the link instead goes to the team's inbox, and this
+// component shows a short "redirecting" notice before opening WhatsApp with
+// a prefilled message naming the project — the actual admin notification
+// email was already sent the moment the request was made.
 export default function SecureDownloadCard({ project, projectType }) {
   const { user, loginWithGoogle } = useAuth();
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | loading | sent | error
+  const [status, setStatus] = useState("idle"); // idle | loading | sent | redirecting | error
   const [error, setError] = useState("");
+  const [resultMessage, setResultMessage] = useState("");
 
   const needsLogin = project.requires_login && !user;
 
@@ -47,7 +52,20 @@ export default function SecureDownloadCard({ project, projectType }) {
         throw new Error(data.message || "Unable to request this download.");
       }
 
-      setStatus("sent");
+      setResultMessage(data.message || "Request received.");
+
+      if (data.redirectWhatsapp) {
+        setStatus("redirecting");
+
+        const waMessage = `Hi Phronix, I'd like to request access to download "${project.name}".`;
+        const waUrl = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(waMessage)}`;
+
+        setTimeout(() => {
+          window.location.href = waUrl;
+        }, 6000);
+      } else {
+        setStatus("sent");
+      }
     } catch (err) {
       setStatus("error");
       setError(err.message);
@@ -74,12 +92,21 @@ export default function SecureDownloadCard({ project, projectType }) {
 
       <p>{project.description}</p>
 
-      {status === "sent" ? (
+      {status === "sent" && (
         <p className="field-success">
           <CheckCircle2 size={16} />
-          Check your email — we sent a one-time activation link.
+          {resultMessage}
         </p>
-      ) : (
+      )}
+
+      {status === "redirecting" && (
+        <p className="field-success">
+          <MessageCircle size={16} />
+          {resultMessage} Opening WhatsApp in a moment — send the message so our team can follow up.
+        </p>
+      )}
+
+      {status !== "sent" && status !== "redirecting" && (
         <>
           {!project.requires_login && (
             <div className="field">
