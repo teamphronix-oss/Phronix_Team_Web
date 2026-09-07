@@ -58,17 +58,23 @@ const featuredProjects = [
 
 export default function ProjectsSection() {
   const [statNumber, setStatNumber] = useState("40+");
+  const [heading, setHeading] = useState("Digital products engineered for scale");
+  const [description, setDescription] = useState(
+    "From high-conversion e-commerce platforms to real-time analytics and custom mobile apps — explore our recent client builds."
+  );
   const [displayCount, setDisplayCount] = useState(1);
   const sectionRef = useRef(null);
   const hasAnimated = useRef(false);
 
-  useEffect(() => {
+    useEffect(() => {
     fetch(`${siteConfig.apiBaseUrl}/settings`)
       .then((res) => res.json())
       .then((data) => {
         if (data.settings?.statNumber) setStatNumber(data.settings.statNumber);
+        if (data.settings?.projectsTitle) setHeading(data.settings.projectsTitle);
+        if (data.settings?.projectsDescription) setDescription(data.settings.projectsDescription);
       })
-      .catch((err) => console.error("Failed to load stat number:", err));
+      .catch((err) => console.error("Failed to load project stats:", err));
   }, []);
 
   const targetNumber = parseInt(statNumber, 10) || 0;
@@ -119,8 +125,8 @@ export default function ProjectsSection() {
 
         <SectionHeading
           eyebrow="Featured Work"
-          title="Digital products engineered for scale"
-          description="From high-conversion e-commerce platforms to real-time analytics and custom mobile apps — explore our recent client builds."
+          title={heading}
+          description={description}
         />
       </div>
 
