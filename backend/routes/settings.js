@@ -25,6 +25,10 @@ router.get("/", async (req, res, next) => {
       settings: {
         logoUrl: row.logo_url || "",
 
+        // statNumber is an alias of projectsStat — the admin panel's
+        // Homepage Stats form reads statNumber, other parts of the app
+        // may read projectsStat, so both point at the same value.
+        statNumber: row.projects_stat || "",
         projectsStat: row.projects_stat || "",
         projectsTitle: row.projects_title || "",
         projectsDescription: row.projects_description || "",
@@ -144,6 +148,33 @@ router.put("/about-intro", requireAdmin, async (req, res, next) => {
       settings: {
         aboutTitle: row.about_title,
         aboutDescription: row.about_description,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ─────────────────────────────────────────────
+// UPDATE HOMEPAGE STATS ("40+" section)
+// ─────────────────────────────────────────────
+
+router.put("/home-stats", requireAdmin, async (req, res, next) => {
+  try {
+    const { statNumber, title, description } = req.body;
+
+    const row = await updateSettings({
+      projects_stat: statNumber,
+      projects_title: title,
+      projects_description: description,
+    });
+
+    res.json({
+      settings: {
+        statNumber: row.projects_stat || "",
+        projectsStat: row.projects_stat || "",
+        projectsTitle: row.projects_title || "",
+        projectsDescription: row.projects_description || "",
       },
     });
   } catch (err) {

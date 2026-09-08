@@ -32,6 +32,7 @@ import clientDownloadRoutes from "./routes/clientDownloads.js";
 import studentDownloadRoutes from "./routes/studentDownloads.js";
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 5000;
 
 // ─────────────────────────────────────────────────────────────
@@ -68,6 +69,7 @@ const allowedOrigins = [
   "https://teamphronix-oss.github.io",
   "https://www.phronix.in",
   "https://phronix.in",
+  "https://admin.phronix.in",
   process.env.CLIENT_URL,
   process.env.ADMIN_URL,
 ].filter(Boolean);
@@ -103,7 +105,7 @@ app.use(
 
     secret: process.env.SESSION_SECRET,
 
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
 
     httpOnly: true,
 

@@ -27,7 +27,14 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 //   supportsYoutube  — both client and student tables have a youtube_url
 //                      column, but keep this explicit per-router so a table
 //                      without it (if one is ever added) doesn't break.
-export function makeDownloadRouter({ projectType, table, supportsCategory = false, supportsYoutube = false }) {
+export function makeDownloadRouter({
+  projectType,
+  table,
+  supportsCategory = false,
+  supportsYoutube = false,
+  adminNotifyOnRequest = false,
+  manualReviewTtlMinutes,
+}) {
   const router = Router();
   const model = makeModel(table, { orderColumn: "order" });
 
@@ -197,9 +204,24 @@ export function makeDownloadRouter({ projectType, table, supportsCategory = fals
         }
       }
 
-      await issueToken({ projectType, project, email, userId });
+            const notifyAdmin = adminNotifyOnRequest && project.requires_login;
 
-      res.json({ message: "Check your email for the activation link." });
+      await issueToken({
+        projectType,
+        project,
+        email,
+        userId,
+        notifyAdmin,
+        ttlMinutes: notifyAdmin ? manualReviewTtlMinutes : undefined,
+      });
+
+      res.json({
+        message: notifyAdmin
+          ? "Request received. Redirecting you to WhatsApp..."
+          : "Check your email for the activation link.",
+        redirectWhatsapp: notifyAdmin,
+      });
+
     } catch (err) {
       next(err);
     }

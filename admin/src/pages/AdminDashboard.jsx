@@ -1964,6 +1964,7 @@ function YoutubePanel() {
 
 const emptyOngoing = {
   name: "",
+  slug: "",
   description: "",
   status: "Planning",
   technologies: "",
@@ -1997,8 +1998,9 @@ function OngoingPanel() {
   }
 
   function startEdit(o) {
-    setForm({
+     setForm({
       name: o.name || "",
+      slug: o.slug || "",
       description: o.description || "",
       status: o.status || "Planning",
       technologies: (o.technologies || []).join(", "),
@@ -2072,6 +2074,15 @@ function OngoingPanel() {
           </label>
 
           <label className="admin-field">
+            <span>Slug (unique, used in the URL)</span>
+            <input
+              value={form.slug}
+              onChange={(e) => setForm({ ...form, slug: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
             <span>Description</span>
             <textarea
               rows={3}
@@ -2100,18 +2111,18 @@ function OngoingPanel() {
           <label className="admin-field">
             <span>Start date</span>
             <input
+              type="date"
               value={form.startDate}
               onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-              placeholder="2026-03-01"
             />
           </label>
 
           <label className="admin-field">
             <span>Expected completion</span>
             <input
+              type="date"
               value={form.expectedCompletion}
               onChange={(e) => setForm({ ...form, expectedCompletion: e.target.value })}
-              placeholder="2026-09-30"
             />
           </label>
 

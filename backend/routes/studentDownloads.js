@@ -5,6 +5,8 @@ const router = makeDownloadRouter({
   table: "student_downloadable_projects",
   supportsCategory: true,
   supportsYoutube: true,
+  adminNotifyOnRequest: true,
+  manualReviewTtlMinutes: 21600, // 15 days
 });
 
 export default router;

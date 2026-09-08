@@ -12,11 +12,11 @@ if (!resend) {
 // Small wrapper so callers don't repeat the "skip if not configured, log
 // failures without throwing" logic in every route. Returns true/false for
 // whether the send actually happened.
-export async function sendMail({ to, subject, text, replyTo }) {
+export async function sendMail({ to, subject, text, replyTo, from }) {
   if (!resend) return false;
   try {
     const { error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL,
+      from: from || process.env.RESEND_FROM_EMAIL,
       to,
       subject,
       text,
