@@ -87,6 +87,39 @@ export const testimonials = [
     feedback:
       "Design sense plus solid engineering — a combination that's hard to find. They got our vision right on the first try.",
   },
+  {
+    id: 9,
+    clientName: "Rhea Kapoor",
+    company: "Greenroot Foods",
+    logo: "/assets/placeholder-logo.svg",
+    projectCompleted: "SEO & paid growth engine",
+    designation: "Head of Marketing",
+    rating: 5,
+    feedback:
+      "The same team that built our store also runs our SEO and ad spend now. Organic traffic more than tripled and our paid campaigns finally have a ROAS we're happy with.",
+  },
+  {
+    id: 10,
+    clientName: "Vikram Chandhok",
+    company: "Anira Retail",
+    logo: "/assets/placeholder-logo.svg",
+    projectCompleted: "Brand positioning & content strategy",
+    designation: "Marketing Director",
+    rating: 5,
+    feedback:
+      "Having engineering and marketing under one roof meant no back-and-forth between agencies. They understood our funnel because they built the site it runs on.",
+  },
+  {
+    id: 11,
+    clientName: "Tanya Sen",
+    company: "Lumina Commerce",
+    logo: "/assets/placeholder-logo.svg",
+    projectCompleted: "Performance marketing & launch",
+    designation: "VP of Growth",
+    rating: 5,
+    feedback:
+      "From high-converting landing pages to targeted Meta ads, Phronix executed our product launch flawlessly. We reached a 4.8x ROAS within the first month.",
+  },
 ];
 
 export default testimonials;

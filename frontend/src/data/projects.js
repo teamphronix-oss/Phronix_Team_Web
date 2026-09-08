@@ -18,6 +18,7 @@ export const projectCategories = [
   "E-Commerce",
   "Dashboard",
   "AI & Automation",
+  "Marketing & Growth",
   "Open Source",
 ];
 
@@ -37,7 +38,11 @@ export const projects = [
       "Stripe payment gateway with 1-tap Apple Pay / Google Pay",
       "Live order dispatch and customer tracking via SMS & WhatsApp",
       "Admin dashboard with automated revenue telemetry"
-    ]
+    ],
+    pillarDetails: {
+      build: "Sub-second Next.js storefront deployed on Edge infrastructure with Stripe custom checkout and SMS webhook dispatch.",
+      campaign: "Paid search and retargeting ads scaled post-launch, delivering a 4.6x return on ad spend during the holiday season.",
+    }
   },
   {
     id: "orbitpay",
@@ -101,7 +106,11 @@ export const projects = [
       "Autonomous tool-calling and semantic database mutations",
       "Sub-40ms streaming voice synthesis",
       "Automated document and receipt OCR parsing"
-    ]
+    ],
+    pillarDetails: {
+      build: "Python/FastAPI microservices orchestrating streaming LangChain agents with sub-40ms latency.",
+      ai: "Fine-tuned tool-calling model connected to vector memory, autonomously resolving multi-step support and database operations.",
+    }
   },
   {
     id: "ledgerlite",
@@ -182,6 +191,46 @@ export const projects = [
       "Full TypeScript type safety with Zod integration",
       "Accessible WCAG 2.1 AA compliant UI elements"
     ]
+  },
+  {
+    id: "greenroot-growth",
+    name: "Greenroot Growth Engine",
+    category: "Marketing & Growth",
+    image: sweeterJoy8,
+    description:
+      "SEO overhaul and performance marketing engine for a sustainable D2C brand, driving organic traffic and repeatable ad revenue.",
+    technologies: ["Technical SEO", "Google Ads", "Meta Ads", "GA4"],
+    githubUrl: "https://github.com/phronix/greenroot-growth",
+    demoUrl: "https://greenrootfoods.demo",
+    features: [
+      "3.4x organic search traffic growth in 90 days via schema optimization",
+      "4.8x average ROAS across search and Meta acquisition campaigns",
+      "Custom server-side conversion tracking for zero data loss"
+    ],
+    pillarDetails: {
+      build: "High-performance headless landing pages built for 100/100 Core Web Vitals.",
+      campaign: "Full-funnel paid campaigns structured around first-party conversion signals, sustaining 4.8x ROAS across scaling spend.",
+    }
+  },
+  {
+    id: "northline-rebrand",
+    name: "Northline Studio Launch",
+    category: "Marketing & Growth",
+    image: sweeterJoy9,
+    description:
+      "Brand repositioning and launch campaign for a creative studio, spanning identity, messaging, content, and a coordinated social rollout.",
+    technologies: ["Brand Strategy", "Content Calendar", "Social Campaigns"],
+    githubUrl: "https://github.com/phronix/northline-rebrand",
+    demoUrl: "https://northlinestudio.demo",
+    features: [
+      "New positioning and identity rolled out across site, deck, and socials",
+      "Launch campaign drove a 2.8x increase in qualified inbound leads",
+      "Social following grew 40% in the first quarter post-launch"
+    ],
+    pillarDetails: {
+      build: "New marketing site built to carry the rebrand consistently across every page and breakpoint.",
+      campaign: "Coordinated launch campaign across paid social and email drove a 2.8x increase in qualified inbound leads.",
+    }
   },
   {
     id: "chocolatier-deluxe",

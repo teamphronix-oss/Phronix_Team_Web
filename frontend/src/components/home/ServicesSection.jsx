@@ -4,12 +4,13 @@ import { ArrowUpRight, Check } from "lucide-react";
 import SectionHeading from "../../components/SectionHeading";
 import ServiceCard from "../../components/ServiceCard";
 import CardCarousel from "../../components/CardCarousel";
+import staticServices from "../../data/services";
 import "../../styles/home/services.css";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function ServicesSection() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState(staticServices);
 
   useEffect(() => {
     async function loadServices() {
@@ -21,7 +22,9 @@ export default function ServicesSection() {
         }
 
         const data = await response.json();
-        setServices(data.services || []);
+        if (data.services && data.services.length > 0) {
+          setServices(data.services);
+        }
       } catch (error) {
         console.error("Home services API error:", error);
       }
@@ -37,7 +40,7 @@ export default function ServicesSection() {
           <SectionHeading
             eyebrow="What We Do"
             title="Services built around real product needs"
-            description="From first prototype to scaled infrastructure — six disciplines, one team."
+            description="From first prototype to the campaign that fills it — nine disciplines spanning engineering and marketing, one team."
           />
 
           <CardCarousel interval={4000}>
