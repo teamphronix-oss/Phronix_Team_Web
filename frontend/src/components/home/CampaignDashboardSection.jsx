@@ -1,9 +1,9 @@
-import { TrendingUp, MousePointerClick, Target, Wallet } from "lucide-react";
+﻿import { TrendingUp, MousePointerClick, Target, Wallet } from "lucide-react";
 import SectionHeading from "../SectionHeading";
 import CountUp from "../CountUp";
 import "../../styles/home/campaign-dashboard.css";
 
-// 14-day mock click trend — illustrative sample reporting data.
+// 14-day mock click trend   illustrative sample reporting data.
 const trend = [32, 40, 38, 52, 48, 60, 55, 70, 66, 78, 74, 88, 82, 95];
 
 const stats = [
@@ -22,13 +22,13 @@ export default function CampaignDashboardSection() {
         <SectionHeading
           eyebrow="Campaigns, Managed End to End"
           title="What running your ads actually looks like"
-          description="A sample of the kind of reporting every paid campaign we run gets — tracked, attributed, and reviewed with you, not just handed off."
-          center
+          description="A sample of the kind of reporting every paid campaign we run gets   tracked, attributed, and reviewed with you, not just handed off."
+          // center
         />
 
         <div className="campaign-dash__card">
           <div className="campaign-dash__card-header">
-            <span className="campaign-dash__card-title">Click Trend — Last 14 Days</span>
+            <span className="campaign-dash__card-title">Click Trend   Last 14 Days</span>
             <span className="campaign-dash__card-badge">Sample data</span>
           </div>
 

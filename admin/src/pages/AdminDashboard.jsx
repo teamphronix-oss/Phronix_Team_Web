@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import {
   KeyRound,
   LogOut,
@@ -218,7 +218,7 @@ function HomeStatsPanel() {
     statNumber: "40+",
     title: "Real-World Projects Built by Aspiring Developers",
     description:
-      "From final-year submissions to portfolio-ready builds — practical, industry-style projects crafted to help students learn by doing.",
+      "From final-year submissions to portfolio-ready builds   practical, industry-style projects crafted to help students learn by doing.",
   });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -233,11 +233,11 @@ function HomeStatsPanel() {
             "Real-World Projects Built by Aspiring Developers",
           description:
             d.settings?.projectsDescription ||
-            "From final-year submissions to portfolio-ready builds — practical, industry-style projects crafted to help students learn by doing.",
+            "From final-year submissions to portfolio-ready builds   practical, industry-style projects crafted to help students learn by doing.",
         });
       })
       .catch(() => {
-        // Backend endpoint isn't ready yet — keep the defaults shown above.
+        // Backend endpoint isn't ready yet   keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -264,7 +264,7 @@ function HomeStatsPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>Homepage — "40+" stat section</h3>
+      <h3>Homepage   "40+" stat section</h3>
 
       {status && (
         <p className="admin-panel__status">
@@ -986,7 +986,7 @@ function TeamPanel() {
 //
 // field.type: "text" | "textarea" | "number" | "checkbox" | "csv" (comma
 // separated list, stored as an array server-side) | "lines" (one item per
-// line, stored as an array server-side) | "password" (optional — blank
+// line, stored as an array server-side) | "password" (optional   blank
 // means "leave unchanged").
 
 function GenericPanel({
@@ -1223,7 +1223,7 @@ function ServicesPanel() {
 // Pehle GenericPanel (JSON-only) use ho raha tha, isliye:
 //   1) Logo file upload nahi ho sakta tha (sirf text URL field tha)
 //   2) Field names table se match nahi karte the (clientName vs name, etc.)
-// Ab ClientsPanel jaisa hi custom component hai — FormData + file upload.
+// Ab ClientsPanel jaisa hi custom component hai   FormData + file upload.
 
 const emptyTestimonial = {
   name: "",
@@ -1535,7 +1535,7 @@ const emptySecureDownload = {
   order: 0,
 };
 
-// showCategory: only the Student panel passes this — Client downloads don't
+// showCategory: only the Student panel passes this   Client downloads don't
 // have a category column, so we must not send that field for them.
 function SecureDownloadsPanel({ basePath, heading, showCategory = false, showYoutube = false }) {
   const [items, setItems] = useState([]);
@@ -1567,7 +1567,7 @@ function SecureDownloadsPanel({ basePath, heading, showCategory = false, showYou
       name: item.name,
       description: item.description || "",
       version: item.version || "",
-      // Write-only on the backend — left blank here on purpose, meaning
+      // Write-only on the backend   left blank here on purpose, meaning
       // "keep the current value" unless the admin types a new one.
       releaseTag: "",
       assetName: "",
@@ -2183,7 +2183,7 @@ function WhyIntroPanel() {
   const [form, setForm] = useState({
     title: "Built Right, Built to Last.",
     description:
-      "Every engagement gets senior engineering attention, transparent communication, and code you actually own — no black boxes, no hand-offs to juniors mid-project.",
+      "Every engagement gets senior engineering attention, transparent communication, and code you actually own   no black boxes, no hand-offs to juniors mid-project.",
   });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -2195,11 +2195,11 @@ function WhyIntroPanel() {
           title: d.settings?.whyTitle || "Built Right, Built to Last.",
           description:
             d.settings?.whyDescription ||
-            "Every engagement gets senior engineering attention, transparent communication, and code you actually own — no black boxes, no hand-offs to juniors mid-project.",
+            "Every engagement gets senior engineering attention, transparent communication, and code you actually own   no black boxes, no hand-offs to juniors mid-project.",
         });
       })
       .catch(() => {
-        // Backend endpoint isn'''t ready yet — keep the defaults shown above.
+        // Backend endpoint isn'''t ready yet   keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -2226,7 +2226,7 @@ function WhyIntroPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>"Why Phronix?" — heading &amp; intro</h3>
+      <h3>"Why Phronix?"   heading &amp; intro</h3>
 
       {status && (
         <p className="admin-panel__status">
@@ -2318,7 +2318,7 @@ function WhyFeaturesPanel() {
   );
 }
 
-// Form 1 — Box 1 (Fast Project Kickoffs) + Box 2 (Integrated Tech Stack)
+// Form 1   Box 1 (Fast Project Kickoffs) + Box 2 (Integrated Tech Stack)
 function PowerhouseCardsPanel() {
   const [form, setForm] = useState({
     card1Title: "Fast Project Kickoffs",
@@ -2326,7 +2326,7 @@ function PowerhouseCardsPanel() {
       "Save weeks of setup. We spin up a production-ready boilerplate so your idea starts shipping from day one.",
     card2Title: "Integrated Tech Stack",
     card2Description:
-      "Every tool you need — no extra cost, no hassle. Battle-tested integrations, ready out of the box.",
+      "Every tool you need   no extra cost, no hassle. Battle-tested integrations, ready out of the box.",
     stackItems: "PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native",
   });
   const [status, setStatus] = useState("");
@@ -2365,7 +2365,7 @@ function PowerhouseCardsPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>Powerhouse — Box 1 &amp; Box 2</h3>
+      <h3>Powerhouse   Box 1 &amp; Box 2</h3>
       {status && <p className="admin-panel__status">{status}</p>}
 
       <label className="admin-field">
@@ -2401,15 +2401,15 @@ function PowerhouseCardsPanel() {
   );
 }
 
-// Form 2 — Box 3 (Pick Your Stack), Box 4 (Structured Page Builder), Box 5 (SEO-Ready & Blazing Fast)
+// Form 2   Box 3 (Pick Your Stack), Box 4 (Structured Page Builder), Box 5 (SEO-Ready & Blazing Fast)
 function PowerhouseTrioPanel() {
   const [form, setForm] = useState({
     box3Title: "Pick Your Stack",
-    box3Description: "Choose the frameworks and integrations that fit your product — nothing forced, nothing locked in.",
+    box3Description: "Choose the frameworks and integrations that fit your product   nothing forced, nothing locked in.",
     box4Title: "Structured Page Builder",
     box4Description: "Every page follows a clean header–content–footer architecture, easy to extend as you grow.",
     box5Title: "SEO-Ready & Blazing Fast",
-    box5Description: "Built for speed and top scores on Core Web Vitals — no extra optimization work needed.",
+    box5Description: "Built for speed and top scores on Core Web Vitals   no extra optimization work needed.",
   });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -2448,7 +2448,7 @@ function PowerhouseTrioPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>Powerhouse — Box 3, 4 &amp; 5</h3>
+      <h3>Powerhouse   Box 3, 4 &amp; 5</h3>
       {status && <p className="admin-panel__status">{status}</p>}
 
       <label className="admin-field">
@@ -2515,7 +2515,7 @@ function ContactPanel() {
         }));
       })
       .catch(() => {
-        // Backend endpoint isn't ready yet — keep the defaults shown above.
+        // Backend endpoint isn't ready yet   keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -2582,7 +2582,7 @@ function ContactPanel() {
       </label>
 
       <label className="admin-field">
-        <span>Address — line 1</span>
+        <span>Address   line 1</span>
 
         <input
           value={form.addressLine1}
@@ -2597,7 +2597,7 @@ function ContactPanel() {
       </label>
 
       <label className="admin-field">
-        <span>Address — line 2</span>
+        <span>Address   line 2</span>
 
         <input
           value={form.addressLine2}
@@ -2653,7 +2653,7 @@ function AboutIntroPanel() {
   const [form, setForm] = useState({
     title: "A small studio, deliberately.",
     description:
-      "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+      "We keep the team small so every project gets senior attention   from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
   });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -2665,11 +2665,11 @@ function AboutIntroPanel() {
           title: d.settings?.aboutTitle || "A small studio, deliberately.",
           description:
             d.settings?.aboutDescription ||
-            "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+            "We keep the team small so every project gets senior attention   from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
         });
       })
       .catch(() => {
-        // Backend endpoint isn't ready yet — keep the defaults shown above.
+        // Backend endpoint isn't ready yet   keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -2696,7 +2696,7 @@ function AboutIntroPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>"About Phronix" — heading &amp; intro</h3>
+      <h3>"About Phronix"   heading &amp; intro</h3>
 
       {status && (
         <p className="admin-panel__status">
@@ -2800,7 +2800,7 @@ function ProjectRequestsPanel() {
   }, []);
 
   function formatDate(date) {
-    if (!date) return "—";
+    if (!date) return " ";
 
     const parsed = new Date(date);
 
@@ -2908,7 +2908,7 @@ function ProjectRequestsPanel() {
   // the outcome yet.
   if (now >= meetingEnd) {
     return {
-      label: "Past — Needs Review",
+      label: "Past   Needs Review",
       className: "past",
     };
   }
@@ -3533,7 +3533,7 @@ function ContactMessagesPanel() {
   }, []);
 
   function formatDate(date) {
-    if (!date) return "—";
+    if (!date) return " ";
 
     const parsed = new Date(date);
 
@@ -3697,12 +3697,12 @@ function ContactMessagesPanel() {
 
                     <div className="contact-enquiry-card__meta">
                       Budget:{" "}
-                      {message.budget_range || "—"}
+                      {message.budget_range || " "}
                     </div>
 
                     <div className="contact-enquiry-card__meta">
                       Timeline:{" "}
-                      {message.timeline || "—"}
+                      {message.timeline || " "}
                     </div>
 
                     {message.preferred_contact_method && (

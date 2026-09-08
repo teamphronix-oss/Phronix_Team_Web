@@ -1,4 +1,4 @@
-import crypto from "crypto";
+﻿import crypto from "crypto";
 import { sendMail } from "../config/resend.js";
 import { insertToken, findByHash, atomicConsume } from "../models/DownloadToken.js";
 
@@ -11,7 +11,7 @@ function hashToken(rawToken) {
 
 // Generates a cryptographically secure token, stores only its hash, and
 // either (a) emails the raw token directly to the requester as an
-// activation link, or (b) — when notifyAdmin is set — emails it to the
+// activation link, or (b)   when notifyAdmin is set   emails it to the
 // team's inbox instead, along with who requested it, so the team can
 // manually review/collect payment before handing the link over.
 export async function issueToken({ projectType, project, email, userId, notifyAdmin = false, ttlMinutes }) {
@@ -57,7 +57,7 @@ export async function issueToken({ projectType, project, email, userId, notifyAd
     text:
       `Your download for "${project.name}" is ready.\n\n` +
       `Activate it here (valid ${minutes} minutes, single use):\n${activationUrl}\n\n` +
-      `If another download is needed later, just request it again — this link only works once.\n\n` +
+      `If another download is needed later, just request it again   this link only works once.\n\n` +
       `If you didn't request this, you can safely ignore this email.`,
   });
 
@@ -92,7 +92,7 @@ export async function validateToken(rawToken) {
 }
 
 // Atomically flips the token to 'used'. Returns ok:false if it was already
-// consumed, expired, revoked, or never existed by the time this runs —
+// consumed, expired, revoked, or never existed by the time this runs  
 // this is what actually enforces single-use under concurrent requests.
 export async function consumeToken(rawToken) {
   const tokenHash = hashToken(rawToken);

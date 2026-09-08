@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Minus, ArrowRight } from "lucide-react";
 import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
 
-/* Home page dock items. "touch" and "start" are pinned — always visible
+/* Home page dock items. "touch" and "start" are pinned   always visible
    from the top of the page. The rest reveal in order while the user
    scrolls through the matching sections below. */
 const DEFAULT_ITEMS = [

@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import requireAdmin from "../middleware/requireAdmin.js";
 import softAdmin from "../middleware/softAdmin.js";
 import { upload, uploadBuffer, deleteImage } from "../middleware/upload.js";
@@ -10,10 +10,10 @@ import { upload, uploadBuffer, deleteImage } from "../middleware/upload.js";
 // request from the admin panel; admin POST/PUT/DELETE require a session.
 //
 // imageFields: [{ formField, urlField, publicIdField, folder }]
-//   formField     — the multipart field name the admin panel uploads under
-//   urlField      — the DB column to store the Cloudinary URL in
-//   publicIdField — the DB column to store the Cloudinary public_id in
-//   folder        — Cloudinary subfolder, e.g. "services"
+//   formField       the multipart field name the admin panel uploads under
+//   urlField        the DB column to store the Cloudinary URL in
+//   publicIdField   the DB column to store the Cloudinary public_id in
+//   folder          Cloudinary subfolder, e.g. "services"
 export function makeContentRouter({
   model,
   responseKey,
@@ -41,7 +41,7 @@ export function makeContentRouter({
     if (hasPublish && row[publishColumn] !== undefined) {
       row[publishColumn] = row[publishColumn] === "true" || row[publishColumn] === true;
     }
-    // Never let the client set the Cloudinary public_id columns directly —
+    // Never let the client set the Cloudinary public_id columns directly  
     // those are only ever set by the upload branch below.
     for (const f of imageFields) delete row[f.publicIdField];
     return row;

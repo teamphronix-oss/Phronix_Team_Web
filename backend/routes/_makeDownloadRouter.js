@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { Readable } from "node:stream";
 import { supabase } from "../config/supabase.js";
@@ -19,12 +19,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // request/validate/download endpoints are the part specific to downloads,
 // and living here once means client and student never duplicate the logic.
 //
-//   projectType      — "client" | "student"
-//   table            — the Supabase table for that resource
-//   supportsCategory — only "student_downloadable_projects" has a category
+//   projectType        "client" | "student"
+//   table              the Supabase table for that resource
+//   supportsCategory   only "student_downloadable_projects" has a category
 //                      column; keep this false for client so we never try
 //                      to insert/update a column that table doesn't have.
-//   supportsYoutube  — both client and student tables have a youtube_url
+//   supportsYoutube    both client and student tables have a youtube_url
 //                      column, but keep this explicit per-router so a table
 //                      without it (if one is ever added) doesn't break.
 export function makeDownloadRouter({
@@ -38,7 +38,7 @@ export function makeDownloadRouter({
   const router = Router();
   const model = makeModel(table, { orderColumn: "order" });
 
-  // release_tag / asset_name are GitHub-distribution internals — never
+  // release_tag / asset_name are GitHub-distribution internals   never
   // let them reach a client response, admin or public.
   function toPublic(row) {
     if (!row) return row;
@@ -179,7 +179,7 @@ export function makeDownloadRouter({
 
   // 1) User requests a download -> a fresh token is generated and emailed.
   //    Never trusts a client-supplied project id/email over what's on the
-  //    verified project row / session — see rule "don't trust frontend".
+  //    verified project row / session   see rule "don't trust frontend".
   router.post("/:slug/request", requestLimiter, async (req, res, next) => {
     try {
       const project = await findBySlug(req.params.slug);
@@ -228,7 +228,7 @@ export function makeDownloadRouter({
   });
 
   // 2) Activation page hits this to decide whether to show the Download
-  //    button. Read-only — does not consume the token.
+  //    button. Read-only   does not consume the token.
   router.get("/validate/:token", async (req, res, next) => {
     try {
       const result = await validateToken(req.params.token);
@@ -246,7 +246,7 @@ export function makeDownloadRouter({
   });
 
   // 3) Actual download. Validates again for a clear error message, then
-  //    atomically consumes the token (rule #7), THEN retrieves the file —
+  //    atomically consumes the token (rule #7), THEN retrieves the file  
   //    matching the order specified in the flow: validate -> consume ->
   //    verify project -> stream.
   router.get("/:token/download", async (req, res, next) => {
@@ -259,7 +259,7 @@ export function makeDownloadRouter({
       const consumed = await consumeToken(req.params.token);
       if (!consumed.ok) {
         // Someone else (or a retry) won the race, or it expired between
-        // the check above and now — reject, do not serve the file.
+        // the check above and now   reject, do not serve the file.
         return res.status(consumed.status).json({ message: consumed.message });
       }
 
@@ -275,7 +275,7 @@ export function makeDownloadRouter({
           assetName: project.asset_name,
         });
       } catch (fetchErr) {
-        // Token is already burned at this point (by design — see rule #7).
+        // Token is already burned at this point (by design   see rule #7).
         // This is the rare-failure case called out in the spec: log it for
         // manual follow-up and tell the user to request a fresh link.
         console.error(

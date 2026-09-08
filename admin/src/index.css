@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
-/* ── Design tokens — "Arctic Code" palette ──────────────────────
+/* ── Design tokens   "Arctic Code" palette ──────────────────────
    Semantic names below are the source of truth. The aliases in the
    second block (--gold, --panel-dark, etc.) exist so every existing
-   component keeps working unchanged — they just point at the new
+   component keeps working unchanged   they just point at the new
    colors. New/updated CSS should prefer the semantic names. ────── */
 :root {
   /* Background */
@@ -26,7 +26,7 @@
   --line: rgba(148,163,184,.18);           /* Frost Border */
   --line-dark: rgba(255,255,255,.15);
 
-  /* Accent — Ice Blue */
+  /* Accent   Ice Blue */
   --ice: #0EA5E9;            /* Ice Blue */
   --ice-bright: #38BDF8;
   --ice-pale: #08283a;
@@ -150,7 +150,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .section--dark .section-head p { color: #c8c5bb; }
 
-/* ── Gold seam — the signature divider element ─────────────── */
+/* ── Gold seam   the signature divider element ─────────────── */
 .seam {
   position: relative;
   height: 1px;
@@ -362,7 +362,7 @@ button { font-family: inherit; cursor: pointer; }
    fixed-position, pointer-events:none so they never block clicks.
 
    White + mix-blend-mode: difference gives the lamalama.com-style
-   effect — the cursor auto-inverts to stay visible on both dark and
+   effect   the cursor auto-inverts to stay visible on both dark and
    light/white backgrounds without needing per-section overrides. */
 
 .custom-cursor__dot,
@@ -409,7 +409,7 @@ button { font-family: inherit; cursor: pointer; }
   opacity: 0;
 }
 
-/* Floating text label/tag that follows the cursor — the "# Chocolate
+/* Floating text label/tag that follows the cursor   the "# Chocolate
    Amsterdam" style pill seen on lamalama.com when hovering a logo or
    card. Sits above the ring (translate -140% on Y) and fades/scales
    in only when the hovered element carries data-cursor-label. */
@@ -441,7 +441,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* Hide the real browser cursor site-wide once our custom one is active.
-   Only applied on fine-pointer (mouse/trackpad) devices — touch devices
+   Only applied on fine-pointer (mouse/trackpad) devices   touch devices
    never load the component at all, but this is a safety net too. */
 /* ── Admin: restore normal browser cursor ── */
 #root,

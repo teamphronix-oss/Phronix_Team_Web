@@ -1,4 +1,4 @@
-import {
+﻿import {
   Sparkles,
   MessageSquare,
   Zap,
@@ -140,7 +140,7 @@ export default function ShowcaseSection() {
   /* Both marquees are frozen on their first item (top of the list /
      left of the row) until the tile is actually on screen. Unlike a
      one-shot trigger, this restarts the animation from scratch every
-     time the tile re-enters the viewport — bumping a "key" forces
+     time the tile re-enters the viewport   bumping a "key" forces
      React to remount the track, which resets the CSS animation to
      0%. Without that reset, scrolling down (which takes a few
      seconds) would let the animation keep running in the background,
@@ -201,7 +201,7 @@ export default function ShowcaseSection() {
         {/* ── BENTO SPEC GRID ───────────────────────────────────── */}
         <div className="spec-bento">
 
-          {/* 1. HERO TILE — AI TOOLS (Static 4×3 Grid) ─────────── */}
+          {/* 1. HERO TILE   AI TOOLS (Static 4×3 Grid) ─────────── */}
           <div className="spec-bento__tile spec-bento__tile--hero">
             <div className="spec-bento__header">
               <div className="spec-bento__badge-wrap">
@@ -232,7 +232,7 @@ export default function ShowcaseSection() {
             </div>
           </div>
 
-          {/* 2. WEB TILE — WEBSITE TOOLS (Vertical Marquee) ──────── */}
+          {/* 2. WEB TILE   WEBSITE TOOLS (Vertical Marquee) ──────── */}
           <div className="spec-bento__tile spec-bento__tile--web">
             <div className="spec-bento__header">
               <div className="spec-bento__badge-wrap">
@@ -279,7 +279,7 @@ export default function ShowcaseSection() {
             </div>
           </div>
 
-          {/* 3. MKT TILE — MARKETING TOOLS (Stat + Horizontal Marquee) */}
+          {/* 3. MKT TILE   MARKETING TOOLS (Stat + Horizontal Marquee) */}
           <div className="spec-bento__tile spec-bento__tile--mkt">
             <div className="spec-bento__header">
               <div className="spec-bento__badge-wrap">
@@ -330,7 +330,7 @@ export default function ShowcaseSection() {
             </div>
           </div>
 
-          {/* 4. TOTAL TILE — AGGREGATE STAT (Static & Centered) ──── */}
+          {/* 4. TOTAL TILE   AGGREGATE STAT (Static & Centered) ──── */}
           <div className="spec-bento__tile spec-bento__tile--total">
             <div className="spec-bento__total-content">
               <div className="spec-bento__total-num">36</div>

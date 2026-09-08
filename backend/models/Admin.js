@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase.js";
+﻿import { supabase } from "../config/supabase.js";
 
 const TABLE = "admins";
 
@@ -55,7 +55,7 @@ export async function updatePassword(id, passwordHash) {
   if (error) throw error;
 }
 
-// Used by scripts/seedAdmin.js — creates the admin if missing, updates it if not.
+// Used by scripts/seedAdmin.js   creates the admin if missing, updates it if not.
 export async function upsertAdmin({ username, email, passwordHash }) {
   const { data, error } = await supabase
     .from(TABLE)

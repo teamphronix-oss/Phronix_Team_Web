@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+﻿import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import SectionHeading from "../SectionHeading";
@@ -60,7 +60,7 @@ export default function ProjectsSection() {
   const [statNumber, setStatNumber] = useState("40+");
   const [heading, setHeading] = useState("Digital products engineered for scale");
   const [description, setDescription] = useState(
-    "From high-conversion e-commerce platforms to real-time analytics and custom mobile apps — explore our recent client builds."
+    "From high-conversion e-commerce platforms to real-time analytics and custom mobile apps   explore our recent client builds."
   );
   const [displayCount, setDisplayCount] = useState(1);
   const sectionRef = useRef(null);

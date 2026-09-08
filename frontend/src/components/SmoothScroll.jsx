@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef } from "react";
+﻿import { createContext, useContext, useEffect, useRef } from "react";
 import Lenis from "lenis";
 
 /**
@@ -6,7 +6,7 @@ import Lenis from "lenis";
  * ------------
  * Wraps the app in a Lenis instance for buttery, eased scrolling instead
  * of the browser's default instant/step scroll. Runs a single rAF loop
- * for the whole app (mount this once, high up in the tree — see App.jsx).
+ * for the whole app (mount this once, high up in the tree   see App.jsx).
  *
  * - Respects prefers-reduced-motion: Lenis is never created for users who
  *   have that OS setting on, so scrolling stays native/instant for them.
@@ -41,7 +41,7 @@ export default function SmoothScroll({ children }) {
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.4,
-      // Keep native touch scrolling on mobile devices — Lenis smooths
+      // Keep native touch scrolling on mobile devices   Lenis smooths
       // wheel/drag input on desktop, touch stays direct + responsive.
       syncTouch: false,
     });

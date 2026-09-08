@@ -1,4 +1,4 @@
-import { Headphones, Bot, Star, Search, ShieldCheck, Palette } from "lucide-react";
+﻿import { Headphones, Bot, Star, Search, ShieldCheck, Palette } from "lucide-react";
 import "../../styles/home/top-features.css";
 import ClientLogoMarquee from "../../components/home/ClientLogoMarquee.jsx";
 import "../../styles/home/client-marquee.css";
@@ -24,7 +24,7 @@ export default function TopFeaturesSection() {
             <h2 className="top-features__title">
               <span className="top-features__grad">Top-Notch Features</span> Included
             </h2>
-            <p>Everything you need for a smooth, professional build — no extra cost, no hidden hassle.</p>
+            <p>Everything you need for a smooth, professional build   no extra cost, no hidden hassle.</p>
           </div>
 
           <div className="top-features__grid">
@@ -33,7 +33,7 @@ export default function TopFeaturesSection() {
                 <Headphones size={24} strokeWidth={1.8} />
               </div>
               <h4>24x7 Support</h4>
-              <p>Reach us anytime via bot or a real call — help is always one message away.</p>
+              <p>Reach us anytime via bot or a real call   help is always one message away.</p>
             </div>
 
             <div className="tf-card">
@@ -41,7 +41,7 @@ export default function TopFeaturesSection() {
                 <Bot size={24} strokeWidth={1.8} />
               </div>
               <h4>AI-First Thinking</h4>
-              <p>Smart automation baked into the build — so your product works smarter from day one.</p>
+              <p>Smart automation baked into the build   so your product works smarter from day one.</p>
             </div>
 
             <div className="tf-card">
@@ -49,7 +49,7 @@ export default function TopFeaturesSection() {
                 <Star size={24} strokeWidth={1.8} />
               </div>
               <h4>Social Review Optimization</h4>
-              <p>Built to earn trust — optimized to collect and showcase great reviews.</p>
+              <p>Built to earn trust   optimized to collect and showcase great reviews.</p>
             </div>
 
             <div className="tf-card">
@@ -73,7 +73,7 @@ export default function TopFeaturesSection() {
                 <Palette size={24} strokeWidth={1.8} />
               </div>
               <h4>Fully Customized Design</h4>
-              <p>Colors, fonts, and layout — shaped to match your brand exactly.</p>
+              <p>Colors, fonts, and layout   shaped to match your brand exactly.</p>
             </div>
           </div>
         </div>

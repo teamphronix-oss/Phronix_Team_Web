@@ -1,12 +1,12 @@
-import { Resend } from "resend";
+﻿import { Resend } from "resend";
 
-// Only construct the client when a key is actually present — the Resend
+// Only construct the client when a key is actually present   the Resend
 // SDK throws immediately in its constructor otherwise, which would crash
 // the whole server on boot just because emails aren't configured yet.
 export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 if (!resend) {
-  console.warn("[resend] RESEND_API_KEY is missing — emails will not be sent.");
+  console.warn("[resend] RESEND_API_KEY is missing   emails will not be sent.");
 }
 
 // Small wrapper so callers don't repeat the "skip if not configured, log

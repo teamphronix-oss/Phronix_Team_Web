@@ -1,4 +1,4 @@
-import * as Icons from "lucide-react";
+﻿import * as Icons from "lucide-react";
 import { useEffect, useState } from "react";
 import siteConfig from "../../data/siteConfig";
 import "../../styles/home/why.css";
@@ -33,7 +33,7 @@ export default function WhySection() {
             </h2>
             <p>
               Every engagement gets senior engineering attention, transparent
-              communication, and code you actually own — no black boxes, no
+              communication, and code you actually own   no black boxes, no
               hand-offs to juniors mid-project.
             </p>
           </div>

@@ -1,4 +1,4 @@
-import { makeContentRouter } from "./_makeContentRouter.js";
+﻿import { makeContentRouter } from "./_makeContentRouter.js";
 import Career from "../models/Career.js";
 
 const model = {
@@ -10,7 +10,7 @@ const model = {
 };
 
 // Careers has no image and uses is_open instead of is_published, so it
-// doesn't fit the generic hasPublish filter — the public site should just
+// doesn't fit the generic hasPublish filter   the public site should just
 // see everything and filter on is_open itself if it wants to.
 export default makeContentRouter({
   model,

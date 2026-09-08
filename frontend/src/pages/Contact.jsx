@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 
 import {
   Mail,
@@ -211,7 +211,7 @@ const [settingsLoading, setSettingsLoading] = useState(true);
       setStatus("success");
 
       setServerMessage(
-        "Thanks — your message is in. We'll reply within one business day."
+        "Thanks   your message is in. We'll reply within one business day."
       );
 
       setForm(initialForm);
