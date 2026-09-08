@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 
@@ -32,7 +32,7 @@ export default function AdminForgotPassword() {
     <div className="page-head-section section admin-auth-page">
       <div className="container admin-auth-page__inner">
         <form className="card admin-auth-card" onSubmit={handleSubmit}>
-          <span className="admin-auth-card__eyebrow">— ADMIN</span>
+          <span className="admin-auth-card__eyebrow">  ADMIN</span>
           <h2 className="admin-auth-card__title">Reset admin password</h2>
 
           <div className="admin-auth-card__icon">
@@ -40,7 +40,7 @@ export default function AdminForgotPassword() {
           </div>
 
           <p className="admin-auth-card__description">
-            Enter the admin email — a reset link will be sent if it's registered.
+            Enter the admin email   a reset link will be sent if it's registered.
           </p>
 
           {message && <div className="admin-auth-card__success">{message}</div>}

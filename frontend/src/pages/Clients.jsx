@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import SectionHeading from "../components/SectionHeading";
 import TestimonialCard from "../components/TestimonialCard";
 import siteConfig from "../data/siteConfig";
@@ -10,7 +10,7 @@ export default function Clients() {
     fetch(`${siteConfig.apiBaseUrl}/testimonials`)
       .then((res) => res.json())
       .then((data) => {
-        // TestimonialCard expects feedback/logo/company/clientName — map the
+        // TestimonialCard expects feedback/logo/company/clientName   map the
         // backend's message/photo_url/company_name/name onto those without
         // touching TestimonialCard itself.
         const mapped = (data.testimonials || []).map((t) => ({

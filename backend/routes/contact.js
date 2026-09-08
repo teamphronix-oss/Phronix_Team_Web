@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 
@@ -73,7 +73,7 @@ const validators = [
 ];
 
 // ─────────────────────────────────────────────
-// ADMIN — LIST CONTACT MESSAGES
+// ADMIN   LIST CONTACT MESSAGES
 // ─────────────────────────────────────────────
 
 router.get("/", requireAdmin, async (req, res, next) => {
@@ -90,7 +90,7 @@ router.get("/", requireAdmin, async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────
-// ADMIN — DELETE ONE CONTACT MESSAGE
+// ADMIN   DELETE ONE CONTACT MESSAGE
 // ─────────────────────────────────────────────
 
 router.delete("/:id", requireAdmin, async (req, res, next) => {
@@ -108,7 +108,7 @@ router.delete("/:id", requireAdmin, async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────
-// ADMIN — DELETE ALL CONTACT MESSAGES
+// ADMIN   DELETE ALL CONTACT MESSAGES
 // ─────────────────────────────────────────────
 
 router.delete("/", requireAdmin, async (req, res, next) => {
@@ -126,7 +126,7 @@ router.delete("/", requireAdmin, async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────
-// PUBLIC — SUBMIT CONTACT FORM
+// PUBLIC   SUBMIT CONTACT FORM
 // ─────────────────────────────────────────────
 
 router.post(
@@ -185,7 +185,7 @@ router.post(
 
 Name: ${name}
 Email: ${email}
-Phone: ${phone || "—"}
+Phone: ${phone || " "}
 
 Project Type: ${projectType}
 Budget Range: ${budget}
@@ -222,7 +222,7 @@ ${saved.id}`,
           to: email,
           from: "Phronix Team <downloads@phronix.in>",
 
-          subject: "We received your enquiry — Phronix",
+          subject: "We received your enquiry   Phronix",
 
           text: `Hi ${name},
 

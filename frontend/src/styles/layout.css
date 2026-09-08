@@ -1,4 +1,4 @@
-/* ── Page loader — color bands sweep bottom-to-top on first load ─ */
+/* ── Page loader  color bands sweep bottom-to-top on first load ─ */
   .page-loader {
     position: fixed;
     inset: 0;
@@ -297,7 +297,10 @@
     border-right: none;
     border-top: 1px solid var(--line);
   }
-  @media (max-width: 900px) {
+  /* Breakpoint raised from 900px → 1024px so tablets (e.g. Surface Pro 7
+     @ 912px) also get the mobile nav treatment instead of a squeezed
+     desktop layout. */
+  @media (max-width: 1024px) {
     .navbar__socials:not(.navbar__socials--mobile) { display: none; }
   }
   .navbar__toggle {
@@ -400,7 +403,8 @@
     background: rgba(14, 165, 233, 0.15);
   }
 
-  @media (max-width: 900px) {
+  /* Breakpoint raised from 900px → 1024px (see note above). */
+  @media (max-width: 1024px) {
     .navbar__links { display: none; }
     .navbar__toggle { display: inline-flex; }
     .navbar__mobile { display: flex; }
@@ -578,7 +582,7 @@
 }
 .footer__social a:hover { color: var(--gold-bright); }
 
-/* Icon hover — scale up smoothly */
+/* Icon hover  scale up smoothly */
 .footer__social-icon {
   display: inline-flex;
   transition: transform 0.25s var(--ease), color 0.2s var(--ease);
@@ -586,7 +590,7 @@
 .footer__social-icon:hover {
   transform: scale(1.25) translateY(-2px);
 }
-/* Brand-colored social icons — specificity bumped so it beats
+/* Brand-colored social icons  specificity bumped so it beats
    `.footer__social a` above */
 .footer__social a.footer__social-icon--instagram { color: #E1306C; }
 .footer__social a.footer__social-icon--instagram:hover { color: #F77737; }
@@ -1035,7 +1039,7 @@
     transform: translate3d(0, 72px, 0);
     pointer-events: none;
 
-    /* Fully transparent glassy background — matches the navbar's blur style */
+    /* Fully transparent glassy background  matches the navbar's blur style */
     background: rgba(5, 11, 22, 0.18);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -1081,7 +1085,7 @@
     gap: 12px;
     padding: 13px 14px;
 
-    /* Transparent — content behind clearly shows through the blur */
+    /* Transparent  content behind clearly shows through the blur */
     background: rgba(7, 17, 31, 0.2);
     border: 0;
     color: #f4f8ff;
@@ -1110,7 +1114,7 @@
     color: #7ddcff;
   }
 
-  /* "Start a project" pill — mirrors the hero's own primary CTA so the
+  /* "Start a project" pill  mirrors the hero's own primary CTA so the
      floating version reads as the same button, not a new dock card. */
   .floating-dock__item--cta {
     background: transparent;
@@ -1214,7 +1218,10 @@
     object-fit: cover;
   }
 
-  @media (max-width: 900px) {
+  /* Breakpoint raised from 900px → 1024px to match the navbar
+     hamburger switch  the dock only makes sense next to a desktop
+     nav, so it hides for tablets too now. */
+  @media (max-width: 1024px) {
     .floating-dock {
       display: none;
     }
@@ -1282,9 +1289,12 @@ border-color: var(--line);
 
 
   /* ═══════════════════════════════════════════════════════════
-    Phoenix logo — static PNG mark (phronix-logo-marks.png),
+    Phoenix logo  static PNG mark (phronix-logo-marks.png),
     right-aligned inside .hero__panel via .hero__shell's
     justify-content: flex-end, and continuously rotating.
+    SIZE BUMP: base + tablet + mobile scale all increased ~10-15%
+    so the mark reads bigger next to the "comes next." headline,
+    especially on phones (max-width: 900px tier).
     ═══════════════════════════════════════════════════════════ */
   .hero__shell-logo-wrap {
     position: relative;
@@ -1292,8 +1302,12 @@ border-color: var(--line);
     height: 375px;
     overflow: visible;
     filter: drop-shadow(0 30px 50px rgba(23, 22, 28, 0.35));
-    transform: translateZ(0) scale(1.7) translateX(6%);
+    transform: translateZ(0) scale(1.85) translateX(6%);
     perspective: 900px;
+    /* transform: scale() enlarges the mark visually but doesn't grow its
+       layout box, so the scaled-up bird can spill into whatever sits
+       below it. margin-bottom reserves real space to compensate. */
+    margin-bottom: 40px;
   }
 
   .hero__shell-logo {
@@ -1314,10 +1328,16 @@ border-color: var(--line);
   }
 
   @media (max-width: 1100px) {
-    .hero__shell-logo-wrap { transform: scale(1.4) translateZ(0); }
+    .hero__shell-logo-wrap {
+      transform: scale(1.55) translateZ(0);
+      margin-bottom: 60px;
+    }
   }
   @media (max-width: 900px) {
-    .hero__shell-logo-wrap { transform: scale(1.1) translateZ(0); }
+    .hero__shell-logo-wrap {
+      transform: scale(1.3) translateZ(0);
+      margin-bottom: 80px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1377,14 +1397,14 @@ border-color: var(--line);
   }
 
   /* ═══════════════════════════════════════════════════════════
-    CARDS on dark bg — clean spacing
+    CARDS on dark bg  clean spacing
     ═══════════════════════════════════════════════════════════ */
   .section--space .card-carousel__stage {
     perspective: 1200px;
   }
 
 
-  /* ── Meet the Team — hover reveal cards (Careers page) ───────── */
+  /* ── Meet the Team  hover reveal cards (Careers page) ───────── */
 .team-hover-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1577,7 +1597,7 @@ border-color: var(--line);
     .careers__cta { flex-direction: column; align-items: flex-start; }
   }
 
-  /* ── Team Carousel — auto-scroll, center card grows (Careers page) ─ */
+  /* ── Team Carousel  auto-scroll, center card grows (Careers page) ─ */
 .team-carousel {
   overflow: hidden;
   margin-top: 8px;
@@ -1735,4 +1755,50 @@ border-color: var(--line);
   font-weight: 600;
   color: #94a3b8;
   font-family: var(--font-mono);
+}
+
+/* ── Extra small mobile fix ─────────────────────────────── */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+  .section {
+    padding: 48px 0;
+  }
+  h1 { font-size: clamp(26px, 8vw, 34px); }
+  h2 { font-size: clamp(22px, 6vw, 28px); }
+}
+
+/* ── Navbar: logo/text scale down on small screens ─────────── */
+@media (max-width: 480px) {
+  .navbar__inner { height: 64px; }
+  .navbar__logo span { font-size: 16px; }
+  .navbar__mark--img { width: 30px; height: 30px; }
+}
+
+/* ── Prevent horizontal scroll on any screen ─────────────── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ── Navbar logo/text perfect vertical centering (mobile) ────── */
+@media (max-width: 480px) {
+  .navbar__inner {
+    align-items: center;
+  }
+  .navbar__logo {
+    align-items: center;
+    line-height: 1;
+  }
+  .navbar__mark--img {
+    display: block;
+    flex-shrink: 0;
+    transform: translateY(-4px)!important;   /* 👈 logo ला थोडं वर सरकवायला */
+  }
+  .navbar__logo span {
+    display: inline-block;
+    line-height: 1;
+    transform: translateY(0.5px);
+  }
 }

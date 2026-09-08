@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useLenis } from "./SmoothScroll";
 
@@ -9,7 +9,7 @@ import { useLenis } from "./SmoothScroll";
  * on another page would land you on a new page but still scrolled down.
  *
  * When Lenis is active, we reset through lenis.scrollTo() instead of
- * window.scrollTo() — Lenis tracks its own internal scroll state, so
+ * window.scrollTo()   Lenis tracks its own internal scroll state, so
  * bypassing it would leave it out of sync with the real scroll position
  * and cause a jump/stutter on the next wheel input. `immediate: true`
  * means this reset itself is instant (no eased animation on page change),

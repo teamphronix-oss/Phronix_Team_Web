@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { CheckCircle2, XCircle, Loader2, Download } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
@@ -7,7 +7,7 @@ import siteConfig from "../data/siteConfig";
 const API = siteConfig.apiBaseUrl;
 
 // Route: /activate-download?type=client|student&token=<raw-token>
-// This page never has the file itself — it only asks the backend "is this
+// This page never has the file itself   it only asks the backend "is this
 // token still good?", then, if yes, links to the real download endpoint,
 // which re-checks and atomically consumes the token server-side.
 export default function ActivateDownload() {
@@ -58,7 +58,7 @@ export default function ActivateDownload() {
         <SectionHeading
           eyebrow="Downloads"
           title="Activate your download"
-          description="This link is single-use — once you download, it stops working."
+          description="This link is single-use   once you download, it stops working."
         />
 
         {state === "loading" && (

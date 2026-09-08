@@ -1,4 +1,4 @@
-import sweeterJoy from "../assets/projects/sweeter-joy.png";
+﻿import sweeterJoy from "../assets/projects/sweeter-joy.png";
 import sweeterJoy1 from "../assets/projects/sweeter-joy1.png";
 import sweeterJoy2 from "../assets/projects/sweeter-joy2.png";
 import sweeterJoy3 from "../assets/projects/sweeter-joy3.png";
@@ -10,7 +10,7 @@ import sweeterJoy8 from "../assets/projects/sweeter-joy8.png";
 import sweeterJoy9 from "../assets/projects/sweeter-joy9.png";
 import sweeterJoy10 from "../assets/projects/sweeter-joy10.png";
 
-// Completed projects — shown on the Projects page and featured on Home.
+// Completed projects   shown on the Projects page and featured on Home.
 export const projectCategories = [
   "All",
   "Web App",

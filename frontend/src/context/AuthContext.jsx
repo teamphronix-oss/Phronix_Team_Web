@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+﻿import { createContext, useContext, useEffect, useState } from "react";
 import siteConfig from "../data/siteConfig";
 
-// Lightweight client-side auth context. It never talks to Google directly —
+// Lightweight client-side auth context. It never talks to Google directly  
 // it only holds whatever user object the backend session/JWT confirms.
 // See backend/routes/auth.js for the real Google OAuth flow.
 const AuthContext = createContext(null);
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
           if (!cancelled) setUser(data.user);
         }
       } catch {
-        // Backend not reachable — user simply stays logged out.
+        // Backend not reachable   user simply stays logged out.
       } finally {
         if (!cancelled) setLoading(false);
       }

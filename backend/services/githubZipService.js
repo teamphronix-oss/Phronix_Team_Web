@@ -1,4 +1,4 @@
-// Streams protected ZIP assets from a private GitHub repo used ONLY for
+﻿// Streams protected ZIP assets from a private GitHub repo used ONLY for
 // download distribution (separate from any public deployment/source repo).
 // Requires:
 //   GITHUB_ZIP_OWNER  - repo owner/org
@@ -6,7 +6,7 @@
 //   GITHUB_ZIP_TOKEN  - fine-grained PAT, Contents: Read-only, scoped to that repo
 //
 // Nothing here ever sends the PAT, the repo name, or any github.com URL to
-// the frontend — callers only ever get back a byte stream.
+// the frontend   callers only ever get back a byte stream.
 
 const GITHUB_API = "https://api.github.com";
 
@@ -52,7 +52,7 @@ async function resolveAssetId(releaseTag, assetName) {
 // Returns { body, contentType, contentLength } where body is a web
 // ReadableStream of the raw file bytes, ready to pipe into an Express
 // response. GitHub's asset endpoint 302s to a signed, time-limited storage
-// URL for the actual bytes — fetch follows that redirect automatically.
+// URL for the actual bytes   fetch follows that redirect automatically.
 export async function fetchReleaseAssetStream({ releaseTag, assetName }) {
   const assetId = await resolveAssetId(releaseTag, assetName);
   const res = await githubFetch(

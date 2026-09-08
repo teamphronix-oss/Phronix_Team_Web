@@ -1,6 +1,6 @@
-import siteConfig from "../data/siteConfig";
+﻿import siteConfig from "../data/siteConfig";
 
-// Floating WhatsApp CTA — matching Phronix dark glassmorphism theme
+// Floating WhatsApp CTA   matching Phronix dark glassmorphism theme
 export default function WhatsAppButton() {
   const href = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
     siteConfig.whatsappDefaultMessage

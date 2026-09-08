@@ -1,4 +1,4 @@
-  import SectionHeading from "../SectionHeading";
+﻿  import SectionHeading from "../SectionHeading";
   import sweeterjoy from "../../assets/projects/sweeter-joy.png";
   import sweeterJoy1 from "../../assets/projects/sweeter-joy1.png";
   import sweeterJoy2 from "../../assets/projects/sweeter-joy2.png";
@@ -82,11 +82,11 @@ const row2Pages = [
           <SectionHeading
             eyebrow="Complete Page Architecture"
             title="15+ Essential pages crafted for business success"
-            description="From high-converting landing pages to customer portals and support centers — every screen is designed to build trust and drive conversions."
+            description="From high-converting landing pages to customer portals and support centers   every screen is designed to build trust and drive conversions."
           />
         </div>
 
-        {/* Row 1 — Forward Marquee */}
+        {/* Row 1   Forward Marquee */}
         <div className="pe-marquee">
           <div className="pe-marquee__track">
             {[...row1Pages, ...row1Pages].map((item, i) => (
@@ -95,7 +95,7 @@ const row2Pages = [
           </div>
         </div>
 
-        {/* Row 2 — Reverse Marquee */}
+        {/* Row 2   Reverse Marquee */}
         <div className="pe-marquee pe-marquee--reverse">
           <div className="pe-marquee__track pe-marquee__track--reverse">
             {[...row2Pages, ...row2Pages].map((item, i) => (

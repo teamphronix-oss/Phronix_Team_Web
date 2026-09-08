@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 const BANDS = [
   // "#BFE0FA", // soft blue
@@ -31,7 +31,7 @@ const BANDS = [
   "#08A1AC", // mid blue-teal
 ];
 const BAND_DURATION = 750; // ms, must match the CSS animation-duration
-const STAGGER = 160; // ms between each band starting its slide — tight overlap
+const STAGGER = 160; // ms between each band starting its slide   tight overlap
 
 export default function PageLoader() {
   const [visible, setVisible] = useState(true);

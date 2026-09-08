@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles, Code2, TrendingUp, Bot } from "lucide-react";
 import { useCallback, useState } from "react";
 import siteConfig from "../../data/siteConfig";
@@ -124,7 +124,7 @@ export default function HeroSection() {
                           How do I track my order?
                         </span>
                         <span className="hero__pillar-bubble hero__pillar-bubble--out">
-                          It shipped today — here's your live tracking link.
+                          It shipped today   here's your live tracking link.
                         </span>
                       </>
                     )}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Check } from "lucide-react";
 import SectionHeading from "../../components/SectionHeading";
@@ -40,7 +40,7 @@ export default function ServicesSection() {
           <SectionHeading
             eyebrow="What We Do"
             title="Services built around real product needs"
-            description="From first prototype to the campaign that fills it — nine disciplines spanning engineering and marketing, one team."
+            description="From first prototype to the campaign that fills it   nine disciplines spanning engineering and marketing, one team."
           />
 
           <CardCarousel interval={4000}>

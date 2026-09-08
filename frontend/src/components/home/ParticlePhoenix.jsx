@@ -58,8 +58,11 @@ export default function ParticlePhoenix({ onInteraction }) {
      * - Desktop keeps the phoenix on the right side.
      * - Touch/mobile devices center the phoenix behind the headline.
      * The mobile frame is smaller so the full bird stays inside the viewport.
+     * Bumped from 2.70 -> 3.30 (~22% bigger) per request; hero.css's
+     * margin-top on .hero__lede was already increased to keep the
+     * larger bird from overlapping the paragraph below it.
      */
-    const FRAME = isMobileViewport ? 2.70 : 6.75;
+    const FRAME = isMobileViewport ? 3.30 : 6.75;
     const OFFSET_X = isMobileViewport ? 0 : 2.45;
 
     /*
@@ -390,7 +393,7 @@ export default function ParticlePhoenix({ onInteraction }) {
          */
         introTimer = window.setTimeout(() => {
           if (!disposed) formationTarget = 1;
-        }, reducedMotion ? 120 : 1000);
+        }, reducedMotion ? 120 : 800);
       },
       undefined,
       (error) => {
