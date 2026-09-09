@@ -10,17 +10,24 @@ const model = {
 };
 
 // Admin panel's checkbox field is named "open", but the careers table's
-// column is "is_open" — remap here so the shared factory never needs to
-// know about this one form's field name.
+// column is "is_open"; similarly the "Type" field maps to "employment_type".
+// Remap here so the shared factory never needs to know about this one
+// form's field names.
 function transformCareerBody(row) {
   const mapped = { ...row };
   mapped.is_open = mapped.open === undefined ? true : mapped.open === "true" || mapped.open === true;
   delete mapped.open;
+
+  if (mapped.type !== undefined) {
+    mapped.employment_type = mapped.type;
+    delete mapped.type;
+  }
+
   return mapped;
 }
 
 // Careers has no image and uses is_open instead of is_published, so it
-// doesn't fit the generic hasPublish filter   the public site should just
+// doesn't fit the generic hasPublish filter — the public site should just
 // see everything and filter on is_open itself if it wants to.
 export default makeContentRouter({
   model,
