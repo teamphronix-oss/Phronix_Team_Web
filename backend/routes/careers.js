@@ -17,10 +17,24 @@ function transformCareerBody(row) {
   const mapped = { ...row };
 
   // Admin form uses "open", database uses "is_open"
-  mapped.is_open =
-    mapped.open === undefined
-      ? true
-      : mapped.open === "true" || mapped.open === true;
+  if (mapped.open !== undefined) {
+    mapped.is_open =
+      mapped.open === true ||
+      mapped.open === "true" ||
+      mapped.open === "on" ||
+      mapped.open === 1 ||
+      mapped.open === "1";
+  } else if (mapped.is_open !== undefined) {
+    mapped.is_open =
+      mapped.is_open === true ||
+      mapped.is_open === "true" ||
+      mapped.is_open === "on" ||
+      mapped.is_open === 1 ||
+      mapped.is_open === "1";
+  } else {
+    mapped.is_open = true;
+  }
+
   delete mapped.open;
 
   // Admin form uses "type", database uses "employment_type"
@@ -41,7 +55,6 @@ function transformCareerBody(row) {
 
   return mapped;
 }
-
 // Careers has no image and uses is_open instead of is_published, so it
 // doesn't fit the generic hasPublish filter — the public site should just
 // see everything and filter on is_open itself if it wants to.
