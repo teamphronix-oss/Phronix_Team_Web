@@ -9,10 +9,13 @@
   }
 
   .top-features__intro {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 48px;
-  }
+  text-align: left;
+  max-width: 720px;
+  margin-top: 0;
+  margin-bottom: 48px;
+  margin-left: 0;
+  margin-right: 0;
+}
 
   .top-features__title {
     margin-top: 18px;

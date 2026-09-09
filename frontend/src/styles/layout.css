@@ -614,8 +614,39 @@
   .footer__bottom { display: flex; justify-content: space-between; padding: 24px 0; font-size: 12.5px; color: rgba(242, 240, 234, 0.55); flex-wrap: wrap; gap: 8px; }
 
   @media (max-width: 900px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 560px) { .footer__grid { grid-template-columns: 1fr; } }
+  /* @media (max-width: 560px) { .footer__grid { grid-template-columns: 1fr; } } */
+@media (max-width: 560px) {
+  .footer__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 10px;
+  }
 
+  .footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer__col h4 {
+    font-size: 13.5px;
+  }
+
+  .footer__col a {
+    font-size: 12.5px;
+  }
+
+  .footer__col ul {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__col:last-child {
+    grid-column: 1 / -1;
+  }
+}
  /* ── WhatsApp floating button ──────────────────────────────── */
 .whatsapp-fab {
   position: fixed;

@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { Github, Instagram, Youtube, Mail, MapPin, Linkedin } from "lucide-react";
 import siteConfig from "../data/siteConfig";
 import useSiteLogo from "../hooks/useSiteLogo";
-import phronixLogo from "../assets/phronix-logo.png";
-
+// import phronixLogo from "../assets/phronix-logo.png";
+import phronixLogo from "../assets/logo_circle_only.png";
 export default function Footer() {
   const logoUrl = useSiteLogo();
   const year = new Date().getFullYear();
@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="container footer__grid">
         <div className="footer__brand">
           <div className="navbar__logo">
-            <img src={logoUrl || phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
+            <img src={phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
             <span>{siteConfig.companyName}</span>
           </div>
           <p>{siteConfig.shortDescription}</p>
