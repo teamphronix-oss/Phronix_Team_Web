@@ -15,12 +15,28 @@ const model = {
 // form's field names.
 function transformCareerBody(row) {
   const mapped = { ...row };
-  mapped.is_open = mapped.open === undefined ? true : mapped.open === "true" || mapped.open === true;
+
+  // Admin form uses "open", database uses "is_open"
+  mapped.is_open =
+    mapped.open === undefined
+      ? true
+      : mapped.open === "true" || mapped.open === true;
   delete mapped.open;
 
+  // Admin form uses "type", database uses "employment_type"
   if (mapped.type !== undefined) {
     mapped.employment_type = mapped.type;
     delete mapped.type;
+  }
+
+  // Generate slug automatically from title
+  if (mapped.title) {
+    mapped.slug = mapped.title
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
   }
 
   return mapped;
