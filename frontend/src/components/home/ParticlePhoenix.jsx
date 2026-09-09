@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
@@ -26,6 +26,17 @@ const BRAND = {
 
 export default function ParticlePhoenix({ onInteraction }) {
   const mountRef = useRef(null);
+  const [isMobileViewport, setIsMobileViewport] = useState(
+    window.matchMedia("(max-width: 760px)").matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 760px)");
+    const handleChange = (e) => setIsMobileViewport(e.matches);
+    
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -42,9 +53,7 @@ export default function ParticlePhoenix({ onInteraction }) {
     // Use viewport width for layout, not pointer type.
     // Some laptops have touch screens and report a coarse pointer;
     // they must still keep the desktop phoenix composition.
-    const isMobileViewport = window.matchMedia(
-      "(max-width: 760px)"
-    ).matches;
+    // isMobileViewport is now a state variable that updates on resize.
 
     // More tiles = more faithful image. 52–64 is a good desktop range.
     const GRID = reducedMotion
@@ -58,11 +67,9 @@ export default function ParticlePhoenix({ onInteraction }) {
      * - Desktop keeps the phoenix on the right side.
      * - Touch/mobile devices center the phoenix behind the headline.
      * The mobile frame is smaller so the full bird stays inside the viewport.
-     * Bumped from 2.70 -> 3.30 (~22% bigger) per request; hero.css's
-     * margin-top on .hero__lede was already increased to keep the
-     * larger bird from overlapping the paragraph below it.
+     * Reduced from 3.30 to 2.40 to prevent overlap with other elements on mobile.
      */
-    const FRAME = isMobileViewport ? 3.30 : 6.75;
+    const FRAME = isMobileViewport ? 2.40 : 6.75;
     const OFFSET_X = isMobileViewport ? 0 : 2.45;
 
     /*
@@ -73,7 +80,7 @@ export default function ParticlePhoenix({ onInteraction }) {
      * IMPORTANT: this is based on viewport width, not pointer type,
      * so touch-enabled laptops keep the original desktop layout.
      */
-    const OFFSET_Y = isMobileViewport ? 0.65 : 0.02;
+    const OFFSET_Y = isMobileViewport ? 1.20 : 0.02;
 
     const scene = new THREE.Scene();
 
@@ -550,7 +557,7 @@ export default function ParticlePhoenix({ onInteraction }) {
         renderer.domElement.remove();
       }
     };
-  }, [onInteraction]);
+  }, [isMobileViewport, onInteraction]);
 
   return (
     <div

@@ -109,7 +109,7 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 12.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gold-ink);
+  color: var(--gold-bright);
   display: inline-flex;
   align-items: center;
   gap: 8px;
