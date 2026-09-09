@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import {
   Instagram,
   ArrowUpRight,
@@ -96,7 +96,7 @@ export default function Projects() {
         <SectionHeading
           eyebrow="Portfolio & Case Studies"
           title="Engineered to build. Managed to grow."
-          description="From high-conversion platforms and cross-platform apps to automated AI workflows and performance campaigns — explore our client work."
+          description="From high-conversion platforms and cross-platform apps to automated AI workflows and performance campaigns   explore our client work."
         />
 
         {/* Category Filters from projects.js */}
@@ -317,7 +317,7 @@ export default function Projects() {
 }
 
 /* Tabbed breakdown shown inside a project's modal when it touched more than
-   one discipline — e.g. a case study that involved both a build and a
+   one discipline   e.g. a case study that involved both a build and a
    marketing campaign, or a build with an AI layer added on top. */
 const PILLAR_TAB_CONFIG = {
   build: { label: "The Build", icon: Code2 },

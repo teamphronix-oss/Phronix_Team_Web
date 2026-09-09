@@ -1,4 +1,4 @@
-import { Search, Target, Palette, Share2 } from "lucide-react";
+﻿import { Search, Target, Palette, Share2 } from "lucide-react";
 import SectionHeading from "../SectionHeading";
 import CountUp from "../CountUp";
 import "../../styles/home/marketing.css";
@@ -7,7 +7,7 @@ const pillars = [
   {
     icon: Search,
     title: "SEO & Organic Growth",
-    desc: "Technical SEO, on-page structure, and content that compounds — built to rank, not just to launch.",
+    desc: "Technical SEO, on-page structure, and content that compounds   built to rank, not just to launch.",
   },
   {
     icon: Target,
@@ -41,7 +41,7 @@ export default function MarketingSection() {
           eyebrow="Marketing & Growth"
           title="We don't just ship it. We sell it."
           description="Engineering gets a product live. Marketing gets it in front of the people who'll actually buy it. We run both under one roof, so the site we build and the campaigns that drive to it are never working from two different playbooks."
-          center
+          // center
         />
 
         <div className="marketing-section__grid">

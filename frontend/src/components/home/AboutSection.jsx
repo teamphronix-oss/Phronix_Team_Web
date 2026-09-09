@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import SectionHeading from "../../components/SectionHeading";
 import siteConfig from "../../data/siteConfig";
 import "../../styles/home/about.css";
 
 const defaultTitle = "A small studio, deliberately.";
 const defaultDescription =
-  "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy, and from the first landing page to the campaign that fills it. We work across web, mobile, cloud, and AI, and we carry that same product into the market with SEO, paid acquisition, and brand strategy. One team, no hand-offs between the people who build it and the people who sell it.";
+  "We keep the team small so every project gets senior attention   from the first architecture decision to the last production deploy, and from the first landing page to the campaign that fills it. We work across web, mobile, cloud, and AI, and we carry that same product into the market with SEO, paid acquisition, and brand strategy. One team, no hand-offs between the people who build it and the people who sell it.";
 
 const defaultPoints = [
   {
@@ -24,13 +24,13 @@ const defaultPoints = [
     id: "p3",
     eyebrow: "PHX / 03",
     title: "Marketing that compounds",
-    description: "SEO, paid, content, and brand work built to grow the product we just shipped — not a bolt-on afterthought.",
+    description: "SEO, paid, content, and brand work built to grow the product we just shipped   not a bolt-on afterthought.",
   },
   {
     id: "p4",
     eyebrow: "PHX / 04",
     title: "Built to last",
-    description: "Clean, documented, maintainable code — because we often maintain it too.",
+    description: "Clean, documented, maintainable code   because we often maintain it too.",
   },
 ];
 

@@ -3,35 +3,35 @@ import { Bot, X, Send, Sparkles } from "lucide-react";
 import "../styles/home/chatbot.css";
 
 const GREETING =
-  "Hi, I'm the Phronix assistant — a small demo of the kind of chatbot we build into client products. Ask me about services, pricing, AI, or how to get in touch.";
+  "Hi, I'm the Phronix assistant  a small demo of the kind of chatbot we build into client products. Ask me about services, pricing, AI, or how to get in touch.";
 
-// Lightweight rule-based reply engine — this widget is a live demo of the
+// Lightweight rule-based reply engine  this widget is a live demo of the
 // "AI Chatbots & Support Copilots" service, running on Phronix's own site.
 function getBotReply(input) {
   const text = input.toLowerCase();
 
   if (/\b(hi|hello|hey|greetings|howdy)\b/.test(text)) {
-    return "Hey there! What can I help you with — services, pricing, or getting in touch?";
+    return "Hey there! What can I help you with  services, pricing, or getting in touch?";
   }
   if (/(price|cost|budget|pricing|rate|quote)/.test(text)) {
     return "Most engagements start in the ₹5,999–₹9,999 range depending on scope. Head to /services for the full breakdown, or /contact to get an exact quote.";
   }
   if (/(ai|chatbot|automat|copilot|rag|gpt|claude|llm)/.test(text)) {
-    return "We build AI chatbots like this one, plus we retrofit AI into software you already have — search, summarization, internal copilots. Check /services#automate.";
+    return "We build AI chatbots like this one, plus we retrofit AI into software you already have  search, summarization, internal copilots. Check /services#automate.";
   }
   if (/(market|seo|ads|campaign|social|brand|roas|traffic|grow)/.test(text)) {
-    return "On the growth side we run SEO, paid ads, branding, and content — see /services#grow for specifics and real campaign results.";
+    return "On the growth side we run SEO, paid ads, branding, and content  see /services#grow for specifics and real campaign results.";
   }
   if (/(web|app|mobile|build|develop|frontend|backend|cloud)/.test(text)) {
-    return "Web, mobile, cloud, backend — full product builds from prototype to production. See /services#build for the details.";
+    return "Web, mobile, cloud, backend  full product builds from prototype to production. See /services#build for the details.";
   }
   if (/(contact|talk|call|email|reach|phone|whatsapp)/.test(text)) {
-    return "You can reach us at hello@phronix.io or via the contact form — head to /contact and we'll get back to you quickly.";
+    return "You can reach us at hello@phronix.io or via the contact form  head to /contact and we'll get back to you quickly.";
   }
   if (/(project|case study|portfolio|work|demo)/.test(text)) {
-    return "Take a look at /projects — filter by Web App, Mobile, AI & Automation, or Marketing & Growth to see relevant case studies.";
+    return "Take a look at /projects  filter by Web App, Mobile, AI & Automation, or Marketing & Growth to see relevant case studies.";
   }
-  return "I'm a lightweight demo bot, so I don't catch everything — but for anything specific, the team at Phronix will. Try /contact, or ask me about services, pricing, or AI.";
+  return "I'm a lightweight demo bot, so I don't catch everything  but for anything specific, the team at Phronix will. Try /contact, or ask me about services, pricing, or AI.";
 }
 
 export default function ChatBotWidget() {

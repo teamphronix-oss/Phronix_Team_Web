@@ -1,11 +1,11 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Download, Lock, Loader2 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import siteConfig from "../data/siteConfig";
 
 // Requests a short-lived, signed download URL from the backend. The backend
 // verifies the session (and project password, if required) before issuing
-// it — no file path or secret ever lives in this component.
+// it   no file path or secret ever lives in this component.
 export default function DownloadCard({ project }) {
   const { user, loginWithGoogle } = useAuth();
   const [password, setPassword] = useState("");

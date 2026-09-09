@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 
-/* Renders a source image (logo, icon, illustration — anything with
+/* Renders a source image (logo, icon, illustration   anything with
    transparency) as a grid of small dots that only appear where the
    image is opaque ("halftone" style), matching lamalama.com's shape
    made of dots. Dots near the cursor scatter away and ease back once
@@ -11,12 +11,12 @@ import { useEffect, useRef, useState } from "react";
      <CursorDotShape src="/assets/your-shape.png" width={480} height={280} />
 
    The source image should have a transparent background and a
-   solid/white silhouette — that silhouette is what gets "dotted". */
+   solid/white silhouette   that silhouette is what gets "dotted". */
 export default function CursorDotShape({
   src,
   width = 480,
   height = 280,
-  spacing = 8,       // sampling grid gap, px — smaller = denser dots
+  spacing = 8,       // sampling grid gap, px   smaller = denser dots
   dotSize = 2,          // resting dot radius, px
   radius = 90,           // cursor influence reach, px
   strength = 26,           // max scatter distance at cursor center, px
@@ -65,7 +65,7 @@ export default function CursorDotShape({
     };
   }, [src, width, height, spacing, threshold]);
 
-  // Step 2: animate — same repulsion/ease-back behaviour as the
+  // Step 2: animate   same repulsion/ease-back behaviour as the
   // full-background dot field, just scoped to this shape's points.
   useEffect(() => {
     if (!ready) return;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Code2, TrendingUp, Bot, LayoutGrid } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
@@ -53,8 +53,8 @@ export default function Services() {
       <div className="container">
         <SectionHeading
           eyebrow="Services"
-          title="What we build — and grow"
-          description="Every engagement starts with the same question: what does this product actually need — to work, to be found, and to sell? These are the disciplines we bring to answer it."
+          title="What we build   and grow"
+          description="Every engagement starts with the same question: what does this product actually need   to work, to be found, and to sell? These are the disciplines we bring to answer it."
         />
 
         <div className="services-filter" role="tablist" aria-label="Filter services">

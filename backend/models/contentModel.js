@@ -1,11 +1,11 @@
-import { supabase } from "../config/supabase.js";
+﻿import { supabase } from "../config/supabase.js";
 
 // Shared CRUD for the simple "admin-managed content list" tables (services,
 // testimonials, careers, youtube_videos, ongoing_projects, why_features,
 // clients). Each of these follows the same shape: order + is_published +
 // created_at/updated_at, so the query logic doesn't need repeating per file.
 // Resource-specific field handling (arrays, image fields) lives in the route
-// layer, not here — this module only talks to Supabase.
+// layer, not here   this module only talks to Supabase.
 export function makeModel(table, { orderColumn = "order", hasPublish = true, publishColumn = "is_published" } = {}) {
   return {
     async list({ onlyPublished = false } = {}) {

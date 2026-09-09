@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 
 import { upload, uploadBuffer, deleteImage } from "../middleware/upload.js";
 
@@ -25,7 +25,7 @@ router.get("/", async (req, res, next) => {
       settings: {
         logoUrl: row.logo_url || "",
 
-        // statNumber is an alias of projectsStat — the admin panel's
+        // statNumber is an alias of projectsStat   the admin panel's
         // Homepage Stats form reads statNumber, other parts of the app
         // may read projectsStat, so both point at the same value.
         statNumber: row.projects_stat || "",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ShieldCheck, Lock, Eye, EyeOff } from "lucide-react";
 
@@ -35,7 +35,7 @@ export default function AdminLogin() {
     <div className="page-head-section section admin-auth-page">
       <div className="container admin-auth-page__inner">
         <form className="card admin-auth-card" onSubmit={handleSubmit}>
-          <span className="admin-auth-card__eyebrow">— ADMIN</span>
+          <span className="admin-auth-card__eyebrow">  ADMIN</span>
           <h2 className="admin-auth-card__title">Admin sign in</h2>
 
           <div className="admin-auth-card__icon">
@@ -43,7 +43,7 @@ export default function AdminLogin() {
           </div>
 
           <p className="admin-auth-card__description">
-            Sign in to edit the Phronix website — team, projects, and site logo.
+            Sign in to edit the Phronix website   team, projects, and site logo.
           </p>
 
           {error && <div className="admin-auth-card__error">{error}</div>}

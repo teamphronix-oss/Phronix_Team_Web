@@ -1,4 +1,4 @@
-import "dotenv/config";
+﻿import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -51,7 +51,7 @@ app.use(express.json({ limit: "1mb" }));
 
 app.use(cookieParser());
 
-// Note: images are no longer served from local disk — everything uploaded
+// Note: images are no longer served from local disk   everything uploaded
 // via the admin panel now goes straight to Cloudinary and the DB stores the
 // Cloudinary URL directly. The backend/uploads/ dir is unused for images.
 
@@ -118,7 +118,7 @@ app.use(
 );
 
 // cookie-session doesn't implement regenerate()/save() that newer Passport
-// versions call internally during login — this shim adds harmless no-op
+// versions call internally during login   this shim adds harmless no-op
 // versions so passport.session() works without switching to express-session.
 app.use((req, res, next) => {
   if (req.session && !req.session.regenerate) {

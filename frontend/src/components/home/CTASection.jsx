@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import siteConfig from "../../data/siteConfig";
 import "../../styles/home/cta.css";
@@ -11,7 +11,7 @@ export default function CTASection() {
           <div>
             <span className="eyebrow">Let's Build</span>
             <h2>Have a project in mind?</h2>
-            <p>Tell us what you're building — we'll reply within one business day.</p>
+            <p>Tell us what you're building   we'll reply within one business day.</p>
           </div>
           <div className="cta__actions">
             <Link to="/contact" className="btn btn--gold">

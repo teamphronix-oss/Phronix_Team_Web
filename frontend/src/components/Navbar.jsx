@@ -13,8 +13,8 @@ import {
   Bot,
 } from "lucide-react";
 import siteConfig from "../data/siteConfig";
-import useSiteLogo from "../hooks/useSiteLogo";
-import phronixLogo from "../assets/Gemini_Generated_Image_mflsmnmflsmnmfls.png";
+import useSiteLogo from "../hooks/useSiteLogo"; //fetched from cloudinary
+import phronixLogo from "../assets/logo_circle_only.png";
 
 const servicesMega = [
   {
@@ -155,7 +155,7 @@ export default function Navbar() {
           }
         >
           <img
-            src={logoUrl || phronixLogo}
+            src={phronixLogo}
             alt="Phronix"
             className="navbar__mark navbar__mark--img"
           />

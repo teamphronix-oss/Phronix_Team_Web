@@ -1,7 +1,7 @@
-import multer from "multer";
+﻿import multer from "multer";
 import cloudinary from "../config/cloudinary.js";
 
-// Files land in memory only — never written to local disk — then streamed
+// Files land in memory only   never written to local disk   then streamed
 // straight to Cloudinary. This replaces the old disk-storage multer setup
 // that saved images under backend/uploads/.
 export const upload = multer({
@@ -16,7 +16,7 @@ export const upload = multer({
 });
 
 // Uploads a single in-memory buffer to Cloudinary under phronix/<folder>/.
-// Resolves { url, publicId } — publicId is stored alongside the URL so the
+// Resolves { url, publicId }   publicId is stored alongside the URL so the
 // old image can be cleanly deleted later on update/removal.
 export function uploadBuffer(buffer, folder) {
   return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ export function uploadBuffer(buffer, folder) {
   });
 }
 
-// Best-effort delete — never throws, since a failed cleanup shouldn't block
+// Best-effort delete   never throws, since a failed cleanup shouldn't block
 // the API response (an orphaned Cloudinary asset is a minor cost, a broken
 // update/delete request is not).
 export async function deleteImage(publicId) {

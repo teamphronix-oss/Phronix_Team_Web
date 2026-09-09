@@ -1,6 +1,6 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 // Open roles shown on the Careers page.
-// Add, remove, or edit entries here — nothing else needs to change.
+// Add, remove, or edit entries here   nothing else needs to change.
 // Set `open: false` to keep a role listed but marked as closed.
 // ─────────────────────────────────────────────────────────────
 
@@ -13,7 +13,7 @@ export const careers = [
     type: "Full-time",
     experience: "2–4 years",
     description:
-      "Build fast, accessible interfaces in React for client and product work — from early prototypes to production dashboards.",
+      "Build fast, accessible interfaces in React for client and product work   from early prototypes to production dashboards.",
     responsibilities: [
       "Ship UI features end-to-end in React and collaborate closely with design",
       "Keep performance, accessibility, and responsiveness front of mind",
@@ -34,7 +34,7 @@ export const careers = [
     type: "Full-time",
     experience: "2–5 years",
     description:
-      "Design and maintain the APIs and infrastructure behind our client platforms — reliable, well-documented, and built to scale.",
+      "Design and maintain the APIs and infrastructure behind our client platforms   reliable, well-documented, and built to scale.",
     responsibilities: [
       "Design REST APIs and data models for new features",
       "Own deployment, monitoring, and performance of backend services",
@@ -76,7 +76,7 @@ export const careers = [
     type: "Internship",
     experience: "Students / recent grads",
     description:
-      "A hands-on internship for people who want real production experience — you'll ship features, not just shadow.",
+      "A hands-on internship for people who want real production experience   you'll ship features, not just shadow.",
     responsibilities: [
       "Pair with senior engineers on live client and product features",
       "Write tests and documentation alongside your code",

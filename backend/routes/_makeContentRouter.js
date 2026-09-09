@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import requireAdmin from "../middleware/requireAdmin.js";
 import softAdmin from "../middleware/softAdmin.js";
 import { upload, uploadBuffer, deleteImage } from "../middleware/upload.js";
@@ -50,7 +50,7 @@ export function makeContentRouter({
     if (hasPublish && row[publishColumn] !== undefined) {
       row[publishColumn] = row[publishColumn] === "true" || row[publishColumn] === true;
     }
-    // Never let the client set the Cloudinary public_id columns directly —
+    // Never let the client set the Cloudinary public_id columns directly  
     // those are only ever set by the upload branch below.
     for (const f of imageFields) delete row[f.publicIdField];
     return transformBody ? transformBody(row) : row;

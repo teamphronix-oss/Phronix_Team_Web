@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
+﻿import { createContext, useContext, useEffect, useState } from "react";
 import siteConfig from "../data/siteConfig";
 
 // Separate from AuthContext (that one is Google login for site visitors).
-// This one is the site-owner admin — username/password, JWT cookie.
+// This one is the site-owner admin   username/password, JWT cookie.
 const AdminAuthContext = createContext(null);
 
 export function AdminAuthProvider({ children }) {

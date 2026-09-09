@@ -1,4 +1,4 @@
-export const team = [
+﻿export const team = [
   {
     id: 1,
     name: "Aarav Deshmukh",
@@ -24,7 +24,7 @@ export const team = [
     name: "Rohan Iyer",
     role: "Backend Engineer",
     image: "/assets/Image/rohan.webp",
-    bio: "Builds the APIs and infrastructure nobody notices — until it's not there.",
+    bio: "Builds the APIs and infrastructure nobody notices   until it's not there.",
     skills: ["Node.js", "MongoDB", "AWS"],
     linkedin: "https://linkedin.com/in/rohaniyer",
     github: "https://github.com/rohaniyer",

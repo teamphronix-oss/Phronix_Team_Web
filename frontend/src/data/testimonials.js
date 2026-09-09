@@ -1,4 +1,4 @@
-export const testimonials = [
+﻿export const testimonials = [
   {
     id: 1,
     clientName: "Meera Kulkarni",
@@ -63,7 +63,7 @@ export const testimonials = [
     designation: "Product Lead",
     rating: 4,
     feedback:
-      "Complex requirements, tight deadline — they handled both without cutting corners on quality. Would work with them again.",
+      "Complex requirements, tight deadline   they handled both without cutting corners on quality. Would work with them again.",
   },
   {
     id: 7,
@@ -85,7 +85,7 @@ export const testimonials = [
     designation: "Creative Director",
     rating: 5,
     feedback:
-      "Design sense plus solid engineering — a combination that's hard to find. They got our vision right on the first try.",
+      "Design sense plus solid engineering   a combination that's hard to find. They got our vision right on the first try.",
   },
   {
     id: 9,

@@ -1,5 +1,5 @@
-// Add, remove, or edit services here — the Services page renders this list directly.
-// pillar: "build" | "grow" | "automate" — used to group and filter services across the site.
+// Add, remove, or edit services here  the Services page renders this list directly.
+// pillar: "build" | "grow" | "automate"  used to group and filter services across the site.
 export const services = [
   {
     id: "web-development",
@@ -119,9 +119,9 @@ export const services = [
     icon: "Bot",
     pillar: "automate",
     shortDescription:
-      "Custom-trained chat and voice bots that handle support, sales, and FAQs — live on your site or app.",
+      "Custom-trained chat and voice bots that handle support, sales, and FAQs  live on your site or app.",
     description:
-      "Custom-trained chat and voice bots that handle support, sales, and FAQs — live on your site or app.",
+      "Custom-trained chat and voice bots that handle support, sales, and FAQs  live on your site or app.",
     technologies: ["OpenAI API", "Claude API", "Vector Search"],
     features: ["OpenAI API", "Claude API", "Vector Search"],
     priceRange: "₹5,999 – ₹9,999",
@@ -133,9 +133,9 @@ export const services = [
     icon: "Cpu",
     pillar: "automate",
     shortDescription:
-      "We retrofit AI into software you already have — no rebuild required. Search, summarization, automation, copilots.",
+      "We retrofit AI into software you already have  no rebuild required. Search, summarization, automation, copilots.",
     description:
-      "We retrofit AI into software you already have — no rebuild required. Search, summarization, automation, copilots.",
+      "We retrofit AI into software you already have  no rebuild required. Search, summarization, automation, copilots.",
     technologies: ["RAG Pipelines", "LangChain", "Legacy API Integration"],
     features: ["RAG Pipelines", "LangChain", "Legacy API Integration"],
     priceRange: "₹5,999 – ₹9,999",
@@ -147,9 +147,9 @@ export const services = [
     icon: "Workflow",
     pillar: "automate",
     shortDescription:
-      "Internal tools and automations that cut manual busywork — from data entry to multi-step approvals.",
+      "Internal tools and automations that cut manual busywork  from data entry to multi-step approvals.",
     description:
-      "Internal tools and automations that cut manual busywork — from data entry to multi-step approvals.",
+      "Internal tools and automations that cut manual busywork  from data entry to multi-step approvals.",
     technologies: ["Python", "Zapier/Make", "Internal APIs"],
     features: ["Python", "Zapier/Make", "Internal APIs"],
     priceRange: "₹5,999 – ₹9,999",

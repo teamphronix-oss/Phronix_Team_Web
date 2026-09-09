@@ -1,4 +1,4 @@
-/* ─────────────────────────────────────────────────────────────
+﻿/* ─────────────────────────────────────────────────────────────
    Phronix Minimalist Services Carousel & Card System
    ───────────────────────────────────────────────────────────── */
 
@@ -319,7 +319,7 @@
   }
 }
 
-/* ── Trust bar — rounded pill row of checkmark highlights ─────── */
+/* ── Trust bar   rounded pill row of checkmark highlights ─────── */
 .trust-bar {
   position: relative;
   z-index: 1;

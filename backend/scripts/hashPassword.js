@@ -1,6 +1,6 @@
-// Utility: node scripts/hashPassword.js "myPassword"
+﻿// Utility: node scripts/hashPassword.js "myPassword"
 // Prints a bcrypt hash to paste into a DownloadableProject document.
-// Never store the plain password anywhere — only this hash.
+// Never store the plain password anywhere   only this hash.
 import bcrypt from "bcryptjs";
 
 const plain = process.argv[2];

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Download, Lock, Loader2, Mail, CheckCircle2, MessageCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import siteConfig from "../data/siteConfig";
@@ -10,7 +10,7 @@ const API = siteConfig.apiBaseUrl;
 // the backend responds with redirectWhatsapp:true (admin-notified/manual
 // review projects), the link instead goes to the team's inbox, and this
 // component shows a short "redirecting" notice before opening WhatsApp with
-// a prefilled message naming the project — the actual admin notification
+// a prefilled message naming the project   the actual admin notification
 // email was already sent the moment the request was made.
 export default function SecureDownloadCard({ project, projectType }) {
   const { user, loginWithGoogle } = useAuth();
@@ -102,7 +102,7 @@ export default function SecureDownloadCard({ project, projectType }) {
       {status === "redirecting" && (
         <p className="field-success">
           <MessageCircle size={16} />
-          {resultMessage} Opening WhatsApp in a moment — send the message so our team can follow up.
+          {resultMessage} Opening WhatsApp in a moment   send the message so our team can follow up.
         </p>
       )}
 
