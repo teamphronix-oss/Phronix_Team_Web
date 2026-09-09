@@ -3,8 +3,8 @@ import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import birdTargetUrl from "../../assets/bird-particle-target-blue.png";
-
+// import birdTargetUrl from "../../assets/bird-particle-target-blue.png";
+import birdTargetUrl from "../../assets/bird.png";
 /*
  * PHRONIX PHOENIX HERO
  *
