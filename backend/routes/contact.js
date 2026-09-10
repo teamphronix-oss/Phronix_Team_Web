@@ -1,4 +1,4 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 
@@ -47,24 +47,16 @@ const validators = [
     .withMessage("Phone number looks invalid."),
 
   body("projectType")
-    .trim()
-    .notEmpty()
-    .withMessage("Project type is required."),
+    .optional({ checkFalsy: true }),
 
   body("budget")
-    .trim()
-    .notEmpty()
-    .withMessage("Budget range is required."),
+    .optional({ checkFalsy: true }),
 
   body("timeline")
-    .trim()
-    .notEmpty()
-    .withMessage("Timeline is required."),
+    .optional({ checkFalsy: true }),
 
   body("contactMethod")
-    .trim()
-    .notEmpty()
-    .withMessage("Preferred contact method is required."),
+    .optional({ checkFalsy: true }),
 
   body("message")
     .trim()
@@ -156,17 +148,17 @@ router.post(
         attachmentName,
       } = req.body;
 
-      // Save the contact message.
+      // Save the contact message with fallbacks
       const saved = await createContactMessage({
         name,
         email,
-        phone,
-        projectType,
-        budget,
-        timeline,
-        contactMethod,
+        phone: phone || "",
+        projectType: projectType || "General Enquiry",
+        budget: budget || "Not Specified",
+        timeline: timeline || "Flexible",
+        contactMethod: contactMethod || "Email",
         message,
-        attachmentName,
+        attachmentName: attachmentName || "",
       });
 
       // ─────────────────────────────────────────

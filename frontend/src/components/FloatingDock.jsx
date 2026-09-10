@@ -7,7 +7,7 @@ import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
    from the top of the page. The rest reveal in order while the user
    scrolls through the matching sections below. */
 const DEFAULT_ITEMS = [
-  { id: "touch", label: "WHY PHRONIX", hasVideo: true, videoSrc: logoVideo, avatar: true },
+  { id: "touch", label: "WHY US", hasVideo: true, videoSrc: logoVideo, avatar: true },
   { id: "start", label: "Start a project", type: "link", to: "/projects", pinned: true, scrollGated: true, cta: true },
   { id: "aibot", label: "TALK TO AI", type: "action", action: "open-chatbot", pinned: true },
   { id: "us", label: "DOCTIFI", hasVideo: true, videoSrc: logoVideo },

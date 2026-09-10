@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Github, Instagram, Youtube, Mail, MapPin, Linkedin } from "lucide-react";
+import { Github, Instagram, Youtube, Mail, MapPin, Linkedin, Phone ,Clock } from "lucide-react";
 import siteConfig from "../data/siteConfig";
 import useSiteLogo from "../hooks/useSiteLogo";
 // import phronixLogo from "../assets/phronix-logo.png";
@@ -86,10 +86,22 @@ export default function Footer() {
               <Mail size={16} />
               <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
             </li>
+            {siteConfig.phone && (
+              <li>
+                <Phone size={16} />
+                <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}>{siteConfig.phone}</a>
+              </li>
+            )}
             <li>
               <MapPin size={16} />
               <span>{siteConfig.address.line1}, {siteConfig.address.line2}</span>
             </li>
+            {siteConfig.businessHours && (
+              <li>
+                <Clock size={16} />
+                <span>{siteConfig.businessHours.display}</span>
+              </li>
+            )}
             <li>
               <a
                 href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.whatsappDefaultMessage)}`}

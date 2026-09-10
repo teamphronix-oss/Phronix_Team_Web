@@ -9,9 +9,9 @@ export default function CTASection() {
       <section className="section section--dark cta">
         <div className="container cta__inner">
           <div>
-            <span className="eyebrow">Let's Build</span>
-            <h2>Have a project in mind?</h2>
-            <p>Tell us what you're building   we'll reply within one business day.</p>
+            <span className="eyebrow">You're building the company.</span>
+            <h2>We're building everything around it.</h2>
+            <p>Design. Development. Shipped.Sound good?</p>
           </div>
           <div className="cta__actions">
             <Link to="/contact" className="btn btn--gold">

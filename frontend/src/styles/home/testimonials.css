@@ -1,6 +1,8 @@
-﻿/* ── Testimonials   staggered zig-zag layout (4 columns) ───────── */
+﻿/* ── Testimonials — staggered zig-zag layout (dynamic columns) ───────── */
 /* =========================================================
-   TESTIMONIALS - 4 COLUMN VERTICAL MARQUEE
+   TESTIMONIALS - DYNAMIC COLUMN VERTICAL MARQUEE
+   Column count comes from --testimonial-cols (set in JSX,
+   based on how many testimonials actually exist)
    Column 1 : Bottom → Top
    Column 2 : Top → Bottom
    Column 3 : Bottom → Top
@@ -14,13 +16,14 @@
 .testimonials-marquee {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--testimonial-cols, 4), 1fr);
   gap: 24px;
-
   margin-top: 50px;
-  padding: 0 24px;
 
-  height: 760px;
+  /* height is now set inline via JS to match actual content —
+     no more fixed 760px causing blank space at the bottom.
+     margin-bottom above gives a fixed, reasonable gap before
+     the next section instead of a huge (old) or zero (new) gap. */
   overflow: hidden;
 }
 
@@ -160,8 +163,7 @@
 @media (max-width: 1100px) {
 
   .testimonials-marquee {
-    grid-template-columns: repeat(2, 1fr);
-    height: 700px;
+    grid-template-columns: repeat(min(2, var(--testimonial-cols, 4)), 1fr);
   }
 
 }
@@ -170,13 +172,7 @@
 @media (max-width: 650px) {
 
   .testimonials-marquee {
-    grid-template-columns: 1fr;
-    height: 600px;
     padding: 0 16px;
-  }
-
-  .testimonials-marquee__column:not(:first-child) {
-    display: none;
   }
 
 }

@@ -26,7 +26,7 @@ export default function WhySection() {
       <section className="section why">
         <div className="container why__grid">
           <div className="why__intro">
-            <span className="eyebrow-badge">Why Phronix?</span>
+            <span className="eyebrow">Why Phronix?</span>
             <h2 className="why__title">
               Built <span className="hero__title-gold">Right</span>,<br />
               Built to <span className="hero__title-gold">Last</span>.

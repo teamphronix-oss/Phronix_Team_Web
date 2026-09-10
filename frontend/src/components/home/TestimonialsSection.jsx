@@ -1,12 +1,32 @@
+import { useEffect, useState } from "react";
 import SectionHeading from "../../components/SectionHeading";
 import TestimonialCard from "../../components/TestimonialCard";
 import "../../styles/home/testimonials.css";
 
-export default function TestimonialsSection({ testimonials }) {
+function getColumnCount() {
+  if (typeof window === "undefined") return 4;
+  const w = window.innerWidth;
+  if (w <= 650) return 1;   // mobile: 1 column, ALL testimonials in it
+  if (w <= 1100) return 2;  // tablet: 2 columns
+  return 4;                 // desktop: 4 columns
+}
 
-  // 4 vertical columns
-  const columns = [0, 1, 2, 3].map((col) =>
-    testimonials.filter((_, index) => index % 4 === col)
+export default function TestimonialsSection({ testimonials }) {
+  const [columnCount, setColumnCount] = useState(getColumnCount());
+
+  useEffect(() => {
+    function handleResize() {
+      setColumnCount(getColumnCount());
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // columns split based on the CURRENT column count —
+  // on mobile (columnCount = 1) every testimonial lands in the
+  // single column, so nothing gets hidden or repeated.
+  const columns = Array.from({ length: columnCount }, (_, col) =>
+    testimonials.filter((_, index) => index % columnCount === col)
   );
 
   return (
@@ -20,7 +40,10 @@ export default function TestimonialsSection({ testimonials }) {
 
       </div>
 
-      <div className="testimonials-marquee">
+      <div
+        className="testimonials-marquee"
+        style={{ "--testimonial-cols": columnCount }}
+      >
 
         {columns.map((column, columnIndex) => (
 
