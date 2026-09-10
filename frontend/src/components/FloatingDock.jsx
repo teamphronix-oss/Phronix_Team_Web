@@ -7,12 +7,12 @@ import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
    from the top of the page. The rest reveal in order while the user
    scrolls through the matching sections below. */
 const DEFAULT_ITEMS = [
-  { id: "touch", label: "GET IN TOUCH", hasVideo: true, videoSrc: logoVideo, avatar: true },
+  { id: "touch", label: "WHY US", hasVideo: true, videoSrc: logoVideo, avatar: true },
   { id: "start", label: "Start a project", type: "link", to: "/projects", pinned: true, scrollGated: true, cta: true },
-  { id: "aibot", label: "Talk to our AI Bot", type: "action", action: "open-chatbot", pinned: true },
-  { id: "us", label: "THIS IS US", hasVideo: true, videoSrc: logoVideo },
-  { id: "pitch", label: "PITCHDECK", hasVideo: true, videoSrc: logoVideo },
-  { id: "awwwards", label: "OUR AWWWARDS TALK", hasVideo: true, videoSrc: logoVideo },
+  { id: "aibot", label: "TALK TO AI", type: "action", action: "open-chatbot", pinned: true },
+  { id: "us", label: "DOCTIFI", hasVideo: true, videoSrc: logoVideo },
+  { id: "pitch", label: "OILTRACK", hasVideo: true, videoSrc: logoVideo },
+  { id: "awwwards", label: "OUR AWWWADS TALK", hasVideo: true, videoSrc: logoVideo },
 ];
 
 /* Number of items pinned at the top of the dock (always visible,

@@ -51,7 +51,7 @@ const links = [
           { to: "/projects", label: "Student Project" },
         ],
       },
-      { to: "/ongoing-projects", label: "Ongoing" },
+      { to: "/ongoing-projects", label: "Latest work" },
     ],
   },
   { to: "/contact", label: "Contact" },

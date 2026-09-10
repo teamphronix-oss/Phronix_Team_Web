@@ -5,6 +5,10 @@
     var(--bg);
 }
 
+section.ai-retrofit .section-head h2 {
+  color: var(--ink) !important;
+}
+
 .ai-retrofit__caption {
   text-align: center;
   margin-top: 14px;

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { Github, Instagram, Youtube, Mail, MapPin, Linkedin } from "lucide-react";
+import { Github, Instagram, Youtube, Mail, MapPin, Linkedin, Phone ,Clock } from "lucide-react";
 import siteConfig from "../data/siteConfig";
 import useSiteLogo from "../hooks/useSiteLogo";
-import phronixLogo from "../assets/phronix-logo.png";
-
+// import phronixLogo from "../assets/phronix-logo.png";
+import phronixLogo from "../assets/logo_circle_only.png";
 export default function Footer() {
   const logoUrl = useSiteLogo();
   const year = new Date().getFullYear();
@@ -13,7 +13,7 @@ export default function Footer() {
       <div className="container footer__grid">
         <div className="footer__brand">
           <div className="navbar__logo">
-            <img src={logoUrl || phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
+            <img src={phronixLogo} alt="" className="navbar__mark navbar__mark--img" />
             <span>{siteConfig.companyName}</span>
           </div>
           <p>{siteConfig.shortDescription}</p>
@@ -86,10 +86,22 @@ export default function Footer() {
               <Mail size={16} />
               <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
             </li>
+            {siteConfig.phone && (
+              <li>
+                <Phone size={16} />
+                <a href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}>{siteConfig.phone}</a>
+              </li>
+            )}
             <li>
               <MapPin size={16} />
               <span>{siteConfig.address.line1}, {siteConfig.address.line2}</span>
             </li>
+            {siteConfig.businessHours && (
+              <li>
+                <Clock size={16} />
+                <span>{siteConfig.businessHours.display}</span>
+              </li>
+            )}
             <li>
               <a
                 href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(siteConfig.whatsappDefaultMessage)}`}

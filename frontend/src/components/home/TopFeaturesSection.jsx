@@ -12,6 +12,8 @@ const clientLogos = [
   { src: `${import.meta.env.BASE_URL}assets/logos/client6.svg`, alt: "Client 6" },
   { src: `${import.meta.env.BASE_URL}assets/logos/client7.svg`, alt: "Client 7" },
   { src: `${import.meta.env.BASE_URL}assets/logos/client8.svg`, alt: "Client 8" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/SweeterJoy.jpeg`, alt: "Sweeter Joy Chocolates" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/GavranDanka.jpeg`, alt: "Gavran Danka" },
 ];
 export default function TopFeaturesSection() {
   return (
@@ -20,7 +22,7 @@ export default function TopFeaturesSection() {
       <section className="section top-features">
         <div className="container">
           <div className="top-features__intro">
-            <span className="eyebrow-badge">Complete Page Ecosystem</span>
+            <span className="eyebrow">Complete Page Ecosystem</span>
             <h2 className="top-features__title">
               <span className="top-features__grad">Top-Notch Features</span> Included
             </h2>

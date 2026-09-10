@@ -1,33 +1,22 @@
-﻿import { useState, useEffect } from "react";
-
+import { useState } from "react";
 import {
-  Mail,
-  Phone,
-  MapPin,
-  FileBadge,
   Loader2,
-  Send,
-  User,
-  BriefcaseBusiness,
-  Tag,
-  CalendarDays,
-  MessageCircle,
-  Paperclip,
+  ArrowRight,
   ChevronDown,
-  PencilLine,
-  LockKeyhole,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  ShieldCheck,
 } from "lucide-react";
 
 import siteConfig from "../data/siteConfig";
 import "../styles/contact.css";
+
 const initialForm = {
   name: "",
   email: "",
   phone: "",
   projectType: "",
-  budget: "",
-  timeline: "",
-  contactMethod: "Email",
   message: "",
 };
 
@@ -35,29 +24,12 @@ const projectTypes = [
   "Website Development",
   "Web Application",
   "Mobile Application",
-  "E-Commerce",
+  "E-Commerce Platform",
   "UI / UX Design",
-  "AI / ML Project",
-  "Cloud / DevOps",
-  "Student Project",
-  "Other",
-];
-
-const budgetRanges = [
-  "Under ₹10,000",
-  "₹10,000 – ₹25,000",
-  "₹25,000 – ₹50,000",
-  "₹50,000 – ₹1,00,000",
-  "₹1,00,000 – ₹2,50,000",
-  "Above ₹2,50,000",
-];
-
-const timelines = [
-  "1 – 2 Weeks",
-  "2 – 4 Weeks",
-  "1 – 2 Months",
-  "2 – 3 Months",
-  "3+ Months",
+  "AI / ML Integration",
+  "Cloud & DevOps",
+  "Custom Engineering",
+  "General Inquiry",
 ];
 
 function validate(form) {
@@ -69,51 +41,19 @@ function validate(form) {
 
   if (!form.email.trim()) {
     errors.email = "Please enter your email.";
-  } else if (
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
-  ) {
-    errors.email = "That doesn't look like a valid email.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = "Please enter a valid email address.";
   }
 
-  if (
-    form.phone &&
-    !/^[+\d][\d\s-]{7,15}$/.test(form.phone)
-  ) {
+  if (form.phone && !/^[+\d][\d\s-]{7,15}$/.test(form.phone)) {
     errors.phone = "Please enter a valid phone number.";
   }
 
-  if (!form.projectType) {
-    errors.projectType = "Please select a project type.";
-  }
-
   if (!form.message.trim() || form.message.trim().length < 10) {
-    errors.message = "Message should be at least 10 characters.";
+    errors.message = "Message must be at least 10 characters.";
   }
 
   return errors;
-}
-
-function ContactCard({ icon: Icon, title, children, accent = false }) {
-  return (
-    <div className={`contact-modern__card ${accent ? "contact-modern__card--accent" : ""}`}>
-      <div className="contact-modern__card-icon">
-        <Icon size={25} strokeWidth={1.8} />
-      </div>
-
-      <div className="contact-modern__card-content">
-        <strong>{title}</strong>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function InputIcon({ children }) {
-  return (
-    <span className="contact-modern__input-icon">
-      {children}
-    </span>
-  );
 }
 
 export default function Contact() {
@@ -121,9 +61,6 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
   const [serverMessage, setServerMessage] = useState("");
-  const [file, setFile] = useState(null);
-  const [siteSettings, setSiteSettings] = useState(null);
-const [settingsLoading, setSettingsLoading] = useState(true);
 
   function update(field, value) {
     setForm((current) => ({
@@ -138,33 +75,11 @@ const [settingsLoading, setSettingsLoading] = useState(true);
       }));
     }
   }
-  useEffect(() => {
-  async function fetchSiteSettings() {
-    try {
-      const res = await fetch(`${siteConfig.apiBaseUrl}/settings`);
-
-      if (!res.ok) {
-        throw new Error("Failed to load site settings.");
-      }
-
-      const data = await res.json();
-
-      setSiteSettings(data.settings);
-    } catch (error) {
-      console.error("Failed to load site settings:", error);
-    } finally {
-      setSettingsLoading(false);
-    }
-  }
-
-  fetchSiteSettings();
-}, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const validationErrors = validate(form);
-
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
@@ -175,596 +90,224 @@ const [settingsLoading, setSettingsLoading] = useState(true);
     setServerMessage("");
 
     try {
-      const res = await fetch(
-        `${siteConfig.apiBaseUrl}/contact`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            phone: form.phone,
-            subject: form.projectType,
-            message: form.message,
-
-            // Additional frontend details.
-            projectType: form.projectType,
-            budget: form.budget,
-            timeline: form.timeline,
-            contactMethod: form.contactMethod,
-            attachmentName: file?.name || "",
-          }),
-        }
-      );
+      const res = await fetch(`${siteConfig.apiBaseUrl}/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          subject: form.projectType || "General Inquiry",
+          projectType: form.projectType || "General Inquiry",
+          budget: "Flexible",
+          timeline: "Flexible",
+          contactMethod: "Email",
+          message: form.message.trim(),
+        }),
+      });
 
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         throw new Error(
-          data.message ||
-            "Something went wrong. Please try again."
+          data.message || "Something went wrong. Please try again."
         );
       }
 
       setStatus("success");
-
       setServerMessage(
-        "Thanks   your message is in. We'll reply within one business day."
+        "Thank you! Your message has been received. We'll reply within one business day."
       );
-
       setForm(initialForm);
-      setFile(null);
     } catch (err) {
       setStatus("error");
-      setServerMessage(err.message);
+      setServerMessage(err.message || "Failed to submit. Please try again.");
     }
   }
 
-  const whatsappNumber = siteConfig.whatsappNumber;
-  const whatsappMessage =
-    siteConfig.whatsappDefaultMessage ||
-    "Hello, I would like to discuss a project.";
-
   return (
-    <div className="page-head-section section contact-modern">
-      <div className="container">
-        <div className="contact-modern__grid">
-
+    <div className="page-head-section section contact-page">
+      <div className="container contact-container">
+        <div className="contact-split-layout">
           {/* =====================================================
-              LEFT SIDE
+              LEFT SIDE: Clean, Atmospheric & Inspiring Heading
           ====================================================== */}
+          <div className="contact-left">
+            <div className="contact-badge">
+              <span className="contact-badge__dot" />
+              <span>START A CONVERSATION</span>
+            </div>
 
-          <div className="contact-modern__left">
+            <h1 className="contact-title">
+              Let’s build <br />
+              <span>something amazing.</span>
+            </h1>
 
-            <div className="contact-modern__heading">
-              <div className="contact-modern__eyebrow">
-                <span>CONTACT US</span>
-                <i />
+            <p className="contact-desc">
+              Have an ambitious vision, need custom software engineered, or want
+              to accelerate your digital product? We’re ready to turn your
+              ideas into production-grade software.
+            </p>
+
+            <div className="contact-perks">
+              <div className="contact-perk">
+                <Clock size={16} className="contact-perk__icon" />
+                <span>Fast turnaround — response in &lt; 4 hours</span>
               </div>
-
-              <h1>
-                Let’s build
-                <br />
-                <span>something amazing</span>
-              </h1>
-
-              <p>
-                Have a project in mind or want to know more about
-                our services? We’d love to hear from you.
-              </p>
+              <div className="contact-perk">
+                <ShieldCheck size={16} className="contact-perk__icon" />
+                <span>Full IP ownership &amp; confidential NDA</span>
+              </div>
             </div>
-
-            <div className="contact-modern__details">
-
-              <ContactCard
-                icon={Mail}
-                title="Email Us"
-              >
-                <a
-                  href={`mailto:${siteSettings?.email || siteConfig.email}`}
-                  className="contact-modern__main-link"
-                >
-                  {siteSettings?.email || siteConfig.email}
-                </a>
-
-                <small>
-                  We usually reply within a few hours
-                </small>
-              </ContactCard>
-
-              <ContactCard
-                icon={Phone}
-                title="Call / WhatsApp"
-              >
-                <a
-                  href={`tel:${(siteSettings?.phone || siteConfig.phone).replace(/\s/g, "")}`}
-                  className="contact-modern__main-link"
-                >
-                  {siteSettings?.phone || siteConfig.phone}
-                </a>
-
-                <small>
-                  Mon – Sat, 10:00 AM – 7:00 PM
-                </small>
-              </ContactCard>
-
-              <ContactCard
-                icon={MapPin}
-                title="Our Office"
-              >
-                <span className="contact-modern__address">
-                  {siteSettings?.addressLine1 || siteConfig.address.line1}
-                  <br />
-                  {siteSettings?.addressLine2 || siteConfig.address.line2}
-                </span>
-
-                <small>
-                  Mon – Sat, 10:00 AM – 7:00 PM
-                </small>
-              </ContactCard>
-
-              {siteSettings?.gstNumber && (
-  <ContactCard
-    icon={FileBadge}
-    title="GSTIN"
-  >
-    <span className="contact-modern__main-link">
-      {siteSettings.gstNumber}
-    </span>
-  </ContactCard>
-)}
-
-            </div>
-
-            <a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                whatsappMessage
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-modern__whatsapp"
-            >
-              <MessageCircle size={22} />
-
-              <span>Chat on WhatsApp</span>
-
-              <span className="contact-modern__whatsapp-arrow">
-                →
-              </span>
-            </a>
-
           </div>
 
           {/* =====================================================
-              RIGHT SIDE FORM
+              RIGHT SIDE: Seamless & Minimal Glass Form
           ====================================================== */}
+          <div className="contact-right">
+            <form
+              className="contact-form-glass"
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              {status === "success" && (
+                <div className="contact-status contact-status--success">
+                  <CheckCircle2 size={18} />
+                  <span>{serverMessage}</span>
+                </div>
+              )}
 
-          <form
-            className="contact-modern__form-card"
-            onSubmit={handleSubmit}
-            noValidate
-          >
+              {status === "error" && (
+                <div className="contact-status contact-status--error">
+                  <AlertCircle size={18} />
+                  <span>{serverMessage}</span>
+                </div>
+              )}
 
-            <div className="contact-modern__form-header">
-
-              <div className="contact-modern__form-icon">
-                <PencilLine size={28} />
-              </div>
-
-              <div>
-                <h2>Send us a message</h2>
-
-                <p>
-                  We’re here to help you
-                </p>
-              </div>
-
-            </div>
-
-            {status === "success" && (
-              <div className="contact-modern__status contact-modern__status--success">
-                {serverMessage}
-              </div>
-            )}
-
-            {status === "error" && (
-              <div className="contact-modern__status contact-modern__status--error">
-                {serverMessage}
-              </div>
-            )}
-
-            {/* Name + Email */}
-
-            <div className="contact-modern__two-columns">
-
-              <div className="contact-modern__field">
-                <label htmlFor="contact-name">
-                  Full Name <span>*</span>
-                </label>
-
-                <div className="contact-modern__input-wrap">
-                  <InputIcon>
-                    <User size={18} />
-                  </InputIcon>
-
+              {/* Row 1: Name + Email */}
+              <div className="contact-form__row">
+                <div className="contact-form__field">
+                  <label htmlFor="contact-name">
+                    Full Name <span className="req">*</span>
+                  </label>
                   <input
                     id="contact-name"
                     type="text"
                     placeholder="Your name"
                     value={form.name}
-                    onChange={(e) =>
-                      update("name", e.target.value)
-                    }
-                    className={
-                      errors.name
-                        ? "contact-modern__error-input"
-                        : ""
-                    }
+                    onChange={(e) => update("name", e.target.value)}
+                    className={errors.name ? "has-error" : ""}
                   />
+                  {errors.name && (
+                    <span className="error-msg">{errors.name}</span>
+                  )}
                 </div>
 
-                {errors.name && (
-                  <small className="contact-modern__field-error">
-                    {errors.name}
-                  </small>
-                )}
-              </div>
-
-              <div className="contact-modern__field">
-                <label htmlFor="contact-email">
-                  Email Address <span>*</span>
-                </label>
-
-                <div className="contact-modern__input-wrap">
-                  <InputIcon>
-                    <Mail size={18} />
-                  </InputIcon>
-
+                <div className="contact-form__field">
+                  <label htmlFor="contact-email">
+                    Email Address <span className="req">*</span>
+                  </label>
                   <input
                     id="contact-email"
                     type="email"
                     placeholder="you@example.com"
                     value={form.email}
-                    onChange={(e) =>
-                      update("email", e.target.value)
-                    }
-                    className={
-                      errors.email
-                        ? "contact-modern__error-input"
-                        : ""
-                    }
+                    onChange={(e) => update("email", e.target.value)}
+                    className={errors.email ? "has-error" : ""}
                   />
+                  {errors.email && (
+                    <span className="error-msg">{errors.email}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Row 2: Phone + Project Type */}
+              <div className="contact-form__row">
+                <div className="contact-form__field">
+                  <label htmlFor="contact-phone">
+                    Phone Number <span className="opt">(Optional)</span>
+                  </label>
+                  <input
+                    id="contact-phone"
+                    type="tel"
+                    placeholder="+91 90000 00000"
+                    value={form.phone}
+                    onChange={(e) => update("phone", e.target.value)}
+                    className={errors.phone ? "has-error" : ""}
+                  />
+                  {errors.phone && (
+                    <span className="error-msg">{errors.phone}</span>
+                  )}
                 </div>
 
-                {errors.email && (
-                  <small className="contact-modern__field-error">
-                    {errors.email}
-                  </small>
+                <div className="contact-form__field">
+                  <label htmlFor="project-type">Project / Service</label>
+                  <div className="contact-select-wrap">
+                    <select
+                      id="project-type"
+                      value={form.projectType}
+                      onChange={(e) => update("projectType", e.target.value)}
+                    >
+                      <option value="">Select an area (optional)</option>
+                      {projectTypes.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} className="select-arrow" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 3: Message */}
+              <div className="contact-form__field">
+                <div className="field-top">
+                  <label htmlFor="contact-message">
+                    Project Details <span className="req">*</span>
+                  </label>
+                  <span className="char-count">{form.message.length} / 1000</span>
+                </div>
+                <textarea
+                  id="contact-message"
+                  rows={3}
+                  maxLength={1000}
+                  placeholder="Tell us about your project, goals, or scope..."
+                  value={form.message}
+                  onChange={(e) => update("message", e.target.value)}
+                  className={errors.message ? "has-error" : ""}
+                />
+                {errors.message && (
+                  <span className="error-msg">{errors.message}</span>
                 )}
               </div>
 
-            </div>
-
-            {/* Phone */}
-
-            <div className="contact-modern__field">
-              <label htmlFor="contact-phone">
-                Phone / WhatsApp
-              </label>
-
-              <div className="contact-modern__input-wrap">
-                <InputIcon>
-                  <Phone size={18} />
-                </InputIcon>
-
-                <input
-                  id="contact-phone"
-                  type="tel"
-                  placeholder="+91 90000 00000"
-                  value={form.phone}
-                  onChange={(e) =>
-                    update("phone", e.target.value)
-                  }
-                  className={
-                    errors.phone
-                      ? "contact-modern__error-input"
-                      : ""
-                  }
-                />
-              </div>
-
-              {errors.phone && (
-                <small className="contact-modern__field-error">
-                  {errors.phone}
-                </small>
-              )}
-            </div>
-
-            {/* Project Type */}
-
-            <div className="contact-modern__field">
-              <label htmlFor="project-type">
-                Project Type
-              </label>
-
-              <div className="contact-modern__input-wrap">
-                <InputIcon>
-                  <BriefcaseBusiness size={18} />
-                </InputIcon>
-
-                <select
-                  id="project-type"
-                  value={form.projectType}
-                  onChange={(e) =>
-                    update("projectType", e.target.value)
-                  }
-                  className={
-                    errors.projectType
-                      ? "contact-modern__error-input"
-                      : ""
-                  }
-                >
-                  <option value="">
-                    Select project type
-                  </option>
-
-                  {projectTypes.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-
-                <ChevronDown
-                  className="contact-modern__select-arrow"
-                  size={18}
-                />
-              </div>
-
-              {errors.projectType && (
-                <small className="contact-modern__field-error">
-                  {errors.projectType}
-                </small>
-              )}
-            </div>
-
-            {/* Budget + Timeline */}
-
-            <div className="contact-modern__two-columns">
-
-              <div className="contact-modern__field">
-                <label htmlFor="budget">
-                  Budget Range
-                </label>
-
-                <div className="contact-modern__input-wrap">
-                  <InputIcon>
-                    <Tag size={18} />
-                  </InputIcon>
-
-                  <select
-                    id="budget"
-                    value={form.budget}
-                    onChange={(e) =>
-                      update("budget", e.target.value)
-                    }
-                  >
-                    <option value="">
-                      Select budget range
-                    </option>
-
-                    {budgetRanges.map((item) => (
-                      <option key={item} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-
-                  <ChevronDown
-                    className="contact-modern__select-arrow"
-                    size={18}
-                  />
-                </div>
-              </div>
-
-              <div className="contact-modern__field">
-                <label htmlFor="timeline">
-                  Timeline
-                </label>
-
-                <div className="contact-modern__input-wrap">
-                  <InputIcon>
-                    <CalendarDays size={18} />
-                  </InputIcon>
-
-                  <select
-                    id="timeline"
-                    value={form.timeline}
-                    onChange={(e) =>
-                      update("timeline", e.target.value)
-                    }
-                  >
-                    <option value="">
-                      Select timeline
-                    </option>
-
-                    {timelines.map((item) => (
-                      <option key={item} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
-
-                  <ChevronDown
-                    className="contact-modern__select-arrow"
-                    size={18}
-                  />
-                </div>
-              </div>
-
-            </div>
-
-            {/* Preferred Contact */}
-
-            <div className="contact-modern__field">
-              <label htmlFor="contact-method">
-                Preferred Contact Method
-              </label>
-
-              <div className="contact-modern__input-wrap">
-                <InputIcon>
-                  <Mail size={18} />
-                </InputIcon>
-
-                <select
-                  id="contact-method"
-                  value={form.contactMethod}
-                  onChange={(e) =>
-                    update(
-                      "contactMethod",
-                      e.target.value
-                    )
-                  }
-                >
-                  <option value="Email">Email</option>
-                  <option value="Phone">
-                    Phone
-                  </option>
-                  <option value="WhatsApp">
-                    WhatsApp
-                  </option>
-                </select>
-
-                <ChevronDown
-                  className="contact-modern__select-arrow"
-                  size={18}
-                />
-              </div>
-            </div>
-
-            {/* Message */}
-
-            <div className="contact-modern__field">
-              <label htmlFor="contact-message">
-                Message / Project Details <span>*</span>
-              </label>
-
-              <div className="contact-modern__textarea-wrap">
-                <MessageCircle size={19} />
-
-                <textarea
-                  id="contact-message"
-                  rows={5}
-                  maxLength={1000}
-                  placeholder="Tell us about your project, requirements, goals..."
-                  value={form.message}
-                  onChange={(e) =>
-                    update("message", e.target.value)
-                  }
-                  className={
-                    errors.message
-                      ? "contact-modern__error-input"
-                      : ""
-                  }
-                />
-
-                <span className="contact-modern__counter">
-                  {form.message.length} / 1000
-                </span>
-              </div>
-
-              {errors.message && (
-                <small className="contact-modern__field-error">
-                  {errors.message}
-                </small>
-              )}
-            </div>
-
-            {/* Attachment */}
-
-            <div className="contact-modern__attachment">
-              <Paperclip size={22} />
-
-              <div>
-                <strong>
-                  {file
-                    ? file.name
-                    : "Attach File (Optional)"}
-                </strong>
-
-                <span>
-                  PDF, DOC, JPG, PNG (Max. 5MB)
-                </span>
-              </div>
-
-              <label
-                htmlFor="contact-file"
-                className="contact-modern__browse"
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="btn btn--gold btn--block contact-submit-btn"
+                disabled={status === "loading"}
               >
-                Browse
-              </label>
+                {status === "loading" ? (
+                  <>
+                    <Loader2 size={16} className="contact-spin" />
+                    <span>Sending message...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Message</span>
+                    <ArrowRight size={16} />
+                  </>
+                )}
+              </button>
 
-              <input
-                id="contact-file"
-                type="file"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                onChange={(e) => {
-                  const selected =
-                    e.target.files?.[0];
-
-                  if (!selected) return;
-
-                  if (
-                    selected.size >
-                    5 * 1024 * 1024
-                  ) {
-                    alert(
-                      "File size must be less than 5MB."
-                    );
-                    e.target.value = "";
-                    return;
-                  }
-
-                  setFile(selected);
-                }}
-              />
-            </div>
-
-            {/* Submit */}
-
-            <button
-              type="submit"
-              className="contact-modern__submit"
-              disabled={status === "loading"}
-            >
-              {status === "loading" ? (
-                <>
-                  <Loader2
-                    size={20}
-                    className="contact-modern__spin"
-                  />
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <Send size={20} />
-                  Send Message
-                </>
-              )}
-            </button>
-
-            <div className="contact-modern__security">
-              <LockKeyhole size={15} />
-
-              <span>
-                Your information is safe with us.
-                We never share your data.
-              </span>
-            </div>
-
-          </form>
+              <p className="contact-privacy">
+                We respect your privacy. No spam or unsolicited marketing.
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </div>
