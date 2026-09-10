@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { X, Upload, FileText, CheckCircle2, Loader2 } from "lucide-react";
 import "../../styles/home/apply-modal.css";
 import { createPortal } from "react-dom";
+import siteConfig from "../../data/siteConfig";
 /**
  * Drop-in replacement for the old `mailto:` "Apply Now" link.
  *
@@ -73,7 +74,7 @@ function ApplyModal({ jobTitle, onClose }) {
     handleFile(e.dataTransfer.files?.[0]);
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     if (!resume) {
       setFileError("Attach your resume to continue.");
@@ -83,26 +84,24 @@ function ApplyModal({ jobTitle, onClose }) {
     setStatus("submitting");
 
     try {
-      // ─────────────────────────────────────────────────────────
-      // TODO (backend): wire this up once /api/careers/apply exists.
-      //
-      // const payload = new FormData();
-      // payload.append("position", jobTitle);
-      // payload.append("name", form.name);
-      // payload.append("email", form.email);
-      // payload.append("phone", form.phone);
-      // payload.append("note", form.note);
-      // payload.append("resume", resume);
-      //
-      // const res = await fetch(`${API}/careers/apply`, {
-      //   method: "POST",
-      //   body: payload,
-      // });
-      // if (!res.ok) throw new Error("Application failed");
-      // ─────────────────────────────────────────────────────────
+      const payload = new FormData();
+      payload.append("position", jobTitle);
+      payload.append("name", form.name);
+      payload.append("email", form.email);
+      payload.append("phone", form.phone);
+      payload.append("note", form.note);
+      payload.append("resume", resume);
 
-      // Placeholder so the UI is demoable before the backend route exists.
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      const res = await fetch(`${siteConfig.apiBaseUrl}/careers/apply`, {
+        method: "POST",
+        body: payload,
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data.message || "Application failed");
+      }
 
       setStatus("success");
     } catch (err) {

@@ -12,7 +12,7 @@ if (!resend) {
 // Small wrapper so callers don't repeat the "skip if not configured, log
 // failures without throwing" logic in every route. Returns true/false for
 // whether the send actually happened.
-export async function sendMail({ to, subject, text, replyTo, from }) {
+export async function sendMail({ to, subject, text, replyTo, from, attachments }) {
   if (!resend) return false;
   try {
     const { error } = await resend.emails.send({
@@ -21,6 +21,7 @@ export async function sendMail({ to, subject, text, replyTo, from }) {
       subject,
       text,
       ...(replyTo ? { replyTo } : {}),
+      ...(attachments ? { attachments } : {}),
     });
     if (error) {
       console.error("Resend send failed:", error.message || error);
