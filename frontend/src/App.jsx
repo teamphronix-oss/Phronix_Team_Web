@@ -23,6 +23,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Careers from "./pages/Careers";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 import { AuthProvider } from "./context/AuthContext";
 
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/careers" element={<Careers />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
