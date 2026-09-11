@@ -12,13 +12,19 @@ const clientLogos = [
   { src: `${import.meta.env.BASE_URL}assets/logos/client6.svg`, alt: "Client 6" },
   { src: `${import.meta.env.BASE_URL}assets/logos/client7.svg`, alt: "Client 7" },
   { src: `${import.meta.env.BASE_URL}assets/logos/client8.svg`, alt: "Client 8" },
-  { src: `${import.meta.env.BASE_URL}assets/logos/SweeterJoy.jpeg`, alt: "Sweeter Joy Chocolates" },
-  { src: `${import.meta.env.BASE_URL}assets/logos/GavranDanka.jpeg`, alt: "Gavran Danka" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/SweeterJoy.jpeg`, alt: "Sweeter Joy Chocolates", name: "Sweeter Joy" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/GavranDanka.jpeg`, alt: "Gavran Danka", name: "Gavran Danka" },
 ];
 export default function TopFeaturesSection() {
   return (
     <>
-    <ClientLogoMarquee logos={clientLogos} />
+    
+     <section className="section clients-handover">
+        <div className="container">
+          <span className="eyebrow">Projects handover to</span>
+          <ClientLogoMarquee logos={clientLogos} />
+        </div>
+      </section>
       <section className="section top-features">
         <div className="container">
           <div className="top-features__intro">

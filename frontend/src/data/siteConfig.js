@@ -7,7 +7,7 @@ export const siteConfig = {
   companyName: "Phronix",
   tagline: "Engineering Thought Into Software",
   shortDescription:
-    "Phronix is a technology and growth studio that designs, builds, and ships digital products — then markets and sells them. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
+    "Phronix is a technology and growth studio that designs, builds, and ships digital products then markets and sells them. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
 
   email: "teamphronix@gmail.com",
   supportEmail: "support@phronix.io",
