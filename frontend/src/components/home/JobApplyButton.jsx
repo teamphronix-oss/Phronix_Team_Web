@@ -111,7 +111,7 @@ function ApplyModal({ jobTitle, onClose }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div
         className="modal apply-modal"
         role="dialog"

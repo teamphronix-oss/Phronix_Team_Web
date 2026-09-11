@@ -11,7 +11,8 @@ export default function CTASection() {
           <div>
             <span className="eyebrow">You're building the company.</span>
             <h2>We're building everything around it.</h2>
-            <p>Design. Development. Shipped.Sound good?</p>
+            <p>Design. Development. Shipped.</p>
+            <p>Sound good?</p>
           </div>
           <div className="cta__actions">
             <Link to="/contact" className="btn btn--gold">

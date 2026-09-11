@@ -7,12 +7,12 @@ export const siteConfig = {
   companyName: "Phronix",
   tagline: "Engineering Thought Into Software",
   shortDescription:
-    "Phronix is a technology and growth studio that designs, builds, and ships digital products — then markets and sells them. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
+    "Phronix is a technology and growth studio that designs, builds, and ships digital products then markets and sells them. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
 
   email: "teamphronix@gmail.com",
   supportEmail: "support@phronix.io",
   careersEmail: "careers@phronix.io",
-  phone: "+91 90000 00000",
+  phone: "+91 92724 71332",
 
   whatsappNumber: "919272471332", // international format, no + or spaces
   whatsappDefaultMessage:
@@ -31,7 +31,7 @@ export const siteConfig = {
     display: "Mon – Sat, 10:00 AM – 7:00 PM",
   },
 
-  gstNumber: "27ABCDE1234F1Z5",
+  gstNumber: "27JVJPK0687Q1ZI",
 
   social: {
     instagram: "https://instagram.com/phronix.tech",

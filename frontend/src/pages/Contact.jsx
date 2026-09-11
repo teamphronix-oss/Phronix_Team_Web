@@ -7,6 +7,7 @@ import {
   AlertCircle,
   Clock,
   ShieldCheck,
+  Paperclip,
 } from "lucide-react";
 
 import siteConfig from "../data/siteConfig";
@@ -17,7 +18,11 @@ const initialForm = {
   email: "",
   phone: "",
   projectType: "",
+  budget: "",
+  timeline: "",
+  contactMethod: "Email",
   message: "",
+  file: null,
 };
 
 const projectTypes = [
@@ -31,6 +36,25 @@ const projectTypes = [
   "Custom Engineering",
   "General Inquiry",
 ];
+
+const budgetRanges = [
+  "Under ₹50,000",
+  "₹50,000 – ₹1,00,000",
+  "₹1,00,000 – ₹3,00,000",
+  "₹3,00,000 – ₹5,00,000",
+  "₹5,00,000+",
+  "Not sure yet",
+];
+
+const timelines = [
+  "ASAP",
+  "Within 1 month",
+  "1 – 3 months",
+  "3 – 6 months",
+  "Flexible",
+];
+
+const contactMethods = ["Email", "Phone", "WhatsApp"];
 
 function validate(form) {
   const errors = {};
@@ -76,6 +100,11 @@ export default function Contact() {
     }
   }
 
+  function handleFileChange(e) {
+    const file = e.target.files?.[0] || null;
+    update("file", file);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -90,22 +119,23 @@ export default function Contact() {
     setServerMessage("");
 
     try {
+      const formData = new FormData();
+      formData.append("name", form.name.trim());
+      formData.append("email", form.email.trim());
+      formData.append("phone", form.phone.trim());
+      formData.append("subject", form.projectType || "General Inquiry");
+      formData.append("projectType", form.projectType || "General Inquiry");
+      formData.append("budget", form.budget || "Flexible");
+      formData.append("timeline", form.timeline || "Flexible");
+      formData.append("contactMethod", form.contactMethod || "Email");
+      formData.append("message", form.message.trim());
+      if (form.file) {
+        formData.append("file", form.file);
+      }
+
       const res = await fetch(`${siteConfig.apiBaseUrl}/contact`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          subject: form.projectType || "General Inquiry",
-          projectType: form.projectType || "General Inquiry",
-          budget: "Flexible",
-          timeline: "Flexible",
-          contactMethod: "Email",
-          message: form.message.trim(),
-        }),
+        body: formData,
       });
 
       const data = await res.json().catch(() => ({}));
@@ -227,7 +257,7 @@ export default function Contact() {
               <div className="contact-form__row">
                 <div className="contact-form__field">
                   <label htmlFor="contact-phone">
-                    Phone Number <span className="opt">(Optional)</span>
+                    Phone / WhatsApp <span className="opt">(Optional)</span>
                   </label>
                   <input
                     id="contact-phone"
@@ -243,14 +273,14 @@ export default function Contact() {
                 </div>
 
                 <div className="contact-form__field">
-                  <label htmlFor="project-type">Project / Service</label>
+                  <label htmlFor="project-type">Project Type</label>
                   <div className="contact-select-wrap">
                     <select
                       id="project-type"
                       value={form.projectType}
                       onChange={(e) => update("projectType", e.target.value)}
                     >
-                      <option value="">Select an area (optional)</option>
+                      <option value="">Select project type</option>
                       {projectTypes.map((item) => (
                         <option key={item} value={item}>
                           {item}
@@ -262,11 +292,71 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Row 3: Message */}
+              {/* Row 3: Budget + Timeline */}
+              <div className="contact-form__row">
+                <div className="contact-form__field">
+                  <label htmlFor="contact-budget">Budget Range</label>
+                  <div className="contact-select-wrap">
+                    <select
+                      id="contact-budget"
+                      value={form.budget}
+                      onChange={(e) => update("budget", e.target.value)}
+                    >
+                      <option value="">Select budget range</option>
+                      {budgetRanges.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} className="select-arrow" />
+                  </div>
+                </div>
+
+                <div className="contact-form__field">
+                  <label htmlFor="contact-timeline">Timeline</label>
+                  <div className="contact-select-wrap">
+                    <select
+                      id="contact-timeline"
+                      value={form.timeline}
+                      onChange={(e) => update("timeline", e.target.value)}
+                    >
+                      <option value="">Select timeline</option>
+                      {timelines.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={15} className="select-arrow" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 4: Preferred Contact Method */}
+              <div className="contact-form__field">
+                <label htmlFor="contact-method">Preferred Contact Method</label>
+                <div className="contact-select-wrap">
+                  <select
+                    id="contact-method"
+                    value={form.contactMethod}
+                    onChange={(e) => update("contactMethod", e.target.value)}
+                  >
+                    {contactMethods.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown size={15} className="select-arrow" />
+                </div>
+              </div>
+
+              {/* Row 5: Message */}
               <div className="contact-form__field">
                 <div className="field-top">
                   <label htmlFor="contact-message">
-                    Project Details <span className="req">*</span>
+                    Message / Project Details <span className="req">*</span>
                   </label>
                   <span className="char-count">{form.message.length} / 1000</span>
                 </div>
@@ -274,7 +364,7 @@ export default function Contact() {
                   id="contact-message"
                   rows={3}
                   maxLength={1000}
-                  placeholder="Tell us about your project, goals, or scope..."
+                  placeholder="Tell us about your project, requirements, goals..."
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}
                   className={errors.message ? "has-error" : ""}
@@ -282,6 +372,31 @@ export default function Contact() {
                 {errors.message && (
                   <span className="error-msg">{errors.message}</span>
                 )}
+              </div>
+
+              {/* Row 6: Attach File */}
+              <div className="contact-form__field contact-form__field--file">
+                <label htmlFor="contact-file">
+                  Attach File <span className="opt">(Optional)</span>
+                </label>
+                <div className="contact-file-wrap">
+                  <div className="contact-file-info">
+                    <Paperclip size={15} className="contact-file-icon" />
+                    <span>
+                      {form.file ? form.file.name : "PDF, DOC, JPG, PNG (Max. 5MB)"}
+                    </span>
+                  </div>
+                  <label htmlFor="contact-file" className="contact-file-btn">
+                    Browse
+                  </label>
+                  <input
+                    id="contact-file"
+                    type="file"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    onChange={handleFileChange}
+                    hidden
+                  />
+                </div>
               </div>
 
               {/* Submit Button */}

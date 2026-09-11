@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Github, Play, ArrowUpRight, Code2 } from "lucide-react";
+import { ArrowUpRight, Code2 } from "lucide-react";
 
 export default function ProjectCard({ project, onViewDetails }) {
   const [hasError, setHasError] = useState(false);
@@ -32,26 +32,6 @@ export default function ProjectCard({ project, onViewDetails }) {
         ))}
       </div>
       <div className="project-card__actions">
-        {project.githubUrl && (
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn--outline btn--sm"
-          >
-            <Github size={15} /> Code
-          </a>
-        )}
-        {project.demoUrl && (
-          <a
-            href={project.demoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn--outline btn--sm"
-          >
-            <Play size={15} /> Demo
-          </a>
-        )}
         <button
           type="button"
           className="btn btn--gold btn--sm"
