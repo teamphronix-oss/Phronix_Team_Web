@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
@@ -16,7 +16,9 @@ import siteConfig from "../data/siteConfig";
 import useSiteLogo from "../hooks/useSiteLogo"; //fetched from cloudinary
 import phronixLogo from "../assets/logo_circle_only.png";
 
-const servicesMega = [
+// Shown before the /services API responds (or if it ever fails), so the
+// mega menu never renders empty.
+const defaultServicesMega = [
   {
     title: "Build",
     icon: Code2,
@@ -36,6 +38,12 @@ const servicesMega = [
     items: ["AI Chatbots", "AI in Existing Software", "Workflow Automation"],
   },
 ];
+
+const PILLAR_META = {
+  build: { title: "Build", icon: Code2, to: "/services#build" },
+  grow: { title: "Grow", icon: TrendingUp, to: "/services#grow" },
+  automate: { title: "Automate", icon: Bot, to: "/services#automate" },
+};
 
 const links = [
   { to: "/", label: "Home" },
@@ -65,6 +73,7 @@ const links = [
 export default function Navbar() {
   const logoUrl = useSiteLogo();
   const [open, setOpen] = useState(false);
+  const [servicesMega, setServicesMega] = useState(defaultServicesMega);
   const [scrolled, setScrolled] = useState(false);
   const [desktopDropdown, setDesktopDropdown] = useState(null);
   const [mobileDropdown, setMobileDropdown] = useState(null);
@@ -76,7 +85,7 @@ export default function Navbar() {
   const closeTimer = useRef(null);
   const subCloseTimer = useRef(null);
 
-  useEffect(() => {
+    useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
 
     window.addEventListener("scroll", onScroll);
@@ -84,6 +93,34 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
+  }, []);
+
+  // Builds the "Services" mega menu from live data instead of the
+  // hardcoded list above — new services (in whichever pillar the admin
+  // picks) show up here automatically, no code change needed.
+  useEffect(() => {
+    fetch(`${siteConfig.apiBaseUrl}/services`)
+      .then((res) => res.json())
+      .then((data) => {
+        const list = data.services || [];
+        if (list.length === 0) return;
+
+        const grouped = { build: [], grow: [], automate: [] };
+        list
+          .slice()
+          .sort((a, b) => (a.order || 0) - (b.order || 0))
+          .forEach((s) => {
+            const key = grouped[s.pillar] ? s.pillar : "build";
+            grouped[key].push(s.name);
+          });
+
+        const mega = Object.entries(PILLAR_META)
+          .map(([key, meta]) => ({ ...meta, items: grouped[key] }))
+          .filter((col) => col.items.length > 0);
+
+        if (mega.length > 0) setServicesMega(mega);
+      })
+      .catch((err) => console.error("Failed to load services for nav menu:", err));
   }, []);
 
   useEffect(() => {

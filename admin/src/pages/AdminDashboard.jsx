@@ -1191,6 +1191,7 @@ const emptyService = {
   shortDescription: "",
   technologies: "",
   priceRange: "",
+  pillar: "build",
   order: 0,
 };
 
@@ -1204,19 +1205,24 @@ function ServicesPanel() {
       emptyLabel="No services yet."
       formTitle="service"
       rowLabel={(s) => s.name}
-      rowSub={(s) => s.price_range || ""}
+      rowSub={(s) => `${s.pillar || ""}${s.price_range ? " · " + s.price_range : ""}`}
       fields={[
         { key: "name", label: "Name", type: "text", required: true },
         { key: "icon", label: "Icon (lucide icon name, e.g. Globe)", type: "text" },
         { key: "shortDescription", label: "Short description", type: "textarea" },
         { key: "technologies", label: "Technologies (comma separated)", type: "csv" },
         { key: "priceRange", label: "Price range", type: "text", placeholder: "₹5,999 – ₹9,999" },
+        {
+          key: "pillar",
+          label: "Category — type exactly: build, grow, or automate",
+          type: "text",
+          placeholder: "build",
+        },
         { key: "order", label: "Order", type: "number" },
       ]}
     />
   );
 }
-
 // ── Testimonials ─────────────────────────────────────────────────
 
 // ── Testimonials ─────────────────────────────────────────────────
