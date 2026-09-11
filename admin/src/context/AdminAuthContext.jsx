@@ -66,20 +66,52 @@ export function AdminAuthProvider({ children }) {
     return data.message;
   }
 
-  async function resetPassword(token, password) {
-    const res = await fetch(`${siteConfig.apiBaseUrl}/admin/reset-password/${token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Something went wrong.");
-    return data.message;
+  async function verifyOtp(email, otp) {
+  const res = await fetch(`${siteConfig.apiBaseUrl}/admin/verify-otp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Invalid or expired code.");
   }
 
+  return data.resetToken;
+}
+
+  async function resetPassword(resetToken, password, confirmPassword) {
+  const res = await fetch(`${siteConfig.apiBaseUrl}/admin/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      resetToken,
+      password,
+      confirmPassword,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || "Something went wrong.");
+  }
+
+  return data.message;
+}
   return (
     <AdminAuthContext.Provider
-      value={{ admin, loading, login, logout, forgotPassword, resetPassword }}
+      value={{
+                admin,
+                loading,
+                login,
+                logout,
+                forgotPassword,
+                verifyOtp,
+                resetPassword,
+              }}
     >
       {children}
     </AdminAuthContext.Provider>
