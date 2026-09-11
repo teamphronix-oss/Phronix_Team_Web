@@ -64,6 +64,7 @@ export default function Footer() {
             <li><Link to="/projects">Projects</Link></li>
             <li><Link to="/team">Our Team</Link></li>
             <li><Link to="/ongoing-projects">Ongoing Projects</Link></li>
+            <li><Link to="/privacy-policy">Privacy Policy</Link></li>
             <li><Link to="/contact">Contact</Link></li>
             <li><Link to="/careers">Careers</Link></li>
           </ul>
