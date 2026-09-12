@@ -25,6 +25,26 @@
      margin-bottom above gives a fixed, reasonable gap before
      the next section instead of a huge (old) or zero (new) gap. */
   overflow: hidden;
+
+  /* Cards vary in text length, so even with an equal card COUNT per
+     column, column heights differ slightly. With a hard fixed height
+     + overflow:hidden, whichever card sits at the top/bottom boundary
+     gets sliced mid-card instead of showing a clean edge. A soft
+     fade at the edges hides that boundary instead of cropping it. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 48px,
+    black calc(100% - 48px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 48px,
+    black calc(100% - 48px),
+    transparent 100%
+  );
 }
 
 .testimonials-marquee__column {
@@ -37,8 +57,10 @@
 .testimonials-marquee__track {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-
+  /* NOTE: no gap here on purpose — see .testimonials-marquee__group.
+     Having gap on BOTH track and group made the two duplicated
+     groups unequal in height, which threw off the 50% translateY
+     math and made columns 2/4 look like they start "mid-card". */
   will-change: transform;
 }
 
@@ -48,6 +70,9 @@
   flex-direction: column;
   gap: 24px;
   flex-shrink: 0;
+  margin-bottom: 24px; /* replaces the old track-level gap so each
+                           group (including its own trailing space)
+                           is EXACTLY half the track's total height */
 }
 
 .testimonials-marquee__item {

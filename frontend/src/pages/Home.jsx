@@ -15,7 +15,7 @@ import ShowcaseSection from "../components/home/ShowcaseSection";
 import ProjectsSection from "../components/home/ProjectsSection";
 import PageEcosystemSection from "../components/home/PageEcosystemSection";
 import PowerhouseSection from "../components/home/PowerhouseSection";
-import TopFeaturesSection from "../components/home/TopFeaturesSection";
+ import TopFeaturesSection from "../components/home/TopFeaturesSection";
 import TestimonialsSection from "../components/home/TestimonialsSection";
 import PayUpdateSection from "../components/home/PayUpdateSection";
 import CTASection from "../components/home/CTASection";
