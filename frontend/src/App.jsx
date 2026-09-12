@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Careers from "./pages/Careers";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions  from "./pages/TermsAndConditions";
 
 import { AuthProvider } from "./context/AuthContext";
 
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/TermsAndConditions" element={<TermsAndConditions />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

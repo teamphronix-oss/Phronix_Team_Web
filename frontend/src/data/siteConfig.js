@@ -19,8 +19,8 @@ export const siteConfig = {
     "Hello Phronix, I would like to know more about your services.",
 
   address: {
-    line1: "near G-square 01",
-    line2: "Airport Road, Nashik, Maharashtra 422003",
+    line1: "Near G-square 01",
+    line2: "Nandur Naka Road, Nashik, Maharashtra 422003",
     country: "India",
   },
 
