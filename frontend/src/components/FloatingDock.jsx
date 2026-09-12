@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 import { Plus, Minus, ArrowRight } from "lucide-react";
 import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
 
-/* Home page dock items. "touch" and "start" are pinned   always visible
-   from the top of the page. The rest reveal in order while the user
-   scrolls through the matching sections below. */
+/* Home page dock items. Only "start" and "touch" are pinned  always
+   visible from the top of the page. Everything else (including
+   TALK TO AI) reveals in order, one at a time from below, while the
+   user scrolls through the page. */
 const DEFAULT_ITEMS = [
-  { id: "touch", label: "WHY US", hasVideo: true, videoSrc: logoVideo, avatar: true },
   { id: "start", label: "Start a project", type: "link", to: "/projects", pinned: true, scrollGated: true, cta: true },
-  { id: "aibot", label: "TALK TO AI", type: "action", action: "open-chatbot", pinned: true },
+  { id: "touch", label: "WHY US", hasVideo: true, videoSrc: logoVideo, avatar: true, pinned: true },
+  { id: "aibot", label: "TALK TO AI", type: "action", action: "open-chatbot" },
   { id: "us", label: "DOCTIFI", hasVideo: true, videoSrc: logoVideo },
   { id: "pitch", label: "OILTRACK", hasVideo: true, videoSrc: logoVideo },
   { id: "awwwards", label: "OUR AWWWADS TALK", hasVideo: true, videoSrc: logoVideo },
@@ -18,17 +19,28 @@ const DEFAULT_ITEMS = [
 /* Number of items pinned at the top of the dock (always visible,
    never gated behind scroll position). Keep this in sync with how
    many leading items in DEFAULT_ITEMS carry pinned: true. */
-const PINNED_COUNT = 3;
+const PINNED_COUNT = 2;
 
-/* Selector for the hero's own "Start a project" button. The dock's
-   matching pill only appears once this one has scrolled out of view,
-   so the CTA never feels duplicated on first load. */
-const HERO_CTA_SELECTOR = ".hero__button--primary";
+/* Ids cycled through as the user scrolls, in the exact order they
+   should become active: TALK TO AI → DOCTIFI → OILTRACK. */
+const SCROLL_CYCLE_IDS = ["aibot", "us", "pitch"];
 
-/* Keep these selectors distinct. They correspond to:
-   1. About / This Is Us
-   2. Services / Pitchdeck
-   3. Projects / Our Awwwards Talk */
+/* Relative scroll-time weight for each id above (same order/length
+   as SCROLL_CYCLE_IDS). TALK TO AI gets a smaller share of the
+   scroll distance; DOCTIFI and OILTRACK each get a bigger share so
+   they stay open/active for longer as the user scrolls. Tune the
+   ratios here, not the logic below, to adjust how long each card
+   stays open. */
+const SCROLL_CYCLE_WEIGHTS = [1, 2, 2]; // total weight = 5
+
+/* Selector for the WHOLE hero section (not just its button). The
+   dock's matching "Start a project" pill only appears once the
+   entire hero has scrolled fully out of view, so it never feels
+   duplicated while any part of the hero is still on screen. */
+const HERO_CTA_SELECTOR = ".hero--particle";
+
+/* Only the first entry is used now  it's the single anchor that
+   marks where the weighted scroll cycle should begin. */
 const DEFAULT_SECTION_SELECTORS = [
   ".about__grid",
   ".section--soft.section--space",
@@ -47,9 +59,9 @@ export default function FloatingDock({
   const [visibleCount, setVisibleCount] = useState(0);
   const [heroCtaGone, setHeroCtaGone] = useState(false);
 
-  /* Reveal the dock's "Start a project" pill only once the hero's own
-     CTA button has scrolled out of the viewport, so we never show two
-     "Start a project" buttons on screen at the same time. */
+  /* Reveal the dock's "Start a project" pill only once the entire
+     hero section has scrolled out of the viewport, so we never show
+     two "Start a project" buttons on screen at the same time. */
   useEffect(() => {
     const heroCta = document.querySelector(HERO_CTA_SELECTOR);
     if (!heroCta) {
@@ -59,158 +71,127 @@ export default function FloatingDock({
 
     const observer = new IntersectionObserver(
       ([entry]) => setHeroCtaGone(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-88px 0px 0px 0px" }
+      { threshold: 0 }
     );
 
     observer.observe(heroCta);
     return () => observer.disconnect();
   }, []);
 
- useEffect(() => {
-  const targets = sectionSelectors
-    .map((sel) => document.querySelector(sel))
-    .filter(Boolean);
+  useEffect(() => {
+    // Only need one anchor to know when the weighted scroll cycle should begin.
+    const startTarget = document.querySelector(sectionSelectors[0]);
+    if (!startTarget) return;
 
-  if (targets.length === 0) return;
+    let startY = null;
+    let lastActiveIdx = -1;
 
-  let startY = null;
-  let lastActiveIdx = -1;
+    const updateFromScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
 
-  const updateFromScroll = () => {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-
-    /*
-     * The sequence starts when the first matching section
-     * reaches the same visual point as before.
-     */
-    if (startY === null) {
-      const firstRect = targets[0].getBoundingClientRect();
-
-      startY =
-        firstRect.top +
-        window.scrollY -
-        viewportHeight * 0.45;
-    }
-
-    /*
-     * The complete scroll range available for the dock.
-     */
-    const pageEndY =
-      document.documentElement.scrollHeight - viewportHeight;
-
-    /*
-     * If we haven't reached the starting point yet,
-     * close all video panels.
-     */
-    if (scrollY < startY) {
-      if (lastActiveIdx !== -1) {
-        lastActiveIdx = -1;
-        setOpenId(null);
+      /*
+       * The sequence starts when the first anchor section
+       * reaches the same visual point as before.
+       */
+      if (startY === null) {
+        const rect = startTarget.getBoundingClientRect();
+        startY = rect.top + window.scrollY - viewportHeight * 0.45;
       }
 
-      return;
-    }
+      /*
+       * The complete scroll range available for the dock.
+       */
+      const pageEndY = document.documentElement.scrollHeight - viewportHeight;
 
-    /*
-     * Once we reach the actual bottom of the page,
-     * close the currently open panel.
-     */
-    if (scrollY >= pageEndY - 20) {
-      if (lastActiveIdx !== -1) {
-        lastActiveIdx = -1;
-        setOpenId(null);
+      /*
+       * If we haven't reached the starting point yet,
+       * close all video panels.
+       */
+      if (scrollY < startY) {
+        if (lastActiveIdx !== -1) {
+          lastActiveIdx = -1;
+          setOpenId(null);
+        }
+        return;
       }
 
-      return;
-    }
+      /*
+       * Once we reach the actual bottom of the page,
+       * close the currently open panel.
+       */
+      if (scrollY >= pageEndY - 20) {
+        if (lastActiveIdx !== -1) {
+          lastActiveIdx = -1;
+          setOpenId(null);
+        }
+        return;
+      }
 
-    /*
-     * Divide the ENTIRE available scroll distance
-     * into exactly 3 equal zones.
-     *
-     * Zone 0 → THIS IS US
-     * Zone 1 → PITCHDECK
-     * Zone 2 → OUR AWWWARDS TALK
-     */
-    const totalScrollDistance = pageEndY - startY;
+      /*
+       * Split the ENTIRE remaining scroll distance into weighted
+       * zones instead of equal thirds  TALK TO AI gets a shorter
+       * zone while DOCTIFI and OILTRACK each get a longer one, so
+       * they stay open longer as the user scrolls.
+       *
+       * Zone 0 → TALK TO AI  (weight 1)
+       * Zone 1 → DOCTIFI     (weight 2)
+       * Zone 2 → OILTRACK    (weight 2)
+       */
+      const totalScrollDistance = pageEndY - startY;
+      const totalWeight = SCROLL_CYCLE_WEIGHTS.reduce((sum, w) => sum + w, 0);
+      const distanceFromStart = scrollY - startY;
 
-    const zoneSize =
-      totalScrollDistance / targets.length;
+      // Walk the weighted zones to find which one distanceFromStart falls in.
+      let activeIdx = SCROLL_CYCLE_IDS.length - 1;
+      let cumulative = 0;
+      for (let i = 0; i < SCROLL_CYCLE_WEIGHTS.length; i++) {
+        cumulative += (SCROLL_CYCLE_WEIGHTS[i] / totalWeight) * totalScrollDistance;
+        if (distanceFromStart < cumulative) {
+          activeIdx = i;
+          break;
+        }
+      }
 
-    const distanceFromStart =
-      scrollY - startY;
+      /*
+       * Keep the index safely inside the cycle's bounds.
+       */
+      activeIdx = Math.max(0, Math.min(activeIdx, SCROLL_CYCLE_IDS.length - 1));
 
-    let activeIdx = Math.floor(
-      distanceFromStart / zoneSize
-    );
+      /*
+       * Don't update React unnecessarily.
+       */
+      if (activeIdx === lastActiveIdx) return;
+      lastActiveIdx = activeIdx;
 
-    /*
-     * Keep the index safely inside 0–2.
-     */
-    activeIdx = Math.max(
-      0,
-      Math.min(activeIdx, targets.length - 1)
-    );
+      /*
+       * "aibot" is the first scroll-revealed item right after the
+       * pinned ones, so activeIdx maps 1:1 onto visibleCount here
+       * (no offset needed  nothing pinned sits inside the scroll
+       * cycle anymore).
+       */
+      setVisibleCount((prev) => Math.max(prev, activeIdx + 1));
 
-    /*
-     * Don't update React unnecessarily.
-     */
-    if (activeIdx === lastActiveIdx) return;
+      setOpenId(SCROLL_CYCLE_IDS[activeIdx]);
+    };
 
-    lastActiveIdx = activeIdx;
+    const initialise = () => {
+      startY = null;
+      lastActiveIdx = -1;
+      updateFromScroll();
+    };
 
-    /*
-     * Reveal the cards progressively.
-     */
-    setVisibleCount((prev) =>
-      Math.max(prev, activeIdx + 1)
-    );
+    initialise();
 
-    /*
-     * Map (offset by PINNED_COUNT since the leading rows are
-     * always-visible pinned items, not scroll-revealed ones):
-     *
-     * activeIdx 0 → items[3] → THIS IS US
-     * activeIdx 1 → items[4] → PITCHDECK
-     * activeIdx 2 → items[5] → OUR AWWWARDS TALK
-     */
-    setOpenId(
-      items[activeIdx + PINNED_COUNT]?.id ?? null
-    );
-  };
+    window.addEventListener("scroll", updateFromScroll, { passive: true });
+    window.addEventListener("resize", initialise);
 
-  const initialise = () => {
-    startY = null;
-    lastActiveIdx = -1;
-    updateFromScroll();
-  };
+    return () => {
+      window.removeEventListener("scroll", updateFromScroll);
+      window.removeEventListener("resize", initialise);
+    };
+  }, [sectionSelectors]);
 
-  initialise();
-
-  window.addEventListener(
-    "scroll",
-    updateFromScroll,
-    { passive: true }
-  );
-
-  window.addEventListener(
-    "resize",
-    initialise
-  );
-
-  return () => {
-    window.removeEventListener(
-      "scroll",
-      updateFromScroll
-    );
-
-    window.removeEventListener(
-      "resize",
-      initialise
-    );
-  };
-}, [sectionSelectors, items]);
   const isPinned = visibleCount > 0;
 
   return (

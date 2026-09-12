@@ -1135,11 +1135,11 @@
 
   /* Pinned rows (Get in touch + Start a project) share the same
      highlighted CTA treatment so both read as primary actions. */
-  .floating-dock__item:first-child .floating-dock__row,
+  /* .floating-dock__item:first-child .floating-dock__row,
   .floating-dock__item--pinned .floating-dock__row {
     background:
       linear-gradient(135deg, rgba(56, 189, 248, 0.20), rgba(7, 17, 31, 0.99) 62%);
-  }
+  } */
 
   .floating-dock__row--link:hover {
     color: #7ddcff;
