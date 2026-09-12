@@ -14,6 +14,9 @@ const clientLogos = [
   { src: `${import.meta.env.BASE_URL}assets/logos/client8.svg`, alt: "Client 8" },
   { src: `${import.meta.env.BASE_URL}assets/logos/SweeterJoy.jpeg`, alt: "Sweeter Joy Chocolates", name: "Sweeter Joy" },
   { src: `${import.meta.env.BASE_URL}assets/logos/GavranDanka.jpeg`, alt: "Gavran Danka", name: "Gavran Danka" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/FactSnap.jpeg`, alt: "FactSnap", name: "FactSnap" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/Mahasahyadri.jpeg`, alt: "Mahasahyadri", name: "Mahasahyadri" },
+  { src: `${import.meta.env.BASE_URL}assets/logos/Smiley.jpeg`, alt: "Smiley+", name: "Smiley+" },
 ];
 export default function TopFeaturesSection() {
   return (
