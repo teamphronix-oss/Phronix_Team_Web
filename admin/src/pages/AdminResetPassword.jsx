@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { KeyRound } from "lucide-react";
 
 import SectionHeading from "../components/SectionHeading";
@@ -8,9 +8,12 @@ import { useAdminAuth } from "../context/AdminAuthContext";
 import "../styles/admin-auth.css";
 
 export default function AdminResetPassword() {
-  const { token } = useParams();
   const { resetPassword } = useAdminAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const resetToken = location.state?.resetToken;
+
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
@@ -19,17 +22,33 @@ export default function AdminResetPassword() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+
+    if (!resetToken) {
+      setError(
+        "Missing or expired reset session. Please start over."
+      );
+      return;
+    }
+
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
       return;
     }
+
     if (password !== confirm) {
       setError("Passwords do not match.");
       return;
     }
+
     setSubmitting(true);
+
     try {
-      await resetPassword(token, password);
+      await resetPassword(
+        resetToken,
+        password,
+        confirm
+      );
+
       navigate("/login");
     } catch (err) {
       setError(err.message);
@@ -48,19 +67,29 @@ export default function AdminResetPassword() {
           description="Choose a new password for the admin account."
         />
 
-        <form className="card admin-auth-card" onSubmit={handleSubmit}>
+        <form
+          className="card admin-auth-card"
+          onSubmit={handleSubmit}
+        >
           <div className="admin-auth-card__icon">
             <KeyRound size={26} />
           </div>
 
-          {error && <div className="admin-auth-card__error">{error}</div>}
+          {error && (
+            <div className="admin-auth-card__error">
+              {error}
+            </div>
+          )}
 
           <label className="admin-field">
             <span>New password</span>
+
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               autoComplete="new-password"
               required
             />
@@ -68,20 +97,32 @@ export default function AdminResetPassword() {
 
           <label className="admin-field">
             <span>Confirm password</span>
+
             <input
               type="password"
               value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
+              onChange={(e) =>
+                setConfirm(e.target.value)
+              }
               autoComplete="new-password"
               required
             />
           </label>
 
-          <button className="btn btn--gold btn--block" type="submit" disabled={submitting}>
-            {submitting ? "Updating…" : "Update password"}
+          <button
+            className="btn btn--gold btn--block"
+            type="submit"
+            disabled={submitting}
+          >
+            {submitting
+              ? "Updating…"
+              : "Update password"}
           </button>
 
-          <Link to="/login" className="admin-auth-card__link">
+          <Link
+            to="/login"
+            className="admin-auth-card__link"
+          >
             Back to sign in
           </Link>
         </form>
