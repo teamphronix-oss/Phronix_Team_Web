@@ -46,19 +46,19 @@ async function apiFetch(url, options = {}) {
 }
 
 const TABS = [
-  { id: "logo", label: "Site Logo" },
-  { id: "homeStats", label: "Homepage Stats" },
+  { id: "logo", label: "Header/footer Logo" },
+  { id: "homeStats", label: "Featured Work " },
   { id: "projects", label: "Student Project" },
-  { id: "team", label: "Team" },
-  { id: "projectRequests", label: "Project Requests" },
+  { id: "team", label: "Team Photo" },
+  { id: "projectRequests", label: "Start a Project" },
   { id: "contactMessages", label: "Contact Messages" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
-  { id: "clients", label: "Clients" },
-  { id: "careers", label: "Careers" },
+  { id: "clients", label: "extra info can be use later" },
+  { id: "careers", label: "Job Openings" },
   { id: "downloads", label: "Client Project" },
   { id: "youtube", label: "YouTube" },
-  { id: "ongoing", label: "Ongoing Projects" },
+  { id: "ongoing", label: "Latest Work" },
   { id: "why", label: "Why Phronix" },
   // { id: "powerhouse", label: "Powerhouse" },
   { id: "about", label: "About Phronix" },
@@ -89,36 +89,43 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        <div className="admin-tabs">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              className={`admin-tabs__btn ${tab === t.id ? "admin-tabs__btn--active" : ""
-                }`}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="admin-dashboard__body">
+
+          <div className="admin-tabs">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                className={`admin-tabs__btn ${tab === t.id ? "admin-tabs__btn--active" : ""
+                  }`}
+                onClick={() => setTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="admin-dashboard__content">
+            {tab === "logo" && <LogoPanel />}
+            {tab === "homeStats" && <HomeStatsPanel />}
+            {tab === "projects" && <StudentSecureDownloadsPanel />}
+            {tab === "team" && <TeamPanel />}
+            {tab === "projectRequests" && <ProjectRequestsPanel />}
+            {tab === "contactMessages" && <ContactMessagesPanel />}
+            {tab === "services" && <ServicesPanel />}
+            {tab === "testimonials" && <TestimonialsPanel />}
+            {tab === "clients" && <ClientsPanel />}
+            {tab === "careers" && <CareersPanel />}
+            {tab === "downloads" && <ClientSecureDownloadsPanel />}
+            {tab === "youtube" && <YoutubePanel />}
+            {tab === "ongoing" && <OngoingPanel />}
+            {tab === "why" && <WhyPanel />}
+            {/* {tab === "powerhouse" && <PowerhousePanel />} */}
+            {tab === "about" && <AboutPanel />}
+            {tab === "contact" && <ContactPanel />}
+          </div>
+
         </div>
 
-        {tab === "logo" && <LogoPanel />}
-        {tab === "homeStats" && <HomeStatsPanel />}
-        {tab === "projects" && <StudentSecureDownloadsPanel />}
-        {tab === "team" && <TeamPanel />}
-        {tab === "projectRequests" && <ProjectRequestsPanel />}
-        {tab === "contactMessages" && <ContactMessagesPanel />}
-        {tab === "services" && <ServicesPanel />}
-        {tab === "testimonials" && <TestimonialsPanel />}
-        {tab === "clients" && <ClientsPanel />}
-        {tab === "careers" && <CareersPanel />}
-        {tab === "downloads" && <ClientSecureDownloadsPanel />}
-        {tab === "youtube" && <YoutubePanel />}
-        {tab === "ongoing" && <OngoingPanel />}
-        {tab === "why" && <WhyPanel />}
-        {/* {tab === "powerhouse" && <PowerhousePanel />} */}
-        {tab === "about" && <AboutPanel />}
-        {tab === "contact" && <ContactPanel />}
       </div>
     </div>
   );
@@ -218,7 +225,7 @@ function HomeStatsPanel() {
     statNumber: "40+",
     title: "Real-World Projects Built by Aspiring Developers",
     description:
-      "From final-year submissions to portfolio-ready builds   practical, industry-style projects crafted to help students learn by doing.",
+      "From final-year submissions to portfolio-ready builds — practical, industry-style projects crafted to help students learn by doing.",
   });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -233,11 +240,11 @@ function HomeStatsPanel() {
             "Real-World Projects Built by Aspiring Developers",
           description:
             d.settings?.projectsDescription ||
-            "From final-year submissions to portfolio-ready builds   practical, industry-style projects crafted to help students learn by doing.",
+            "From final-year submissions to portfolio-ready builds — practical, industry-style projects crafted to help students learn by doing.",
         });
       })
       .catch(() => {
-        // Backend endpoint isn't ready yet   keep the defaults shown above.
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -264,7 +271,7 @@ function HomeStatsPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>Homepage   "40+" stat section</h3>
+      <h3>Homepage — "40+" stat section</h3>
 
       {status && (
         <p className="admin-panel__status">
@@ -986,7 +993,7 @@ function TeamPanel() {
 //
 // field.type: "text" | "textarea" | "number" | "checkbox" | "csv" (comma
 // separated list, stored as an array server-side) | "lines" (one item per
-// line, stored as an array server-side) | "password" (optional   blank
+// line, stored as an array server-side) | "password" (optional — blank
 // means "leave unchanged").
 
 function GenericPanel({
@@ -1229,7 +1236,7 @@ function ServicesPanel() {
 // Pehle GenericPanel (JSON-only) use ho raha tha, isliye:
 //   1) Logo file upload nahi ho sakta tha (sirf text URL field tha)
 //   2) Field names table se match nahi karte the (clientName vs name, etc.)
-// Ab ClientsPanel jaisa hi custom component hai   FormData + file upload.
+// Ab ClientsPanel jaisa hi custom component hai — FormData + file upload.
 
 const emptyTestimonial = {
   name: "",
@@ -1541,7 +1548,7 @@ const emptySecureDownload = {
   order: 0,
 };
 
-// showCategory: only the Student panel passes this   Client downloads don't
+// showCategory: only the Student panel passes this — Client downloads don't
 // have a category column, so we must not send that field for them.
 function SecureDownloadsPanel({ basePath, heading, showCategory = false, showYoutube = false }) {
   const [items, setItems] = useState([]);
@@ -1573,7 +1580,7 @@ function SecureDownloadsPanel({ basePath, heading, showCategory = false, showYou
       name: item.name,
       description: item.description || "",
       version: item.version || "",
-      // Write-only on the backend   left blank here on purpose, meaning
+      // Write-only on the backend — left blank here on purpose, meaning
       // "keep the current value" unless the admin types a new one.
       releaseTag: "",
       assetName: "",
@@ -2184,102 +2191,7 @@ function OngoingPanel() {
 function WhyPanel() {
   return <WhyFeaturesPanel />;
 }
-/*
-function WhyIntroPanel() {
-  const [form, setForm] = useState({
-    title: "Built Right, Built to Last.",
-    description:
-      "Every engagement gets senior engineering attention, transparent communication, and code you actually own   no black boxes, no hand-offs to juniors mid-project.",
-  });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    apiFetch("/settings")
-      .then((d) => {
-        setForm({
-          title: d.settings?.whyTitle || "Built Right, Built to Last.",
-          description:
-            d.settings?.whyDescription ||
-            "Every engagement gets senior engineering attention, transparent communication, and code you actually own   no black boxes, no hand-offs to juniors mid-project.",
-        });
-      })
-      .catch(() => {
-        // Backend endpoint isn'''t ready yet   keep the defaults shown above.
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function save() {
-    setStatus("Saving…");
-
-    try {
-      await apiFetch("/settings/why-intro", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      setStatus("Saved.");
-    } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
-    }
-  }
-
-  if (loading) {
-    return <p className="admin-panel__status">Loading…</p>;
-  }
-
-  return (
-    <div className="card admin-panel">
-      <h3>"Why Phronix?"   heading &amp; intro</h3>
-
-      {status && (
-        <p className="admin-panel__status">
-          {status}
-        </p>
-      )}
-
-      <label className="admin-field">
-        <span>Title</span>
-
-        <input
-          value={form.title}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              title: e.target.value,
-            })
-          }
-        />
-      </label>
-
-      <label className="admin-field">
-        <span>Description</span>
-
-        <textarea
-          rows={3}
-          value={form.description}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              description: e.target.value,
-            })
-          }
-        />
-      </label>
-
-      <button
-        className="btn btn--gold btn--sm"
-        onClick={save}
-      >
-        <Upload size={16} />
-        Save
-      </button>
-    </div>
-  );
-}
-*/
 const emptyWhyFeature = {
   title: "",
   description: "",
@@ -2312,190 +2224,6 @@ function WhyFeaturesPanel() {
   );
 }
 
-// ── Powerhouse ("Everything You Need, Built Right In") ─────────────
-
-/*
- function PowerhousePanel() {
-  return (
-    <div className="admin-panel">
-      <PowerhouseCardsPanel />
-      <PowerhouseTrioPanel />
-    </div>
-  );
-}
-
-// Form 1   Box 1 (Fast Project Kickoffs) + Box 2 (Integrated Tech Stack)
-function PowerhouseCardsPanel() {
-  const [form, setForm] = useState({
-    card1Title: "Fast Project Kickoffs",
-    card1Description:
-      "Save weeks of setup. We spin up a production-ready boilerplate so your idea starts shipping from day one.",
-    card2Title: "Integrated Tech Stack",
-    card2Description:
-      "Every tool you need   no extra cost, no hassle. Battle-tested integrations, ready out of the box.",
-    stackItems: "PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native",
-  });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiFetch("/settings")
-      .then((d) => {
-        setForm((f) => ({
-          card1Title: d.settings?.powerhouseCard1Title || f.card1Title,
-          card1Description: d.settings?.powerhouseCard1Description || f.card1Description,
-          card2Title: d.settings?.powerhouseCard2Title || f.card2Title,
-          card2Description: d.settings?.powerhouseCard2Description || f.card2Description,
-          stackItems: d.settings?.powerhouseStackItems || f.stackItems,
-        }));
-      })
-      .catch(() => { })
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function save() {
-    setStatus("Saving…");
-    try {
-      await apiFetch("/settings/powerhouse-cards", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      setStatus("Saved.");
-    } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
-    }
-  }
-
-  if (loading) return <p className="admin-panel__status">Loading…</p>;
-
-  return (
-    <div className="card admin-panel">
-      <h3>Powerhouse   Box 1 &amp; Box 2</h3>
-      {status && <p className="admin-panel__status">{status}</p>}
-
-      <label className="admin-field">
-        <span>Box 1 title (Fast Project Kickoffs)</span>
-        <input value={form.card1Title} onChange={(e) => setForm({ ...form, card1Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 1 description</span>
-        <textarea rows={2} value={form.card1Description} onChange={(e) => setForm({ ...form, card1Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 2 title (Integrated Tech Stack)</span>
-        <input value={form.card2Title} onChange={(e) => setForm({ ...form, card2Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 2 description</span>
-        <textarea rows={2} value={form.card2Description} onChange={(e) => setForm({ ...form, card2Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 2 tech stack items (comma separated)</span>
-        <input value={form.stackItems} onChange={(e) => setForm({ ...form, stackItems: e.target.value })} placeholder="PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native" />
-      </label>
-
-      <button className="btn btn--gold btn--sm" onClick={save}>
-        <Upload size={16} />
-        Save
-      </button>
-    </div>
-  );
-}
-
-// Form 2   Box 3 (Pick Your Stack), Box 4 (Structured Page Builder), Box 5 (SEO-Ready & Blazing Fast)
-function PowerhouseTrioPanel() {
-  const [form, setForm] = useState({
-    box3Title: "Pick Your Stack",
-    box3Description: "Choose the frameworks and integrations that fit your product   nothing forced, nothing locked in.",
-    box4Title: "Structured Page Builder",
-    box4Description: "Every page follows a clean header–content–footer architecture, easy to extend as you grow.",
-    box5Title: "SEO-Ready & Blazing Fast",
-    box5Description: "Built for speed and top scores on Core Web Vitals   no extra optimization work needed.",
-  });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiFetch("/settings")
-      .then((d) => {
-        setForm((f) => ({
-          box3Title: d.settings?.powerhouseBox3Title || f.box3Title,
-          box3Description: d.settings?.powerhouseBox3Description || f.box3Description,
-          box4Title: d.settings?.powerhouseBox4Title || f.box4Title,
-          box4Description: d.settings?.powerhouseBox4Description || f.box4Description,
-          box5Title: d.settings?.powerhouseBox5Title || f.box5Title,
-          box5Description: d.settings?.powerhouseBox5Description || f.box5Description,
-        }));
-      })
-      .catch(() => { })
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function save() {
-    setStatus("Saving…");
-    try {
-      await apiFetch("/settings/powerhouse-trio", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      setStatus("Saved.");
-    } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
-    }
-  }
-
-  if (loading) return <p className="admin-panel__status">Loading…</p>;
-
-  return (
-    <div className="card admin-panel">
-      <h3>Powerhouse   Box 3, 4 &amp; 5</h3>
-      {status && <p className="admin-panel__status">{status}</p>}
-
-      <label className="admin-field">
-        <span>Box 3 title (Pick Your Stack)</span>
-        <input value={form.box3Title} onChange={(e) => setForm({ ...form, box3Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 3 description</span>
-        <textarea rows={2} value={form.box3Description} onChange={(e) => setForm({ ...form, box3Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 4 title (Structured Page Builder)</span>
-        <input value={form.box4Title} onChange={(e) => setForm({ ...form, box4Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 4 description</span>
-        <textarea rows={2} value={form.box4Description} onChange={(e) => setForm({ ...form, box4Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 5 title (SEO-Ready &amp; Blazing Fast)</span>
-        <input value={form.box5Title} onChange={(e) => setForm({ ...form, box5Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 5 description</span>
-        <textarea rows={2} value={form.box5Description} onChange={(e) => setForm({ ...form, box5Description: e.target.value })} />
-      </label>
-
-      <button className="btn btn--gold btn--sm" onClick={save}>
-        <Upload size={16} />
-        Save
-      </button>
-    </div>
-  );
-}
-*/
-
 // ── Contact (Email, Phone, Address, GST Number) ─────────────────────
 
 function ContactPanel() {
@@ -2521,7 +2249,7 @@ function ContactPanel() {
         }));
       })
       .catch(() => {
-        // Backend endpoint isn't ready yet   keep the defaults shown above.
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -2588,7 +2316,7 @@ function ContactPanel() {
       </label>
 
       <label className="admin-field">
-        <span>Address   line 1</span>
+        <span>Address — line 1</span>
 
         <input
           value={form.addressLine1}
@@ -2603,7 +2331,7 @@ function ContactPanel() {
       </label>
 
       <label className="admin-field">
-        <span>Address   line 2</span>
+        <span>Address — line 2</span>
 
         <input
           value={form.addressLine2}
@@ -2659,7 +2387,7 @@ function AboutIntroPanel() {
   const [form, setForm] = useState({
     title: "A small studio, deliberately.",
     description:
-      "We keep the team small so every project gets senior attention   from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+      "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
   });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -2671,11 +2399,11 @@ function AboutIntroPanel() {
           title: d.settings?.aboutTitle || "A small studio, deliberately.",
           description:
             d.settings?.aboutDescription ||
-            "We keep the team small so every project gets senior attention   from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
+            "We keep the team small so every project gets senior attention — from the first architecture decision to the last production deploy. We work across web, mobile, cloud, and AI, but the discipline stays the same: understand the problem before writing a line of code.",
         });
       })
       .catch(() => {
-        // Backend endpoint isn't ready yet   keep the defaults shown above.
+        // Backend endpoint isn't ready yet — keep the defaults shown above.
       })
       .finally(() => setLoading(false));
   }, []);
@@ -2702,7 +2430,7 @@ function AboutIntroPanel() {
 
   return (
     <div className="card admin-panel">
-      <h3>"About Phronix"   heading &amp; intro</h3>
+      <h3>"About Phronix" — heading &amp; intro</h3>
 
       {status && (
         <p className="admin-panel__status">
@@ -2806,7 +2534,7 @@ function ProjectRequestsPanel() {
   }, []);
 
   function formatDate(date) {
-    if (!date) return " ";
+    if (!date) return "—";
 
     const parsed = new Date(date);
 
@@ -2914,7 +2642,7 @@ function ProjectRequestsPanel() {
   // the outcome yet.
   if (now >= meetingEnd) {
     return {
-      label: "Past   Needs Review",
+      label: "Past — Needs Review",
       className: "past",
     };
   }
@@ -3539,7 +3267,7 @@ function ContactMessagesPanel() {
   }, []);
 
   function formatDate(date) {
-    if (!date) return " ";
+    if (!date) return "—";
 
     const parsed = new Date(date);
 
@@ -3703,12 +3431,12 @@ function ContactMessagesPanel() {
 
                     <div className="contact-enquiry-card__meta">
                       Budget:{" "}
-                      {message.budget_range || " "}
+                      {message.budget_range || "—"}
                     </div>
 
                     <div className="contact-enquiry-card__meta">
                       Timeline:{" "}
-                      {message.timeline || " "}
+                      {message.timeline || "—"}
                     </div>
 
                     {message.preferred_contact_method && (
