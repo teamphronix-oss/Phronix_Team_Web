@@ -6,13 +6,30 @@
   flex-wrap: wrap;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Sidebar layout (tabs on the left, panel content on the right)
+   ───────────────────────────────────────────────────────────── */
+
+.admin-dashboard__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin: 24px 0;
+}
+
 .admin-tabs {
   display: flex;
-  gap: 8px;
-  margin: 24px 0;
-  border-bottom: 1px solid var(--line);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  flex-direction: column;
+  gap: 4px;
+  width: 230px;
+  flex-shrink: 0;
+  border-bottom: none;
+  border-right: 1px solid var(--line);
+  padding-right: 14px;
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
   scrollbar-width: none;       /* Firefox */
   -ms-overflow-style: none;    /* old Edge/IE */
 }
@@ -25,17 +42,56 @@
   padding: 10px 16px;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-left: 2px solid transparent;
   color: var(--ink-soft);
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-body);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: left;
   flex-shrink: 0;
+  border-radius: 6px;
 }
 .admin-tabs__btn--active {
   color: var(--ice-ink);
-  border-bottom-color: var(--ice);
+  border-left-color: var(--ice);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-dashboard__content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 800px) {
+  .admin-dashboard__body {
+    flex-direction: column;
+  }
+
+  .admin-tabs {
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-right: 0;
+    padding-bottom: 8px;
+    position: static;
+    max-height: none;
+  }
+
+  .admin-tabs__btn {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    border-radius: 0;
+  }
+  .admin-tabs__btn--active {
+    border-left-color: transparent;
+    border-bottom-color: var(--ice);
+    background: none;
+  }
 }
 
 .admin-panel { display: flex; flex-direction: column; gap: 18px; }
