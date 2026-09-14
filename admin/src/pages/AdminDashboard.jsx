@@ -46,19 +46,19 @@ async function apiFetch(url, options = {}) {
 }
 
 const TABS = [
-  { id: "logo", label: "Site Logo" },
-  { id: "homeStats", label: "Homepage Stats" },
+  { id: "logo", label: "Header/footer Logo" },
+  { id: "homeStats", label: "Featured Work " },
   { id: "projects", label: "Student Project" },
-  { id: "team", label: "Team" },
-  { id: "projectRequests", label: "Project Requests" },
+  { id: "team", label: "Team Photo" },
+  { id: "projectRequests", label: "Start a Project" },
   { id: "contactMessages", label: "Contact Messages" },
   { id: "services", label: "Services" },
   { id: "testimonials", label: "Testimonials" },
-  { id: "clients", label: "Clients" },
-  { id: "careers", label: "Careers" },
+  { id: "clients", label: "extra info can be use later" },
+  { id: "careers", label: "Job Openings" },
   { id: "downloads", label: "Client Project" },
   { id: "youtube", label: "YouTube" },
-  { id: "ongoing", label: "Ongoing Projects" },
+  { id: "ongoing", label: "Latest Work" },
   { id: "why", label: "Why Phronix" },
   // { id: "powerhouse", label: "Powerhouse" },
   { id: "about", label: "About Phronix" },
@@ -89,36 +89,43 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        <div className="admin-tabs">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              className={`admin-tabs__btn ${tab === t.id ? "admin-tabs__btn--active" : ""
-                }`}
-              onClick={() => setTab(t.id)}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="admin-dashboard__body">
+
+          <div className="admin-tabs">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                className={`admin-tabs__btn ${tab === t.id ? "admin-tabs__btn--active" : ""
+                  }`}
+                onClick={() => setTab(t.id)}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="admin-dashboard__content">
+            {tab === "logo" && <LogoPanel />}
+            {tab === "homeStats" && <HomeStatsPanel />}
+            {tab === "projects" && <StudentSecureDownloadsPanel />}
+            {tab === "team" && <TeamPanel />}
+            {tab === "projectRequests" && <ProjectRequestsPanel />}
+            {tab === "contactMessages" && <ContactMessagesPanel />}
+            {tab === "services" && <ServicesPanel />}
+            {tab === "testimonials" && <TestimonialsPanel />}
+            {tab === "clients" && <ClientsPanel />}
+            {tab === "careers" && <CareersPanel />}
+            {tab === "downloads" && <ClientSecureDownloadsPanel />}
+            {tab === "youtube" && <YoutubePanel />}
+            {tab === "ongoing" && <OngoingPanel />}
+            {tab === "why" && <WhyPanel />}
+            {/* {tab === "powerhouse" && <PowerhousePanel />} */}
+            {tab === "about" && <AboutPanel />}
+            {tab === "contact" && <ContactPanel />}
+          </div>
+
         </div>
 
-        {tab === "logo" && <LogoPanel />}
-        {tab === "homeStats" && <HomeStatsPanel />}
-        {tab === "projects" && <ProjectsPanel />}
-        {tab === "team" && <TeamPanel />}
-        {tab === "projectRequests" && <ProjectRequestsPanel />}
-        {tab === "contactMessages" && <ContactMessagesPanel />}
-        {tab === "services" && <ServicesPanel />}
-        {tab === "testimonials" && <TestimonialsPanel />}
-        {tab === "clients" && <ClientsPanel />}
-        {tab === "careers" && <CareersPanel />}
-        {tab === "downloads" && <DownloadsPanel />}
-        {tab === "youtube" && <YoutubePanel />}
-        {tab === "ongoing" && <OngoingPanel />}
-        {tab === "why" && <WhyPanel />}
-        {/* {tab === "powerhouse" && <PowerhousePanel />} */}
-        {tab === "about" && <AboutPanel />}
-        {tab === "contact" && <ContactPanel />}
       </div>
     </div>
   );
@@ -1191,6 +1198,7 @@ const emptyService = {
   shortDescription: "",
   technologies: "",
   priceRange: "",
+  pillar: "build",
   order: 0,
 };
 
@@ -1204,19 +1212,24 @@ function ServicesPanel() {
       emptyLabel="No services yet."
       formTitle="service"
       rowLabel={(s) => s.name}
-      rowSub={(s) => s.price_range || ""}
+      rowSub={(s) => `${s.pillar || ""}${s.price_range ? " · " + s.price_range : ""}`}
       fields={[
         { key: "name", label: "Name", type: "text", required: true },
         { key: "icon", label: "Icon (lucide icon name, e.g. Globe)", type: "text" },
         { key: "shortDescription", label: "Short description", type: "textarea" },
         { key: "technologies", label: "Technologies (comma separated)", type: "csv" },
         { key: "priceRange", label: "Price range", type: "text", placeholder: "₹5,999 – ₹9,999" },
+        {
+          key: "pillar",
+          label: "Category — type exactly: build, grow, or automate",
+          type: "text",
+          placeholder: "build",
+        },
         { key: "order", label: "Order", type: "number" },
       ]}
     />
   );
 }
-
 // ── Testimonials ─────────────────────────────────────────────────
 
 // ── Testimonials ─────────────────────────────────────────────────
@@ -1440,7 +1453,7 @@ const emptyCareer = {
   description: "",
   responsibilities: "",
   requirements: "",
-  open: true,
+  is_open: true,
   order: 0,
 };
 
@@ -1454,7 +1467,7 @@ function CareersPanel() {
       emptyLabel="No open roles yet."
       formTitle="role"
       rowLabel={(c) => c.title}
-      rowSub={(c) => `${c.department || ""}${c.open ? "" : " · Closed"}`}
+      rowSub={(c) => `${c.department || ""}${c.is_open ? "" : " · Closed"}`}
       fields={[
         { key: "title", label: "Title", type: "text", required: true },
         { key: "department", label: "Department", type: "text" },
@@ -1464,7 +1477,7 @@ function CareersPanel() {
         { key: "description", label: "Description", type: "textarea" },
         { key: "responsibilities", label: "Responsibilities (one per line)", type: "lines" },
         { key: "requirements", label: "Requirements (one per line)", type: "lines" },
-        { key: "open", label: "Role is open", type: "checkbox" },
+        { key: "is_open", label: "Role is open", type: "checkbox" },
         { key: "order", label: "Order", type: "number" },
       ]}
     />
@@ -1517,6 +1530,292 @@ function DownloadsPanel() {
     />
   );
 }
+// ── Secure Downloads (Client / Student) ─────────────────────────────
+// Shared component for the new token-based download system. Unlike the old
+// DownloadsPanel (GenericPanel, JSON-only), this posts FormData because it
+// supports an optional cover image, same as ClientsPanel/TestimonialsPanel.
+
+const emptySecureDownload = {
+  slug: "",
+  name: "",
+  description: "",
+  version: "",
+  releaseTag: "",
+  assetName: "",
+  requiresLogin: true,
+  category: "",
+  youtubeUrl: "",
+  order: 0,
+};
+
+// showCategory: only the Student panel passes this — Client downloads don't
+// have a category column, so we must not send that field for them.
+function SecureDownloadsPanel({ basePath, heading, showCategory = false, showYoutube = false }) {
+  const [items, setItems] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [form, setForm] = useState(emptySecureDownload);
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("");
+
+  function load() {
+    apiFetch(`${basePath}?all=true`)
+      .then((d) => setItems(d.downloads || []))
+      .catch((err) => {
+        console.error(`${basePath} load error:`, err);
+        setStatus(err.message);
+      });
+  }
+
+  useEffect(load, []);
+
+  function startNew() {
+    setForm(emptySecureDownload);
+    setFile(null);
+    setEditing("new");
+  }
+
+  function startEdit(item) {
+    setForm({
+      slug: item.slug,
+      name: item.name,
+      description: item.description || "",
+      version: item.version || "",
+      // Write-only on the backend — left blank here on purpose, meaning
+      // "keep the current value" unless the admin types a new one.
+      releaseTag: "",
+      assetName: "",
+      requiresLogin: Boolean(item.requires_login),
+      category: item.category || "",
+      youtubeUrl: item.youtube_url || "",
+      order: item.order || 0,
+    });
+    setFile(null);
+    setEditing(item.id);
+  }
+
+  async function save() {
+    if (editing === "new" && (!form.releaseTag || !form.assetName)) {
+      setStatus("Release tag and asset filename are required for a new download.");
+      return;
+    }
+
+    setStatus("Saving…");
+
+    try {
+      const body = new FormData();
+      Object.entries(form).forEach(([k, v]) => body.append(k, v));
+      if (file) body.append("image", file);
+
+      if (editing === "new") {
+        await apiFetch(basePath, { method: "POST", body });
+      } else {
+        await apiFetch(`${basePath}/${editing}`, { method: "PUT", body });
+      }
+
+      setEditing(null);
+      setStatus("");
+      load();
+    } catch (err) {
+      setStatus(err.message);
+    }
+  }
+
+  async function remove(id) {
+    if (!confirm("Delete this download? Existing activation links for it will stop working.")) return;
+    try {
+      await apiFetch(`${basePath}/${id}`, { method: "DELETE" });
+      load();
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  return (
+    <div className="admin-panel">
+      <div className="admin-panel__toolbar">
+        <div>
+          <h3>{heading}</h3>
+          <p className="admin-panel__status">
+            ZIPs live in a private GitHub repo. Visitors request access, get a one-time
+            emailed link, and the link stops working after first use.
+          </p>
+        </div>
+
+        <button className="btn btn--gold btn--sm" onClick={startNew}>
+          <Plus size={16} />
+          Add download
+        </button>
+      </div>
+
+      {editing && (
+        <div className="card admin-form">
+          <div className="admin-form__head">
+            <h3>{editing === "new" ? "New download" : "Edit download"}</h3>
+            <button className="admin-form__close" onClick={() => setEditing(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          {status && <p className="admin-panel__status">{status}</p>}
+
+          <label className="admin-field">
+            <span>Slug (unique, used in the URL)</span>
+            <input
+              value={form.slug}
+              onChange={(e) => setForm({ ...form, slug: e.target.value })}
+              disabled={editing !== "new"}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Name</span>
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Description</span>
+            <textarea
+              rows={3}
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Version</span>
+            <input
+              value={form.version}
+              onChange={(e) => setForm({ ...form, version: e.target.value })}
+              placeholder="v1.0.0"
+            />
+          </label>
+
+          {showCategory && (
+            <label className="admin-field">
+              <span>Category</span>
+              <input
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                placeholder="Web App / Mobile App / AI & Automation / ..."
+              />
+            </label>
+          )}
+
+          {showYoutube && (
+             <label className="admin-field">
+              <span>YouTube URL</span>
+              <input
+                value={form.youtubeUrl}
+                onChange={(e) => setForm({ ...form, youtubeUrl: e.target.value })}
+                placeholder="https://youtube.com/watch?v=..."
+              />
+            </label>
+          )}
+          
+          <label className="admin-field">
+            <span>
+              GitHub release tag{editing !== "new" ? " (leave blank to keep current)" : ""}
+            </span>
+            <input
+              value={form.releaseTag}
+              onChange={(e) => setForm({ ...form, releaseTag: e.target.value })}
+              placeholder="v1.0.0"
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>
+              ZIP asset filename in that release{editing !== "new" ? " (leave blank to keep current)" : ""}
+            </span>
+            <input
+              value={form.assetName}
+              onChange={(e) => setForm({ ...form, assetName: e.target.value })}
+              placeholder="my-project.zip"
+            />
+          </label>
+
+          <label className="admin-field admin-field--row">
+            <input
+              type="checkbox"
+              checked={form.requiresLogin}
+              onChange={(e) => setForm({ ...form, requiresLogin: e.target.checked })}
+            />
+            <span>Require visitor to be signed in to request this download</span>
+          </label>
+
+          <label className="admin-field">
+            <span>Order</span>
+            <input
+              type="number"
+              value={form.order}
+              onChange={(e) => setForm({ ...form, order: e.target.value })}
+            />
+          </label>
+
+          <label className="admin-field">
+            <span>Cover image</span>
+            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+          </label>
+
+          <button className="btn btn--gold btn--block" onClick={save}>
+            Save
+          </button>
+        </div>
+      )}
+
+      <div className="admin-list">
+        {items.map((d) => (
+          <div className="admin-list__row" key={d.id}>
+            <div className="admin-list__info">
+              <strong>{d.name}</strong>
+              <span>
+                {d.version || ""}
+                {showCategory && d.category ? ` · ${d.category}` : ""}
+                {d.requires_login ? " · Sign-in required" : " · Email only"}
+              </span>
+            </div>
+            <div className="admin-list__actions">
+              <button className="btn btn--outline btn--sm" onClick={() => startEdit(d)}>
+                <Pencil size={14} />
+              </button>
+              <button className="btn btn--outline btn--sm" onClick={() => remove(d.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {items.length === 0 && <p className="admin-panel__status">No downloads yet.</p>}
+      </div>
+    </div>
+  );
+}
+
+function ClientSecureDownloadsPanel() {
+  return (
+    <SecureDownloadsPanel
+      basePath="/downloads/client"
+      heading="Client Project Downloads (secure, one-time link)"
+      showYoutube
+    />
+  );
+}
+
+function StudentSecureDownloadsPanel() {
+  return (
+    <SecureDownloadsPanel
+      basePath="/downloads/student"
+      heading="Student Project Downloads (secure, one-time link)"
+      showCategory
+      showYoutube
+    />
+  );
+}
+
 
 const emptyVideo = {
   title: "",
@@ -1678,6 +1977,7 @@ function YoutubePanel() {
 
 const emptyOngoing = {
   name: "",
+  slug: "",
   description: "",
   status: "Planning",
   technologies: "",
@@ -1711,8 +2011,9 @@ function OngoingPanel() {
   }
 
   function startEdit(o) {
-    setForm({
+     setForm({
       name: o.name || "",
+      slug: o.slug || "",
       description: o.description || "",
       status: o.status || "Planning",
       technologies: (o.technologies || []).join(", "),
@@ -1786,6 +2087,15 @@ function OngoingPanel() {
           </label>
 
           <label className="admin-field">
+            <span>Slug (unique, used in the URL)</span>
+            <input
+              value={form.slug}
+              onChange={(e) => setForm({ ...form, slug: e.target.value })}
+              required
+            />
+          </label>
+
+          <label className="admin-field">
             <span>Description</span>
             <textarea
               rows={3}
@@ -1814,18 +2124,18 @@ function OngoingPanel() {
           <label className="admin-field">
             <span>Start date</span>
             <input
+              type="date"
               value={form.startDate}
               onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-              placeholder="2026-03-01"
             />
           </label>
 
           <label className="admin-field">
             <span>Expected completion</span>
             <input
+              type="date"
               value={form.expectedCompletion}
               onChange={(e) => setForm({ ...form, expectedCompletion: e.target.value })}
-              placeholder="2026-09-30"
             />
           </label>
 
@@ -1881,102 +2191,7 @@ function OngoingPanel() {
 function WhyPanel() {
   return <WhyFeaturesPanel />;
 }
-/*
-function WhyIntroPanel() {
-  const [form, setForm] = useState({
-    title: "Built Right, Built to Last.",
-    description:
-      "Every engagement gets senior engineering attention, transparent communication, and code you actually own — no black boxes, no hand-offs to juniors mid-project.",
-  });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    apiFetch("/settings")
-      .then((d) => {
-        setForm({
-          title: d.settings?.whyTitle || "Built Right, Built to Last.",
-          description:
-            d.settings?.whyDescription ||
-            "Every engagement gets senior engineering attention, transparent communication, and code you actually own — no black boxes, no hand-offs to juniors mid-project.",
-        });
-      })
-      .catch(() => {
-        // Backend endpoint isn'''t ready yet — keep the defaults shown above.
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function save() {
-    setStatus("Saving…");
-
-    try {
-      await apiFetch("/settings/why-intro", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      setStatus("Saved.");
-    } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
-    }
-  }
-
-  if (loading) {
-    return <p className="admin-panel__status">Loading…</p>;
-  }
-
-  return (
-    <div className="card admin-panel">
-      <h3>"Why Phronix?" — heading &amp; intro</h3>
-
-      {status && (
-        <p className="admin-panel__status">
-          {status}
-        </p>
-      )}
-
-      <label className="admin-field">
-        <span>Title</span>
-
-        <input
-          value={form.title}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              title: e.target.value,
-            })
-          }
-        />
-      </label>
-
-      <label className="admin-field">
-        <span>Description</span>
-
-        <textarea
-          rows={3}
-          value={form.description}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              description: e.target.value,
-            })
-          }
-        />
-      </label>
-
-      <button
-        className="btn btn--gold btn--sm"
-        onClick={save}
-      >
-        <Upload size={16} />
-        Save
-      </button>
-    </div>
-  );
-}
-*/
 const emptyWhyFeature = {
   title: "",
   description: "",
@@ -2008,190 +2223,6 @@ function WhyFeaturesPanel() {
     />
   );
 }
-
-// ── Powerhouse ("Everything You Need, Built Right In") ─────────────
-
-/*
- function PowerhousePanel() {
-  return (
-    <div className="admin-panel">
-      <PowerhouseCardsPanel />
-      <PowerhouseTrioPanel />
-    </div>
-  );
-}
-
-// Form 1 — Box 1 (Fast Project Kickoffs) + Box 2 (Integrated Tech Stack)
-function PowerhouseCardsPanel() {
-  const [form, setForm] = useState({
-    card1Title: "Fast Project Kickoffs",
-    card1Description:
-      "Save weeks of setup. We spin up a production-ready boilerplate so your idea starts shipping from day one.",
-    card2Title: "Integrated Tech Stack",
-    card2Description:
-      "Every tool you need — no extra cost, no hassle. Battle-tested integrations, ready out of the box.",
-    stackItems: "PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native",
-  });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiFetch("/settings")
-      .then((d) => {
-        setForm((f) => ({
-          card1Title: d.settings?.powerhouseCard1Title || f.card1Title,
-          card1Description: d.settings?.powerhouseCard1Description || f.card1Description,
-          card2Title: d.settings?.powerhouseCard2Title || f.card2Title,
-          card2Description: d.settings?.powerhouseCard2Description || f.card2Description,
-          stackItems: d.settings?.powerhouseStackItems || f.stackItems,
-        }));
-      })
-      .catch(() => { })
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function save() {
-    setStatus("Saving…");
-    try {
-      await apiFetch("/settings/powerhouse-cards", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      setStatus("Saved.");
-    } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
-    }
-  }
-
-  if (loading) return <p className="admin-panel__status">Loading…</p>;
-
-  return (
-    <div className="card admin-panel">
-      <h3>Powerhouse — Box 1 &amp; Box 2</h3>
-      {status && <p className="admin-panel__status">{status}</p>}
-
-      <label className="admin-field">
-        <span>Box 1 title (Fast Project Kickoffs)</span>
-        <input value={form.card1Title} onChange={(e) => setForm({ ...form, card1Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 1 description</span>
-        <textarea rows={2} value={form.card1Description} onChange={(e) => setForm({ ...form, card1Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 2 title (Integrated Tech Stack)</span>
-        <input value={form.card2Title} onChange={(e) => setForm({ ...form, card2Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 2 description</span>
-        <textarea rows={2} value={form.card2Description} onChange={(e) => setForm({ ...form, card2Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 2 tech stack items (comma separated)</span>
-        <input value={form.stackItems} onChange={(e) => setForm({ ...form, stackItems: e.target.value })} placeholder="PostgreSQL, AWS, Docker, Node.js, CI / CD, React Native" />
-      </label>
-
-      <button className="btn btn--gold btn--sm" onClick={save}>
-        <Upload size={16} />
-        Save
-      </button>
-    </div>
-  );
-}
-
-// Form 2 — Box 3 (Pick Your Stack), Box 4 (Structured Page Builder), Box 5 (SEO-Ready & Blazing Fast)
-function PowerhouseTrioPanel() {
-  const [form, setForm] = useState({
-    box3Title: "Pick Your Stack",
-    box3Description: "Choose the frameworks and integrations that fit your product — nothing forced, nothing locked in.",
-    box4Title: "Structured Page Builder",
-    box4Description: "Every page follows a clean header–content–footer architecture, easy to extend as you grow.",
-    box5Title: "SEO-Ready & Blazing Fast",
-    box5Description: "Built for speed and top scores on Core Web Vitals — no extra optimization work needed.",
-  });
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    apiFetch("/settings")
-      .then((d) => {
-        setForm((f) => ({
-          box3Title: d.settings?.powerhouseBox3Title || f.box3Title,
-          box3Description: d.settings?.powerhouseBox3Description || f.box3Description,
-          box4Title: d.settings?.powerhouseBox4Title || f.box4Title,
-          box4Description: d.settings?.powerhouseBox4Description || f.box4Description,
-          box5Title: d.settings?.powerhouseBox5Title || f.box5Title,
-          box5Description: d.settings?.powerhouseBox5Description || f.box5Description,
-        }));
-      })
-      .catch(() => { })
-      .finally(() => setLoading(false));
-  }, []);
-
-  async function save() {
-    setStatus("Saving…");
-    try {
-      await apiFetch("/settings/powerhouse-trio", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      setStatus("Saved.");
-    } catch (err) {
-      setStatus(err.message || "Backend not connected yet.");
-    }
-  }
-
-  if (loading) return <p className="admin-panel__status">Loading…</p>;
-
-  return (
-    <div className="card admin-panel">
-      <h3>Powerhouse — Box 3, 4 &amp; 5</h3>
-      {status && <p className="admin-panel__status">{status}</p>}
-
-      <label className="admin-field">
-        <span>Box 3 title (Pick Your Stack)</span>
-        <input value={form.box3Title} onChange={(e) => setForm({ ...form, box3Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 3 description</span>
-        <textarea rows={2} value={form.box3Description} onChange={(e) => setForm({ ...form, box3Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 4 title (Structured Page Builder)</span>
-        <input value={form.box4Title} onChange={(e) => setForm({ ...form, box4Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 4 description</span>
-        <textarea rows={2} value={form.box4Description} onChange={(e) => setForm({ ...form, box4Description: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 5 title (SEO-Ready &amp; Blazing Fast)</span>
-        <input value={form.box5Title} onChange={(e) => setForm({ ...form, box5Title: e.target.value })} />
-      </label>
-
-      <label className="admin-field">
-        <span>Box 5 description</span>
-        <textarea rows={2} value={form.box5Description} onChange={(e) => setForm({ ...form, box5Description: e.target.value })} />
-      </label>
-
-      <button className="btn btn--gold btn--sm" onClick={save}>
-        <Upload size={16} />
-        Save
-      </button>
-    </div>
-  );
-}
-*/
 
 // ── Contact (Email, Phone, Address, GST Number) ─────────────────────
 

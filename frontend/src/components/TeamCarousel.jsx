@@ -128,24 +128,49 @@ export default function TeamCarousel() {
         className="team-carousel__track"
         ref={trackRef}
       >
-        {LOOP_TEAM.map((member, i) => (
-          <div
-            className="team-carousel__card"
-            key={`${member.id}-${i}`}
-          >
-            <img
-              src={member.image}
-              alt={member.name}
-              className="team-carousel__img"
-              loading="lazy"
-            />
+        {LOOP_TEAM.map((member, i) => {
+          const profileUrl = member.linkedin || member.github;
 
-            <div className="team-carousel__overlay">
-              <strong>{member.name}</strong>
-              <span>{member.role}</span>
+          const cardContent = (
+            <>
+              <img
+                src={member.image}
+                alt={member.name}
+                className="team-carousel__img"
+                loading="lazy"
+              />
+
+              <div className="team-carousel__overlay">
+                <strong>{member.name}</strong>
+                <span>{member.role}</span>
+              </div>
+            </>
+          );
+
+          if (profileUrl) {
+            return (
+              <a
+                className="team-carousel__card"
+                key={`${member.id}-${i}`}
+                href={profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${member.name} profile`}
+              >
+                {cardContent}
+              </a>
+            );
+          }
+
+          return (
+            <div
+              className="team-carousel__card"
+              key={`${member.id}-${i}`}
+            >
+              {cardContent}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
