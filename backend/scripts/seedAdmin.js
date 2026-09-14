@@ -1,6 +1,6 @@
-// Usage: node scripts/seedAdmin.js <username> <email> <password>
+﻿// Usage: node scripts/seedAdmin.js <username> <email> <password>
 // Creates (or updates) the admin account in Supabase. Run this once after
-// setting up your .env — that account is what you'll use to sign in at
+// setting up your .env   that account is what you'll use to sign in at
 // /admin/login on the site.
 import "dotenv/config";
 import bcrypt from "bcryptjs";

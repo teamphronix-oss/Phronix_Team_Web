@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 
 /**
  * StickyScrollFeature
  * ────────────────────
  * Right-side panel stays pinned (sticky) while the left-side numbered
  * steps scroll past. Whichever step is centered in the viewport becomes
- * "active" and its image/content crossfades into the pinned panel —
+ * "active" and its image/content crossfades into the pinned panel  
  * same effect as the Contiant hero (01 / 02 / 03 sliding through a
  * fixed device mockup).
  *

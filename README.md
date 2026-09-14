@@ -1,16 +1,16 @@
-# Phronix Website
+﻿# Phronix Website
 
-A full company website for **Phronix** — marketing pages, a services/projects catalog,
-protected project downloads, Google sign-in, and a contact form — split into an
+A full company website for **Phronix**   marketing pages, a services/projects catalog,
+protected project downloads, Google sign-in, and a contact form   split into an
 independent `frontend` (React + Vite) and `backend` (Node/Express + MongoDB).
 
 ## Structure
 
 ```
 phronix/
-├── frontend/          React (Vite) site — pages, components, all editable data
+├── frontend/          React (Vite) site   pages, components, all editable data
 │   └── src/data/       ← edit these files to update services, projects, team, etc.
-└── backend/           Express API — auth, contact form, protected downloads
+└── backend/           Express API   auth, contact form, protected downloads
 ```
 
 ## Quick start
@@ -47,12 +47,12 @@ Runs at http://localhost:5000. Requires a running MongoDB instance (local or Atl
 
 ### 4. Protected downloads
 
-Files must live **outside** any publicly served directory — set
+Files must live **outside** any publicly served directory   set
 `PROTECTED_FILES_DIR` in `backend/.env` to that path, and drop the real ZIP
 files there (matching the `filename` field in each `DownloadableProject`
 document).
 
-- If a project needs its own password, hash it first — never store it in plain text:
+- If a project needs its own password, hash it first   never store it in plain text:
   ```bash
   node backend/scripts/hashPassword.js "the password"
   ```
@@ -61,7 +61,7 @@ document).
   node backend/scripts/seedDownloads.js
   ```
 - Update `frontend/src/data/downloads.js` with matching public-facing metadata
-  (name, description, version — never the file path or hash).
+  (name, description, version   never the file path or hash).
 
 Downloads work by issuing a short-lived signed link (default 120s, see
 `DOWNLOAD_LINK_TTL_SECONDS`) after the backend confirms the user is signed in
@@ -71,24 +71,24 @@ and expires quickly instead of pointing at a permanent public file URL.
 ### 5. Contact form email
 
 Set `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`/`CONTACT_TO_EMAIL` in `backend/.env`
-to receive form submissions by email (any SMTP provider works — SendGrid, SES,
+to receive form submissions by email (any SMTP provider works   SendGrid, SES,
 Postmark, etc.). Every submission is also saved to MongoDB regardless, so
 nothing is lost if email isn't configured yet.
 
 ## Editing content
 
-All company-specific content lives in `frontend/src/data/*.js` — no need to
+All company-specific content lives in `frontend/src/data/*.js`   no need to
 touch components to add a service, project, team member, testimonial, video,
 or ongoing project. Contact details, social links, WhatsApp number, and GST
 number live in `frontend/src/data/siteConfig.js`.
 
-Placeholder images live in `frontend/public/assets/` — swap in real photos
+Placeholder images live in `frontend/public/assets/`   swap in real photos
 and screenshots at the same paths referenced in the data files.
 
 ## Security notes
 
 - No API keys, OAuth secrets, or database credentials are ever referenced in
-  frontend code — only `VITE_API_URL`.
+  frontend code   only `VITE_API_URL`.
 - Sessions are signed, httpOnly cookies; the frontend never sees a token it
   could leak.
 - Downloads are authenticated and served via short-lived signed links from a

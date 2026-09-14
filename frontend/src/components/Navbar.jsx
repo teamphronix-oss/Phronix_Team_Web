@@ -8,14 +8,46 @@ import {
   Github,
   Youtube,
   Linkedin,
+  Code2,
+  TrendingUp,
+  Bot,
 } from "lucide-react";
 import siteConfig from "../data/siteConfig";
-import useSiteLogo from "../hooks/useSiteLogo";
-import phronixLogo from "../assets/Gemini_Generated_Image_mflsmnmflsmnmfls.png";
+import useSiteLogo from "../hooks/useSiteLogo"; //fetched from cloudinary
+import phronixLogo from "../assets/logo_circle_only.png";
+
+// Shown before the /services API responds (or if it ever fails), so the
+// mega menu never renders empty.
+const defaultServicesMega = [
+  {
+    title: "Build",
+    icon: Code2,
+    to: "/services#build",
+    items: ["Web Development", "Mobile Apps", "Cloud & DevOps", "UI/UX Design"],
+  },
+  {
+    title: "Grow",
+    icon: TrendingUp,
+    to: "/services#grow",
+    items: ["SEO & Organic", "Paid Ads", "Brand & Content"],
+  },
+  {
+    title: "Automate",
+    icon: Bot,
+    to: "/services#automate",
+    items: ["AI Chatbots", "AI in Existing Software", "Workflow Automation"],
+  },
+];
+
+const PILLAR_META = {
+  build: { title: "Build", icon: Code2, to: "/services#build" },
+  grow: { title: "Grow", icon: TrendingUp, to: "/services#grow" },
+  automate: { title: "Automate", icon: Bot, to: "/services#automate" },
+};
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
+  { to: "/services", label: "Services", mega: true },
   {
     to: "/clients",
     label: "Clients",
@@ -27,7 +59,7 @@ const links = [
           { to: "/projects", label: "Student Project" },
         ],
       },
-      { to: "/ongoing-projects", label: "Ongoing" },
+      { to: "/ongoing-projects", label: "Latest work" },
     ],
   },
   { to: "/contact", label: "Contact" },
@@ -41,6 +73,7 @@ const links = [
 export default function Navbar() {
   const logoUrl = useSiteLogo();
   const [open, setOpen] = useState(false);
+  const [servicesMega, setServicesMega] = useState(defaultServicesMega);
   const [scrolled, setScrolled] = useState(false);
   const [desktopDropdown, setDesktopDropdown] = useState(null);
   const [mobileDropdown, setMobileDropdown] = useState(null);
@@ -52,7 +85,7 @@ export default function Navbar() {
   const closeTimer = useRef(null);
   const subCloseTimer = useRef(null);
 
-  useEffect(() => {
+    useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
 
     window.addEventListener("scroll", onScroll);
@@ -60,6 +93,34 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
+  }, []);
+
+  // Builds the "Services" mega menu from live data instead of the
+  // hardcoded list above — new services (in whichever pillar the admin
+  // picks) show up here automatically, no code change needed.
+  useEffect(() => {
+    fetch(`${siteConfig.apiBaseUrl}/services`)
+      .then((res) => res.json())
+      .then((data) => {
+        const list = data.services || [];
+        if (list.length === 0) return;
+
+        const grouped = { build: [], grow: [], automate: [] };
+        list
+          .slice()
+          .sort((a, b) => (a.order || 0) - (b.order || 0))
+          .forEach((s) => {
+            const key = grouped[s.pillar] ? s.pillar : "build";
+            grouped[key].push(s.name);
+          });
+
+        const mega = Object.entries(PILLAR_META)
+          .map(([key, meta]) => ({ ...meta, items: grouped[key] }))
+          .filter((col) => col.items.length > 0);
+
+        if (mega.length > 0) setServicesMega(mega);
+      })
+      .catch((err) => console.error("Failed to load services for nav menu:", err));
   }, []);
 
   useEffect(() => {
@@ -131,7 +192,7 @@ export default function Navbar() {
           }
         >
           <img
-            src={logoUrl || phronixLogo}
+            src={phronixLogo}
             alt="Phronix"
             className="navbar__mark navbar__mark--img"
           />
@@ -142,7 +203,67 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <nav className="navbar__links" aria-label="Primary">
           {links.map((l) =>
-            l.children ? (
+            l.mega ? (
+              <div
+                key={l.to}
+                className="navbar__dropdown"
+                onMouseEnter={() => openDropdown(l.label)}
+                onMouseLeave={scheduleCloseDropdown}
+              >
+                <NavLink
+                  to={l.to}
+                  className={({ isActive }) =>
+                    `navbar__link navbar__link--dropdown ${
+                      isActive ? "navbar__link--active" : ""
+                    }`
+                  }
+                  onClick={() => handleNavClick(l.to)}
+                >
+                  {l.label}
+                  <ChevronDown
+                    size={14}
+                    className={`navbar__dropdown-caret ${
+                      desktopDropdown === l.label
+                        ? "navbar__dropdown-caret--open"
+                        : ""
+                    }`}
+                  />
+                </NavLink>
+
+                {desktopDropdown === l.label && (
+                  <div className="navbar__mega" role="menu">
+                    {servicesMega.map((col) => {
+                      const ColIcon = col.icon;
+                      return (
+                        <div className="navbar__mega-col" key={col.title}>
+                          <NavLink
+                            to={col.to}
+                            className="navbar__mega-col-title"
+                            onClick={() => handleNavClick(col.to)}
+                          >
+                            <ColIcon size={15} strokeWidth={2} />
+                            <span>{col.title}</span>
+                          </NavLink>
+                          <ul>
+                            {col.items.map((item) => (
+                              <li key={item}>
+                                <NavLink
+                                  to={col.to}
+                                  className="navbar__mega-item"
+                                  onClick={() => handleNavClick(col.to)}
+                                >
+                                  {item}
+                                </NavLink>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ) : l.children ? (
               <div
                 key={l.to}
                 className="navbar__dropdown"
@@ -338,15 +459,13 @@ export default function Navbar() {
         <nav className="navbar__mobile" aria-label="Mobile">
 
           {links.map((l) =>
-            l.children ? (
+            l.mega ? (
               <div key={l.to} className="navbar__mobile-group">
                 <button
                   type="button"
                   className="navbar__mobile-link navbar__mobile-link--dropdown"
                   aria-expanded={mobileDropdown === l.label}
                   onClick={() => {
-                    navigate(l.to);
-                    setOpen(false);
                     setMobileDropdown((cur) =>
                       cur === l.label ? null : l.label
                     );
@@ -362,6 +481,68 @@ export default function Navbar() {
                     }`}
                   />
                 </button>
+
+                {mobileDropdown === l.label && (
+                  <div className="navbar__mobile-mega">
+                    {servicesMega.map((col) => {
+                      const ColIcon = col.icon;
+                      return (
+                        <div className="navbar__mobile-mega-col" key={col.title}>
+                          <span className="navbar__mobile-mega-title">
+                            <ColIcon size={14} strokeWidth={2} /> {col.title}
+                          </span>
+                          {col.items.map((item) => (
+                            <NavLink
+                              key={item}
+                              to={col.to}
+                              className="navbar__mobile-sublink"
+                              onClick={() => handleNavClick(col.to)}
+                            >
+                              {item}
+                            </NavLink>
+                          ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ) : l.children ? (
+              <div key={l.to} className="navbar__mobile-group">
+                <div
+                  className="navbar__mobile-link navbar__mobile-link--dropdown"
+                  aria-expanded={mobileDropdown === l.label}
+                >
+                  <NavLink
+                    to={l.to}
+                    end={l.to === "/"}
+                    className="navbar__mobile-link-text"
+                    onClick={() => handleNavClick(l.to)}
+                  >
+                    {l.label}
+                  </NavLink>
+                  <button
+                    type="button"
+                    className="navbar__mobile-dropdown-toggle"
+                    aria-label={`Toggle ${l.label} submenu`}
+                    aria-expanded={mobileDropdown === l.label}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMobileDropdown((cur) =>
+                        cur === l.label ? null : l.label
+                      );
+                    }}
+                  >
+                    <ChevronDown
+                      size={16}
+                      className={`navbar__dropdown-caret ${
+                        mobileDropdown === l.label
+                          ? "navbar__dropdown-caret--open"
+                          : ""
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 {mobileDropdown === l.label && (
                   <div className="navbar__mobile-submenu">

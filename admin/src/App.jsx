@@ -10,7 +10,8 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<AdminLogin />} />
       <Route path="/forgot-password" element={<AdminForgotPassword />} />
-      <Route path="/reset-password/:token" element={<AdminResetPassword />} />
+      <Route path="/reset-password" element={<AdminResetPassword />} />
+
       <Route
         path="/"
         element={
@@ -19,6 +20,7 @@ export default function App() {
           </AdminRoute>
         }
       />
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

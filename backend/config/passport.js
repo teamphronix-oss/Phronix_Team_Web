@@ -1,10 +1,10 @@
-import passport from "passport";
+﻿import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { findUserByGoogleId, findUserById, createUser } from "../models/User.js";
 
 // Google OAuth is the only supported login method for regular site users.
-// Client secret and IDs live only in environment variables — never in
-// frontend code. (Admins use username/password — see routes/admin.js.)
+// Client secret and IDs live only in environment variables   never in
+// frontend code. (Admins use username/password   see routes/admin.js.)
 passport.use(
   new GoogleStrategy(
     {

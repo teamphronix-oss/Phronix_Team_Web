@@ -10,7 +10,7 @@ import {
 } from "../models/ContactMessage.js";
 
 import requireAdmin from "../middleware/requireAdmin.js";
-import { sendMail } from "../config/mailer.js";
+import { sendMail } from "../config/resend.js";
 
 const router = Router();
 
@@ -47,24 +47,16 @@ const validators = [
     .withMessage("Phone number looks invalid."),
 
   body("projectType")
-    .trim()
-    .notEmpty()
-    .withMessage("Project type is required."),
+    .optional({ checkFalsy: true }),
 
   body("budget")
-    .trim()
-    .notEmpty()
-    .withMessage("Budget range is required."),
+    .optional({ checkFalsy: true }),
 
   body("timeline")
-    .trim()
-    .notEmpty()
-    .withMessage("Timeline is required."),
+    .optional({ checkFalsy: true }),
 
   body("contactMethod")
-    .trim()
-    .notEmpty()
-    .withMessage("Preferred contact method is required."),
+    .optional({ checkFalsy: true }),
 
   body("message")
     .trim()
@@ -73,7 +65,7 @@ const validators = [
 ];
 
 // ─────────────────────────────────────────────
-// ADMIN — LIST CONTACT MESSAGES
+// ADMIN   LIST CONTACT MESSAGES
 // ─────────────────────────────────────────────
 
 router.get("/", requireAdmin, async (req, res, next) => {
@@ -90,7 +82,7 @@ router.get("/", requireAdmin, async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────
-// ADMIN — DELETE ONE CONTACT MESSAGE
+// ADMIN   DELETE ONE CONTACT MESSAGE
 // ─────────────────────────────────────────────
 
 router.delete("/:id", requireAdmin, async (req, res, next) => {
@@ -108,7 +100,7 @@ router.delete("/:id", requireAdmin, async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────
-// ADMIN — DELETE ALL CONTACT MESSAGES
+// ADMIN   DELETE ALL CONTACT MESSAGES
 // ─────────────────────────────────────────────
 
 router.delete("/", requireAdmin, async (req, res, next) => {
@@ -126,7 +118,7 @@ router.delete("/", requireAdmin, async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────
-// PUBLIC — SUBMIT CONTACT FORM
+// PUBLIC   SUBMIT CONTACT FORM
 // ─────────────────────────────────────────────
 
 router.post(
@@ -156,17 +148,17 @@ router.post(
         attachmentName,
       } = req.body;
 
-      // Save the contact message.
+      // Save the contact message with fallbacks
       const saved = await createContactMessage({
         name,
         email,
-        phone,
-        projectType,
-        budget,
-        timeline,
-        contactMethod,
+        phone: phone || "",
+        projectType: projectType || "General Enquiry",
+        budget: budget || "Not Specified",
+        timeline: timeline || "Flexible",
+        contactMethod: contactMethod || "Email",
         message,
-        attachmentName,
+        attachmentName: attachmentName || "",
       });
 
       // ─────────────────────────────────────────
@@ -177,6 +169,7 @@ router.post(
         try {
           await sendMail({
             to: process.env.CONTACT_TO_EMAIL,
+            from: "Phronix Contact Form <downloads@phronix.in>",
 
             subject: `New contact enquiry from ${name}`,
 
@@ -184,7 +177,7 @@ router.post(
 
 Name: ${name}
 Email: ${email}
-Phone: ${phone || "—"}
+Phone: ${phone || " "}
 
 Project Type: ${projectType}
 Budget Range: ${budget}
@@ -216,14 +209,14 @@ ${saved.id}`,
       // EMAIL → CUSTOMER CONFIRMATION
       // ─────────────────────────────────────────
 
-      if (process.env.SMTP_HOST && process.env.SMTP_USER) {
-        try {
-          await sendMail({
-            to: email,
+      try {
+        await sendMail({
+          to: email,
+          from: "Phronix Team <downloads@phronix.in>",
 
-            subject: "We received your enquiry — Phronix",
+          subject: "We received your enquiry   Phronix",
 
-            text: `Hi ${name},
+          text: `Hi ${name},
 
 Thank you for reaching out to Phronix.
 
@@ -241,16 +234,15 @@ If you need to provide any additional information, you can reply directly to thi
 Regards,
 Phronix Team`,
 
-            replyTo: process.env.CONTACT_TO_EMAIL,
-          });
+          replyTo: process.env.CONTACT_TO_EMAIL,
+        });
 
-          console.log("Customer confirmation email sent.");
-        } catch (emailError) {
-          console.error(
-            "Customer confirmation email failed:",
-            emailError.message
-          );
-        }
+        console.log("Customer confirmation email sent.");
+      } catch (emailError) {
+        console.error(
+          "Customer confirmation email failed:",
+          emailError.message
+        );
       }
 
       // ─────────────────────────────────────────

@@ -1,5 +1,5 @@
-/* ─────────────────────────────────────────────────────────────
-   ShowcaseSection — Bento Layout Spec Implementation
+﻿/* ─────────────────────────────────────────────────────────────
+   ShowcaseSection   Bento Layout Spec Implementation
    Asymmetric 3-Column × 2-Row Bento Grid (Expanded Layout)
    ───────────────────────────────────────────────────────────── */
 
@@ -222,7 +222,7 @@
   flex-direction: column;
   gap: 8px;
   /* Frozen on its first frame (item 1 at the top) until the tile
-     scrolls into view — see .is-playing below. This stops the
+     scrolls into view   see .is-playing below. This stops the
      marquee from already looking mid-loop by the time you scroll
      down to it. */
   animation: tickerVerticalScroll 22s linear infinite;

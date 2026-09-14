@@ -1,8 +1,8 @@
-import { supabase } from "../config/supabase.js";
+﻿import { supabase } from "../config/supabase.js";
 
 const TABLE = "feedback";
 
-// Public — anyone visiting the site can submit feedback.
+// Public   anyone visiting the site can submit feedback.
 export async function createFeedback({ name, email, rating, message }) {
   const { data, error } = await supabase
     .from(TABLE)
@@ -14,7 +14,7 @@ export async function createFeedback({ name, email, rating, message }) {
 }
 
 // Admin-only listing, newest first, optionally filtered by status
-// ("new" | "reviewed" | "archived" — whatever values the admin panel uses).
+// ("new" | "reviewed" | "archived"   whatever values the admin panel uses).
 export async function listFeedback({ status } = {}) {
   let query = supabase.from(TABLE).select("*").order("created_at", { ascending: false });
   if (status) query = query.eq("status", status);

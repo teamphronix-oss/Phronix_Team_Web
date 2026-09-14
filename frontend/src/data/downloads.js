@@ -1,5 +1,5 @@
-// Public-facing metadata only. Actual files, versions the download is tied
-// to, and any password requirements are enforced server-side — see
+﻿// Public-facing metadata only. Actual files, versions the download is tied
+// to, and any password requirements are enforced server-side   see
 // backend/routes/downloads.js. This file never contains file paths or secrets.
 export const downloadableProjects = [
   {

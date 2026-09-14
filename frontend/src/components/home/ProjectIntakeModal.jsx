@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { X, ArrowRight, ArrowLeft, Check, Calendar, CalendarCheck } from "lucide-react";
+import siteConfig from "../../data/siteConfig";
 import "../../styles/home/project-intake-modal.css";
 
 const ROLE_OPTIONS = ["Founder", "CTO / Eng", "Product", "Enterprise", "Other"];
@@ -148,7 +149,7 @@ export default function ProjectIntakeModal({ isOpen, onClose }) {
     setErrors({});
 
     try {
-      const response = await fetch("http://localhost:5000/api/project-requests", {
+        const response = await fetch(`${siteConfig.apiBaseUrl}/project-requests`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

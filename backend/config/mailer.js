@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+﻿import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -68,7 +68,7 @@ ${meetUrl}
 
 We look forward to speaking with you.
 
-— Phronix Team
+  Phronix Team
     `.trim(),
 
     html: `
@@ -109,7 +109,7 @@ We look forward to speaking with you.
           Looking forward to speaking with you.
         </p>
 
-        <p>— Phronix Team</p>
+        <p>  Phronix Team</p>
       </div>
     `,
   });

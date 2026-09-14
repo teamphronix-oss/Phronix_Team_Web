@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 // Central, editable configuration for all Phronix contact points.
 // Update these values — nothing else in the codebase needs to change.
 // ─────────────────────────────────────────────────────────────
@@ -7,23 +7,31 @@ export const siteConfig = {
   companyName: "Phronix",
   tagline: "Engineering Thought Into Software",
   shortDescription:
-    "Phronix is a technology studio that designs, builds, and ships digital products — from early prototypes to production-grade platforms.",
+    "Phronix is a technology and growth studio that designs, builds, and ships digital products then markets and sells them. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
 
-  email: "hello@phronix.io",
+  email: "teamphronix@gmail.com",
   supportEmail: "support@phronix.io",
   careersEmail: "careers@phronix.io",
-  phone: "+91 90000 00000",
+  phone: "+91 92724 71332",
+
   whatsappNumber: "919272471332", // international format, no + or spaces
   whatsappDefaultMessage:
     "Hello Phronix, I would like to know more about your services.",
 
   address: {
-    line1: "4th Floor, Prism Business Park",
-    line2: "College Road, Nashik, Maharashtra 422005",
+    line1: "Near G-square 01",
+    line2: "Nandur Naka Road, Nashik, Maharashtra 422003",
     country: "India",
   },
 
-  gstNumber: "27ABCDE1234F1Z5",
+  businessHours: {
+    days: "Mon – Sat",
+    hours: "10:00 AM – 7:00 PM",
+    timezone: "IST",
+    display: "Mon – Sat, 10:00 AM – 7:00 PM",
+  },
+
+  gstNumber: "27JVJPK0687Q1ZI",
 
   social: {
     instagram: "https://instagram.com/phronix.tech",
@@ -36,13 +44,11 @@ export const siteConfig = {
   apiBaseUrl: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 
   socialLinks: {
-  instagram: "https://www.instagram.com/phronix.ai?igsh=MXdpa2w0aG96enV3eA==",
-  github: "https://github.com/teamphronix-oss",
-  youtube: "https://www.youtube.com/@Phronixx",
-   linkedin: "https://www.linkedin.com/in/phronix-team-315156426",
-},
+    instagram: "https://www.instagram.com/phronix.ai?igsh=MXdpa2w0aG96enV3eA==",
+    github: "https://github.com/teamphronix-oss",
+    youtube: "https://www.youtube.com/@Phronixx",
+    linkedin: "https://www.linkedin.com/in/phronix-team-315156426",
+  },
 };
-
-
 
 export default siteConfig;

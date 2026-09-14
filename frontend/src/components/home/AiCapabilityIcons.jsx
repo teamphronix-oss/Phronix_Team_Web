@@ -35,7 +35,7 @@ function IconShell({ size = 32, children, gradId, from = "#38bdf8", to = "#a78bf
   );
 }
 
-/* 1. AI Chatbots — speech bubble with an orbiting "reply" dot ---- */
+/* 1. AI Chatbots  speech bubble with an orbiting "reply" dot ---- */
 export function IconAiChatbots(props) {
   const id = useGradientId("chat");
   return (
@@ -56,7 +56,7 @@ export function IconAiChatbots(props) {
   );
 }
 
-/* 2. AI Assistants — friendly robot head with a Saturn-style ring - */
+/* 2. AI Assistants  friendly robot head with a Saturn-style ring - */
 export function IconAiAssistants(props) {
   const id = useGradientId("asst");
   return (
@@ -72,7 +72,7 @@ export function IconAiAssistants(props) {
   );
 }
 
-/* 3. AI Agents — a brain silhouette built from a node network ---- */
+/* 3. AI Agents  a brain silhouette built from a node network ---- */
 export function IconAiAgents(props) {
   const id = useGradientId("agent");
   /* Organic brain-profile outline (two lobes + a folded underside),
@@ -110,7 +110,7 @@ export function IconAiAgents(props) {
   );
 }
 
-/* 4. AI Automation — a spinning gear firing off a bolt of speed -- */
+/* 4. AI Automation  a spinning gear firing off a bolt of speed -- */
 export function IconAiAutomation(props) {
   const id = useGradientId("auto");
   return (
@@ -132,7 +132,7 @@ export function IconAiAutomation(props) {
   );
 }
 
-/* 5. Generative AI — magic wand casting sparkles ------------------ */
+/* 5. Generative AI  magic wand casting sparkles ------------------ */
 export function IconGenerativeAi(props) {
   const id = useGradientId("gen");
   return (
@@ -146,7 +146,7 @@ export function IconGenerativeAi(props) {
   );
 }
 
-/* 6. Voice AI — audio waveform, dots between the bars -------------- */
+/* 6. Voice AI  audio waveform, dots between the bars -------------- */
 export function IconVoiceAi(props) {
   const id = useGradientId("voice");
   const items = [
@@ -187,7 +187,7 @@ export function IconVoiceAi(props) {
   );
 }
 
-/* 7. Document Intelligence — a document wired to circuit nodes ---- */
+/* 7. Document Intelligence  a document wired to circuit nodes ---- */
 export function IconDocumentIntelligence(props) {
   const id = useGradientId("doc");
   return (
@@ -206,7 +206,7 @@ export function IconDocumentIntelligence(props) {
   );
 }
 
-/* 8. Computer Vision — an eye framed like a camera viewfinder ----- */
+/* 8. Computer Vision  an eye framed like a camera viewfinder ----- */
 export function IconComputerVision(props) {
   const id = useGradientId("vision");
   return (
@@ -218,7 +218,7 @@ export function IconComputerVision(props) {
   );
 }
 
-/* 9. AI Workflows — linked task nodes ------------------------------*/
+/* 9. AI Workflows  linked task nodes ------------------------------*/
 export function IconAiWorkflows(props) {
   const id = useGradientId("flow");
   return (
@@ -236,7 +236,7 @@ export function IconAiWorkflows(props) {
   );
 }
 
-/* 10. AI Data Analysis — a rising bar chart -------------------------*/
+/* 10. AI Data Analysis  a rising bar chart -------------------------*/
 export function IconAiDataAnalysis(props) {
   const id = useGradientId("data");
   const bars = [
@@ -255,7 +255,7 @@ export function IconAiDataAnalysis(props) {
   );
 }
 
-/* 11. Predictive Analytics — a trend line converging on a target ---*/
+/* 11. Predictive Analytics  a trend line converging on a target ---*/
 export function IconPredictiveAnalytics(props) {
   const id = useGradientId("predict");
   return (
@@ -269,7 +269,7 @@ export function IconPredictiveAnalytics(props) {
   );
 }
 
-/* 12. AI Personalization — a person at the centre of an orbit ------*/
+/* 12. AI Personalization  a person at the centre of an orbit ------*/
 export function IconAiPersonalization(props) {
   const id = useGradientId("persona");
   return (

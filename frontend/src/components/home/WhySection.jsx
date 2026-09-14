@@ -1,4 +1,4 @@
-import * as Icons from "lucide-react";
+﻿import * as Icons from "lucide-react";
 import { useEffect, useState } from "react";
 import siteConfig from "../../data/siteConfig";
 import "../../styles/home/why.css";
@@ -26,14 +26,14 @@ export default function WhySection() {
       <section className="section why">
         <div className="container why__grid">
           <div className="why__intro">
-            <span className="eyebrow-badge">Why Phronix?</span>
+            <span className="eyebrow">Why Phronix?</span>
             <h2 className="why__title">
               Built <span className="hero__title-gold">Right</span>,<br />
               Built to <span className="hero__title-gold">Last</span>.
             </h2>
             <p>
               Every engagement gets senior engineering attention, transparent
-              communication, and code you actually own — no black boxes, no
+              communication, and code you actually own   no black boxes, no
               hand-offs to juniors mid-project.
             </p>
           </div>

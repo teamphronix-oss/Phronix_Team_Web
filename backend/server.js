@@ -1,4 +1,4 @@
-import "dotenv/config";
+﻿import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -28,7 +28,11 @@ import aboutPointRoutes from "./routes/aboutPoints.js";
 import clientRoutes from "./routes/clients.js";
 import feedbackRoutes from "./routes/feedback.js";
 
+import clientDownloadRoutes from "./routes/clientDownloads.js";
+import studentDownloadRoutes from "./routes/studentDownloads.js";
+
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 5000;
 
 // ─────────────────────────────────────────────────────────────
@@ -47,7 +51,7 @@ app.use(express.json({ limit: "1mb" }));
 
 app.use(cookieParser());
 
-// Note: images are no longer served from local disk — everything uploaded
+// Note: images are no longer served from local disk   everything uploaded
 // via the admin panel now goes straight to Cloudinary and the DB stores the
 // Cloudinary URL directly. The backend/uploads/ dir is unused for images.
 
@@ -63,7 +67,11 @@ const allowedOrigins = [
   "http://localhost:5175",
   'http://localhost:5174',
   "https://teamphronix-oss.github.io",
+  "https://www.phronix.in",
+  "https://phronix.in",
+  "https://admin.phronix.in",
   process.env.CLIENT_URL,
+  process.env.ADMIN_URL,
 ].filter(Boolean);
 
 app.use(
@@ -97,7 +105,7 @@ app.use(
 
     secret: process.env.SESSION_SECRET,
 
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
 
     httpOnly: true,
 
@@ -110,7 +118,7 @@ app.use(
 );
 
 // cookie-session doesn't implement regenerate()/save() that newer Passport
-// versions call internally during login — this shim adds harmless no-op
+// versions call internally during login   this shim adds harmless no-op
 // versions so passport.session() works without switching to express-session.
 app.use((req, res, next) => {
   if (req.session && !req.session.regenerate) {
@@ -155,6 +163,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/contact", contactRoutes);
 
 app.use("/api/downloads", downloadRoutes);
+
+app.use("/api/downloads/client", clientDownloadRoutes);
+app.use("/api/downloads/student", studentDownloadRoutes);
 
 app.use("/api/admin", adminRoutes);
 

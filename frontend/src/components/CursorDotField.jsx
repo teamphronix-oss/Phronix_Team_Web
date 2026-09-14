@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef } from "react";
 
-/* Interactive dot-grid background — the "particle field" effect seen
+/* Interactive dot-grid background   the "particle field" effect seen
    behind the hero on lamalama.com. A grid of small dots sits at rest;
    as the mouse moves near them, each dot is pushed away from the
    cursor (repulsion) and eases back to its home position once the

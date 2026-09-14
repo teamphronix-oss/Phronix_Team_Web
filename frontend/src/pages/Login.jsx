@@ -1,4 +1,4 @@
-import { LogIn, LogOut, ShieldCheck } from "lucide-react";
+﻿import { LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import SectionHeading from "../components/SectionHeading";
 
@@ -37,7 +37,7 @@ export default function Login() {
                 <LogIn size={16} /> Sign in with Google
               </button>
               <p className="login-card__note">
-                We only use your Google account to verify who you are — never to post on your behalf.
+                We only use your Google account to verify who you are   never to post on your behalf.
               </p>
             </>
           )}

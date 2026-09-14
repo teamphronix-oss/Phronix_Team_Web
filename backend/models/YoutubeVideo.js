@@ -1,8 +1,8 @@
-import { supabase } from "../config/supabase.js";
+﻿import { supabase } from "../config/supabase.js";
 
 const TABLE = "youtube_videos";
 
-// Admin panel and frontend both use "url" — DB column is "youtube_url".
+// Admin panel and frontend both use "url"   DB column is "youtube_url".
 // This mapping keeps that existing frontend/admin code untouched.
 function toApi(row) {
   return {

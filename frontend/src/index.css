@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 
-/* ── Design tokens — "Arctic Code" palette ──────────────────────
+/* ── Design tokens   "Arctic Code" palette ──────────────────────
    Semantic names below are the source of truth. The aliases in the
    second block (--gold, --panel-dark, etc.) exist so every existing
-   component keeps working unchanged — they just point at the new
+   component keeps working unchanged   they just point at the new
    colors. New/updated CSS should prefer the semantic names. ────── */
 :root {
   /* Background */
@@ -26,7 +26,7 @@
   --line: rgba(148,163,184,.18);           /* Frost Border */
   --line-dark: rgba(255,255,255,.15);
 
-  /* Accent — Ice Blue */
+  /* Accent   Ice Blue */
   --ice: #0EA5E9;            /* Ice Blue */
   --ice-bright: #38BDF8;
   --ice-pale: #08283a;
@@ -59,7 +59,7 @@
 
 * { box-sizing: border-box; }
 /* Scroll easing is handled by Lenis (see SmoothScroll.jsx) instead of the
-   CSS scroll-behavior property — running both at once causes anchor-link
+   CSS scroll-behavior property   running both at once causes anchor-link
    jumps to stutter as they fight over the scroll position. Lenis itself
    is skipped entirely for prefers-reduced-motion users, so html stays
    "auto" for them automatically. */
@@ -109,19 +109,35 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 12.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--gold-ink);
+  color: var(--gold-bright);
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
-.eyebrow::before {
+/* .eyebrow::before {
   content: "";
   width: 18px;
   height: 1.5px;
   background: var(--gold);
   display: inline-block;
+} */
+.page-head-section .eyebrow {
+  font-size: 11px;
+  padding: 6px 14px;
+  border: 1px solid rgba(49, 230, 208, 0.3);
+  border-radius: 999px;
+  background: var(--gold-pale);
 }
-
+.page-head-section .eyebrow::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 6px rgba(49, 230, 208, 0.8);
+  display: inline-block;
+  flex-shrink: 0;
+}
 .section { padding: 96px 0; }
 .section--soft { background: var(--bg-soft); }
 .section--dark {
@@ -154,7 +170,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .section--dark .section-head p { color: #c8c5bb; }
 
-/* ── Gold seam — the signature divider element ─────────────── */
+/* ── Gold seam   the signature divider element ─────────────── */
 .seam {
   position: relative;
   height: 1px;
@@ -646,23 +662,16 @@ input, textarea, select {
 .navbar__mark--img {
   width: 42px;
   height: 42px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: 50% 50%;
+  transform: translateY(3px);  /* image chya aat phoenix khali push karayla */
   border-radius: 50%;
-
-  /* Deep-blue theme ring */
   border: 2px solid #123b68;
-
-  /* subtle blue/cyan glow */
   box-shadow:
     0 0 0 2px rgba(0, 174, 255, 0.08),
     0 0 18px rgba(0, 174, 255, 0.12);
-
   background: #06101f;
-
-  transition:
-    transform 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar__logo:hover .navbar__mark--img {
@@ -673,4 +682,24 @@ input, textarea, select {
   box-shadow:
     0 0 0 2px rgba(121, 206, 245, 0.15),
     0 0 22px rgba(48, 173, 231, 0.28);
+}
+
+.navbar__mobile-link--dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navbar__mobile-link-text {
+  flex: 1;
+  color: inherit;
+  text-decoration: none;
+}
+.navbar__mobile-dropdown-toggle {
+  background: none;
+  border: none;
+  padding: 8px;
+  margin: -8px;
+  display: flex;
+  align-items: center;
+  color: inherit;
 }

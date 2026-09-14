@@ -44,6 +44,11 @@ function transformServiceBody(body) {
     // DB: price_range
     price_range: body.priceRange || "",
 
+    // Which filter tab this shows under on /services — must be exactly
+    // "build", "grow", or "automate" (lowercase) to match the frontend's
+    // filter logic (s.pillar === active).
+    pillar: (body.pillar || "build").trim().toLowerCase(),
+
     order: Number(body.order) || 0,
 
     is_published:

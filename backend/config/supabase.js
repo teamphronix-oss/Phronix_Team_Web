@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+﻿import { createClient } from "@supabase/supabase-js";
 import ws from "ws";
 
 // Node 20 doesn't have a native WebSocket global (that lands in Node 22+),
@@ -10,11 +10,11 @@ if (!globalThis.WebSocket) {
 }
 
 // Server-side only. Uses the SERVICE ROLE key (never expose this key to the
-// frontend / browser — it bypasses Row Level Security). The Express API is
+// frontend / browser   it bypasses Row Level Security). The Express API is
 // the only thing that talks to Supabase; the React app talks to Express.
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   console.warn(
-    "[supabase] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing — check your .env file."
+    "[supabase] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing   check your .env file."
   );
 }
 

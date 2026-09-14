@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabase.js";
+﻿import { supabase } from "../config/supabase.js";
 
 const TABLE = "downloadable_projects";
 
@@ -43,7 +43,7 @@ export async function upsertDownloadable(item) {
 }
 
 // Full insert for admin-created downloads (unlike upsertDownloadable, which
-// only touches slug/name/version/filename/password_hash/requires_auth —
+// only touches slug/name/version/filename/password_hash/requires_auth  
 // this also sets description, order, is_published, and the Cloudinary
 // image fields in one go, since it's used by the new admin "create" flow).
 export async function createDownloadable(row) {
@@ -54,7 +54,7 @@ export async function createDownloadable(row) {
 
 
 // Admin-panel metadata edits (description, image, order, published state).
-// filename/password_hash are intentionally NOT editable here — those are
+// filename/password_hash are intentionally NOT editable here   those are
 // set only via scripts/seedDownloads.js + hashPassword.js, since the actual
 // protected file has to be placed on disk to match.
 export async function updateDownloadableMeta(id, row) {

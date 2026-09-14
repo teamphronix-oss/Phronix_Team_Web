@@ -1,6 +1,6 @@
-import { v2 as cloudinary } from "cloudinary";
+﻿import { v2 as cloudinary } from "cloudinary";
 
-// Server-side only — the API key/secret never reach the frontend or admin
+// Server-side only   the API key/secret never reach the frontend or admin
 // panel. Routes upload buffers here directly (see middleware/upload.js).
 if (
   !process.env.CLOUDINARY_CLOUD_NAME ||
@@ -8,7 +8,7 @@ if (
   !process.env.CLOUDINARY_API_SECRET
 ) {
   console.warn(
-    "[cloudinary] CLOUDINARY_CLOUD_NAME / CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET missing — image uploads will fail."
+    "[cloudinary] CLOUDINARY_CLOUD_NAME / CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET missing   image uploads will fail."
   );
 }
 

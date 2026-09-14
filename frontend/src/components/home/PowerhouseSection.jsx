@@ -1,4 +1,4 @@
-import {
+﻿import {
   Bot,
   Layers3,
   Share2,
@@ -98,7 +98,7 @@ export default function PowerhouseSection() {
       <div className="container">
 
         <SectionHeading
-          eyebrow="What We Do"
+          eyebrow="All In One PowerHouse"
          title={
             <>
               More Than Just Software.
@@ -108,7 +108,7 @@ export default function PowerhouseSection() {
               <span className="powerhouse-gradient">Digital Businesses.</span>
             </>
           }
-          description="From AI agents to social growth — everything you need to launch, scale and dominate online."
+          description="From AI agents to social growth   everything you need to launch, scale and dominate online."
         />
 
         <div className="features-powerhouse__grid">

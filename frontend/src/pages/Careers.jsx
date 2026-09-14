@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Sparkles, Users, Rocket, GraduationCap } from "lucide-react";
 import SectionHeading from "../components/SectionHeading";
 import JobCard from "../components/JobCard";
@@ -13,7 +13,7 @@ const values = [
   {
     icon: Users,
     title: "Small, senior team",
-    text: "Direct access to the people building alongside you — no layers to get lost in.",
+    text: "Direct access to the people building alongside you   no layers to get lost in.",
   },
   {
     icon: Rocket,
@@ -34,7 +34,7 @@ export default function Careers() {
     fetch(`${siteConfig.apiBaseUrl}/careers`)
       .then((res) => res.json())
       .then((data) => {
-        // JobCard expects `type` and `open` — map the backend's
+        // JobCard expects `type` and `open`   map the backend's
         // employment_type / is_open onto those without touching JobCard.
         const mapped = (data.careers || []).map((c) => ({
           ...c,
@@ -82,7 +82,7 @@ export default function Careers() {
             ))}
           </div>
         ) : (
-          <p>There are no open roles right now — check back soon, or send us an open application below.</p>
+          <p>There are no open roles right now   check back soon, or send us an open application below.</p>
         )}
 
         {closedRoles.length > 0 && (

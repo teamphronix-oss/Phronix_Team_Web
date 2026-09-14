@@ -1,4 +1,4 @@
-/* ── Page loader — color bands sweep bottom-to-top on first load ─ */
+﻿/* ── Page loader   color bands sweep bottom-to-top on first load ─ */
   .page-loader {
     position: fixed;
     inset: 0;
@@ -509,7 +509,7 @@
 }
 .footer__social a:hover { color: var(--gold-bright); }
 
-/* Icon hover — scale up smoothly */
+/* Icon hover   scale up smoothly */
 .footer__social-icon {
   display: inline-flex;
   transition: transform 0.25s var(--ease), color 0.2s var(--ease);
@@ -517,7 +517,7 @@
 .footer__social-icon:hover {
   transform: scale(1.25) translateY(-2px);
 }
-/* Brand-colored social icons — specificity bumped so it beats
+/* Brand-colored social icons   specificity bumped so it beats
    `.footer__social a` above */
 .footer__social a.footer__social-icon--instagram { color: #E1306C; }
 .footer__social a.footer__social-icon--instagram:hover { color: #F77737; }
@@ -930,7 +930,7 @@
     transform: translate3d(0, 72px, 0);
     pointer-events: none;
 
-    /* Deep navy/blue theme — deliberately opaque to hide content behind it. */
+    /* Deep navy/blue theme   deliberately opaque to hide content behind it. */
     background: #050b16;
     border: 1px solid rgba(56, 189, 248, 0.16);
     border-radius: 12px;
@@ -974,7 +974,7 @@
     gap: 12px;
     padding: 13px 14px;
 
-    /* Opaque face — scrolling content stays underneath the dock. */
+    /* Opaque face   scrolling content stays underneath the dock. */
     background: #07111f;
     border: 0;
     color: #f4f8ff;
@@ -1003,7 +1003,7 @@
     color: #7ddcff;
   }
 
-  /* "Start a project" pill — mirrors the hero's own primary CTA so the
+  /* "Start a project" pill   mirrors the hero's own primary CTA so the
      floating version reads as the same button, not a new dock card. */
   .floating-dock__item--cta {
     background: transparent;
@@ -1175,7 +1175,7 @@ border-color: var(--line);
 
 
   /* ═══════════════════════════════════════════════════════════
-    Phoenix logo — static PNG mark (phronix-logo-marks.png),
+    Phoenix logo   static PNG mark (phronix-logo-marks.png),
     right-aligned inside .hero__panel via .hero__shell's
     justify-content: flex-end, and continuously rotating.
     ═══════════════════════════════════════════════════════════ */
@@ -1270,14 +1270,14 @@ border-color: var(--line);
   }
 
   /* ═══════════════════════════════════════════════════════════
-    CARDS on dark bg — clean spacing
+    CARDS on dark bg   clean spacing
     ═══════════════════════════════════════════════════════════ */
   .section--space .card-carousel__stage {
     perspective: 1200px;
   }
 
 
-  /* ── Meet the Team — hover reveal cards (Careers page) ───────── */
+  /* ── Meet the Team   hover reveal cards (Careers page) ───────── */
 .team-hover-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1470,7 +1470,7 @@ border-color: var(--line);
     .careers__cta { flex-direction: column; align-items: flex-start; }
   }
 
-  /* ── Team Carousel — auto-scroll, center card grows (Careers page) ─ */
+  /* ── Team Carousel   auto-scroll, center card grows (Careers page) ─ */
 .team-carousel {
   overflow: hidden;
   margin-top: 8px;

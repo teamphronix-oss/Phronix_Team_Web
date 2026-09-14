@@ -1,0 +1,125 @@
+.privacy-policy {
+  background: #000000;
+  color: #ffffff;
+  min-height: 100vh;
+}
+
+.privacy-policy__container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 80px 24px 110px;
+}
+
+.privacy-policy__header {
+  margin-bottom: 48px;
+}
+
+.privacy-policy .eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #2dd4bf;
+  margin-bottom: 12px;
+}
+
+.privacy-policy__header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #ffffff;
+}
+
+.privacy-policy__updated {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.privacy-policy__content > p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #d1d5db;
+  border-left: 2px solid #14b8a6;
+  padding-left: 20px;
+  margin-bottom: 56px;
+}
+
+.privacy-policy__section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.privacy-policy__section:last-of-type {
+  border-bottom: none;
+}
+
+.privacy-policy__number {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #14b8a6;
+  opacity: 0.6;
+}
+
+.privacy-policy .privacy-policy__section h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #2dd4bf !important;
+  margin: 0 0 16px;
+}
+
+.privacy-policy__section p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #d1d5db;
+  margin: 0 0 14px;
+}
+
+.privacy-policy__section ul {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.privacy-policy__section li {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #d1d5db;
+  margin-bottom: 8px;
+}
+
+.privacy-policy__section--contact a {
+  display: inline-block;
+  font-size: 0.95rem;
+  color: #22d3ee;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  margin-bottom: 8px;
+}
+
+.privacy-policy__section--contact a:hover {
+  color: #5eead4;
+}
+
+.privacy-policy__address {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+@media (max-width: 560px) {
+  .privacy-policy__container {
+    padding: 56px 18px 80px;
+  }
+
+  .privacy-policy__header h1 {
+    font-size: 1.75rem;
+  }
+
+  .privacy-policy__section {
+    gap: 12px;
+  }
+}

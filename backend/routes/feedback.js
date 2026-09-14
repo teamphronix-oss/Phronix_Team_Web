@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import { body, validationResult } from "express-validator";
 import rateLimit from "express-rate-limit";
 import requireAdmin from "../middleware/requireAdmin.js";
@@ -18,7 +18,7 @@ const validators = [
   body("rating").optional({ checkFalsy: true }).isInt({ min: 1, max: 5 }).withMessage("Rating must be 1-5."),
 ];
 
-// Public — anyone on the site can leave feedback, no sign-in required.
+// Public   anyone on the site can leave feedback, no sign-in required.
 router.post("/", submitLimiter, validators, async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -33,7 +33,7 @@ router.post("/", submitLimiter, validators, async (req, res, next) => {
   }
 });
 
-// Everything below is admin-only — feedback is never shown publicly.
+// Everything below is admin-only   feedback is never shown publicly.
 router.get("/", requireAdmin, async (req, res, next) => {
   try {
     const items = await listFeedback({ status: req.query.status });

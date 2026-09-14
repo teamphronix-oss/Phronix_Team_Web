@@ -1,4 +1,4 @@
-import { Router } from "express";
+﻿import { Router } from "express";
 import requireAdmin from "../middleware/requireAdmin.js";
 import softAdmin from "../middleware/softAdmin.js";
 import { upload, uploadBuffer, deleteImage } from "../middleware/upload.js";
@@ -14,6 +14,14 @@ import { upload, uploadBuffer, deleteImage } from "../middleware/upload.js";
 //   urlField      — the DB column to store the Cloudinary URL in
 //   publicIdField — the DB column to store the Cloudinary public_id in
 //   folder        — Cloudinary subfolder, e.g. "services"
+//
+// transformBody: optional (row) => row
+//   Runs AFTER the generic parsing below (array-field splitting,
+//   order/rating coercion, publish-flag coercion). Use it when a resource's
+//   admin-panel field names don't match its DB column names 1:1 (e.g.
+//   Services' "priceRange" -> "price_range", Careers' "open" -> "is_open").
+//   Resources that don't need this simply don't pass it, and behave
+//   exactly as before.
 export function makeContentRouter({
   model,
   responseKey,
@@ -22,6 +30,7 @@ export function makeContentRouter({
   imageFields = [],
   hasPublish = true,
   publishColumn = "is_published",
+  transformBody,
 }) {
   const router = Router();
   const multerFields = imageFields.map((f) => ({ name: f.formField, maxCount: 1 }));
@@ -41,10 +50,10 @@ export function makeContentRouter({
     if (hasPublish && row[publishColumn] !== undefined) {
       row[publishColumn] = row[publishColumn] === "true" || row[publishColumn] === true;
     }
-    // Never let the client set the Cloudinary public_id columns directly —
+    // Never let the client set the Cloudinary public_id columns directly  
     // those are only ever set by the upload branch below.
     for (const f of imageFields) delete row[f.publicIdField];
-    return row;
+    return transformBody ? transformBody(row) : row;
   }
 
   router.get("/", softAdmin, async (req, res, next) => {
