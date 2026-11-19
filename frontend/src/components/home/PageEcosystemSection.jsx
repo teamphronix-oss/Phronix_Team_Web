@@ -82,7 +82,13 @@ const row2Pages = [
           <SectionHeading
             eyebrow="Complete Page Architecture"
             title="15+ Essential pages crafted for business success"
-            description="From high-converting landing pages to customer portals and support centers   every screen is designed to build trust and drive conversions."
+            description={
+              <>
+                E-Commerce & SaaS Web Pages:<br />(Home, Product Catalog, Pricing, Case Studies, Order Tracking, etc.)
+                <br />
+                Custom News & Media Portal Modules:<br />(Breaking News Engine, Regional Categories, Multi-Language Support, Admin Analytics Dashboard).
+              </>
+            }
           />
         </div>
 

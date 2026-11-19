@@ -134,10 +134,10 @@ export default function HeroSection() {
               ))}
           </div>
 
-          <div className="hero__meta">
+          <div className="hero__meta">  
             <span><Sparkles size={13} /> AI-first thinking</span>
-            <span><CountUp end={40} suffix="+" /> projects</span>
-            <span><CountUp end={18} suffix="+" /> clients</span>
+            <span><CountUp end={50} suffix="+" /> projects Delivered</span>
+            <span><CountUp end={30} suffix="+" /> Happy clients</span>
             <span><CountUp end={60} suffix="+" /> campaigns launched</span>
           </div>
         </div>
