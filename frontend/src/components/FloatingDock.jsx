@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Plus, Minus, ArrowRight } from "lucide-react";
 import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
 import doctifyImg from "../assets/Images/Doctify Clinic Management Made Simple.png";
-import oilgridImg from "../assets/Images/oilgrid.png";
+import oilgridImg from "../assets/Images/OILGRID Oil Mill Management Dashboard.png";
 
 /* Home page dock items.
    - "start": Primary CTA that appears once the hero section has scrolled out of view.
@@ -52,7 +52,7 @@ const DEFAULT_ITEMS = [
   },
   {
     id: "awwwards",
-    label: "OUR AWWWADS TALK",
+    label: "OURWORK",
     hasVideo: true,
     videoSrc: logoVideo,
     sectionSelector: ".features-powerhouse",

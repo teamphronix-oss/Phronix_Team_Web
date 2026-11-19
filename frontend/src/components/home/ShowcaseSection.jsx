@@ -1,6 +1,13 @@
 ﻿import {
   Sparkles,
   MessageSquare,
+  MessageCircle, 
+  Code,        // new
+  Server,      // new
+  Cloud,       // new
+  Network,     // new
+  Radio,       // new
+  Gauge,       // new
   Zap,
   Target,
   Video,
@@ -118,9 +125,18 @@ const websiteTools = [
   { icon: Bell, label: "Notifications" },
   { icon: CreditCard, label: "Payments" },
   { icon: Search, label: "Search" },
-  { icon: Settings, label: "Settings" }
+  { icon: Settings, label: "Settings" },
+  { icon: Code, label: "React & Next.js" },
+  { icon: Server, label: "Node.js & Python" },
+  { icon: Cloud, label: "Cloud Hosting (AWS)" },
+  { icon: CreditCard, label: "Payment Gateways (Razorpay/Stripe)" },
+  { icon: Network, label: "REST & GraphQL APIs" },
+  { icon: FileText, label: "Custom CMS" },
+  { icon: ShieldCheck, label: "Role-Based Auth" },
+  { icon: Radio, label: "Real-Time WebSockets" },
+  { icon: Search, label: "Technical SEO Schema" },
+  { icon: Gauge, label: "Core Web Vitals Optimization" },
 ];
-
 const marketingTools = [
   { icon: Megaphone, label: "Campaigns" },
   { icon: TrendingUp, label: "Growth" },
@@ -133,7 +149,14 @@ const marketingTools = [
   { icon: BarChart3, label: "Analytics" },
   { icon: UserCircle, label: "Influencer" },
   { icon: Target, label: "Retargeting" },
-  { icon: Palette, label: "Branding" }
+  { icon: Palette, label: "Branding" },
+  { icon: ArrowUpRight, label: "Conversion" },
+  { icon: Search, label: "Google Search & Meta Ads" },
+  { icon: TrendingUp, label: "Technical & Local SEO" },
+  { icon: BarChart3, label: "GA4 & Conversion Tracking" },
+  { icon: MessageCircle, label: "WhatsApp & Email Automation" },
+  { icon: Users, label: "HubSpot & Zoho CRM" },
+  { icon: Target, label: "Landing Page CRO" },
 ];
 
 export default function ShowcaseSection() {
