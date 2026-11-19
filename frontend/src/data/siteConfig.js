@@ -7,7 +7,7 @@ export const siteConfig = {
   companyName: "Phronix",
   tagline: "Engineering Thought Into Software",
   shortDescription:
-    "Phronix is a technology and growth studio that designs, builds, and ships digital products then markets and sells them. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
+    "Phronix is a software development and digital marketing agency in Nashik that builds custom web apps, mobile apps, and AI automation systems—then scales them with SEO and paid ads. From early prototypes to production-grade platforms, and from SEO to paid campaigns, one team carries the work end to end.",
 
   email: "teamphronix@gmail.com",
   supportEmail: "support@phronix.io",
@@ -19,7 +19,7 @@ export const siteConfig = {
     "Hello Phronix, I would like to know more about your services.",
 
   address: {
-    line1: "Near G-square 01",
+    line1: "G-square 01",
     line2: "Nandur Naka Road, Nashik, Maharashtra 422003",
     country: "India",
   },

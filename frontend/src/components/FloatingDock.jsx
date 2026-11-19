@@ -52,7 +52,7 @@ const DEFAULT_ITEMS = [
   },
   {
     id: "awwwards",
-    label: "OURWORK",
+    label: "OUR WORK",
     hasVideo: true,
     videoSrc: logoVideo,
     sectionSelector: ".features-powerhouse",
