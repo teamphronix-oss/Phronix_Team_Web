@@ -1248,6 +1248,7 @@
     height: 100%;
     object-fit: cover;
   }
+  
 
   /* Breakpoint raised from 900px → 1024px to match the navbar
      hamburger switch  the dock only makes sense next to a desktop

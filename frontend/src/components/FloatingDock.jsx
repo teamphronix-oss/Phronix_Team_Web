@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Plus, Minus, ArrowRight } from "lucide-react";
 import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
+import doctifyImg from "../assets/Images/Doctify Clinic Management Made Simple.png";
+import oilgridImg from "../assets/Images/oilgrid.png";
 
 /* Home page dock items.
    - "start": Primary CTA that appears once the hero section has scrolled out of view.
@@ -32,18 +34,20 @@ const DEFAULT_ITEMS = [
     action: "open-chatbot",
     sectionSelector: ".ai-retrofit",
   },
-  {
+   {
     id: "us",
-    label: "DOCTIFI",
-    hasVideo: true,
-    videoSrc: logoVideo,
+    label: "DOCTIFY",
+    hasImage: true,
+    imageSrc: doctifyImg,
+    linkUrl: "https://www.youtube.com/watch?v=_TkGB1H2CUg&t=1s",
     sectionSelector: ".showcase-section",
   },
   {
     id: "pitch",
-    label: "OILTRACK",
-    hasVideo: true,
-    videoSrc: logoVideo,
+    label: "OilGrid",
+    hasImage: true,
+    imageSrc: oilgridImg,
+    linkUrl: "https://www.youtube.com/@Phronixx",
     sectionSelector: ".projects-section",
   },
   {
@@ -126,7 +130,7 @@ export default function FloatingDock({ items = DEFAULT_ITEMS }) {
         setOpenId((prev) => {
           if (!nextActive.has(prev)) {
             const itemObj = items.find((it) => it.id === latestActiveId);
-            return itemObj?.hasVideo ? latestActiveId : null;
+            return itemObj?.hasVideo || itemObj?.hasImage ? latestActiveId : null;
           }
           return prev;
         });
@@ -271,6 +275,27 @@ function DockItem({ item, index, isOpen, isVisible, onToggle }) {
                 <source src={item.videoSrc} type="video/mp4" />
               </video>
             </div>
+          </div>
+        </div>
+      )}
+
+            {item.hasImage && (
+        <div
+          className={`floating-dock__panel${
+            isOpen ? " floating-dock__panel--open" : ""
+          }`}
+          aria-hidden={!isOpen}
+        >
+          <div className="floating-dock__panel-inner">
+            <a
+              href={item.linkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="floating-dock__video floating-dock__image-link"
+              tabIndex={isOpen ? 0 : -1}
+            >
+              <img src={item.imageSrc} alt={item.label} />
+            </a>
           </div>
         </div>
       )}
