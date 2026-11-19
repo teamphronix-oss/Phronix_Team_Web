@@ -21,7 +21,7 @@ export default function PayUpdateSection() {
               <br />
               <span>own it forever.</span>
               <br />
-              <small>build to actually last.</small>
+              <small>build to last.</small>
             </h2>
 
             <p className="pay-update__description">
@@ -42,7 +42,7 @@ export default function PayUpdateSection() {
 
             <div className="pay-update__note">
               <Check size={15} />
-              <span>1 Months Free Post-Launch Support</span>
+              <span>1 Month Free Post-Launch Support</span>
             </div>
 
           </div>

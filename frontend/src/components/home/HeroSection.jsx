@@ -136,9 +136,9 @@ export default function HeroSection() {
 
           <div className="hero__meta">
             <span><Sparkles size={13} /> AI-first thinking</span>
-            <span><CountUp end={40} suffix="+" /> projects</span>
-            <span><CountUp end={18} suffix="+" /> clients</span>
-            <span><CountUp end={60} suffix="+" /> campaigns launched</span>
+            <span><CountUp end={50} suffix="+" /> Projects Delivered</span>
+            <span><CountUp end={30} suffix="+" /> Happy Clients</span>
+            <span><CountUp end={60} suffix="+" /> Campaigns Launched</span>
           </div>
         </div>
       </section>

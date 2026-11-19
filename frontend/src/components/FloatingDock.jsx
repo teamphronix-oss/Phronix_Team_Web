@@ -2,7 +2,8 @@
 import { Link } from "react-router-dom";
 import { Plus, Minus, ArrowRight } from "lucide-react";
 import logoVideo from "../assets/Video/give_me_just_my_logo_in_white.mp4";
-
+import doctifyImg from "../assets/Images/Doctify Clinic Management Made Simple.png"; // tumchya image cha path dya
+import oilgridImg from "../assets/Images/OILGRID Oil Mill Management Dashboard.png"; // new
 /* Home page dock items. Only "start" and "touch" are pinned  always
    visible from the top of the page. Everything else (including
    TALK TO AI) reveals in order, one at a time from below, while the
@@ -11,9 +12,22 @@ const DEFAULT_ITEMS = [
   { id: "start", label: "Start a project", type: "link", to: "/projects", pinned: true, scrollGated: true, cta: true },
   { id: "touch", label: "WHY US", hasVideo: true, videoSrc: logoVideo, avatar: true, pinned: true },
   { id: "aibot", label: "TALK TO AI", type: "action", action: "open-chatbot" },
-  { id: "us", label: "DOCTIFI", hasVideo: true, videoSrc: logoVideo },
-  { id: "pitch", label: "OILTRACK", hasVideo: true, videoSrc: logoVideo },
-  { id: "awwwards", label: "OUR AWWWADS TALK", hasVideo: true, videoSrc: logoVideo },
+  // { id: "us", label: "DOCTIFY", hasVideo: true, videoSrc: logoVideo },
+  {
+    id: "us",
+    label: "DOCTIFY",
+    hasImage: true,
+    imageSrc: doctifyImg,
+    linkUrl: "https://www.youtube.com/watch?v=_TkGB1H2CUg&t=1s",
+  },
+ {
+  id: "pitch",
+  label: "OILGRID",
+  hasImage: true,
+  imageSrc: oilgridImg,
+  linkUrl: "https://www.youtube.com/@Phronixx",
+},
+  { id: "awwwards", label: "CASE STUDIES", hasVideo: true, videoSrc: logoVideo },
 ];
 
 /* Number of items pinned at the top of the dock (always visible,
@@ -314,6 +328,28 @@ function DockItem({ item, index, isOpen, isVisible, onToggle }) {
           </div>
         </div>
       )}
+
+
+      {item.hasImage && (
+  <div
+    className={`floating-dock__panel${
+      isOpen ? " floating-dock__panel--open" : ""
+    }`}
+    aria-hidden={!isOpen}
+  >
+    <div className="floating-dock__panel-inner">
+      <a
+        href={item.linkUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="floating-dock__video floating-dock__image-link"
+        tabIndex={isOpen ? 0 : -1}
+      >
+        <img src={item.imageSrc} alt={item.label} />
+      </a>
+    </div>
+  </div>
+)}
     </div>
   );
 }
